@@ -1,0 +1,1 @@
+node config/release/release.js
