@@ -1,12 +1,23 @@
-# vue-base-frame
+# vue-base
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 ![java version](https://img.shields.io/badge/JAVA-1.8-green.svg)
-![gitee star](https://gitee.com/linlannet/vue-base-frame/badge/star.svg)
+![gitee star](https://gitee.com/linlannet/vue-base/badge/star.svg)
 
 ## Introduction
 
-Enterprise-level front-end framework, based on VUE framework, realizes the front-end project of organization, administrator, role, post, grouping and message management.
+Enterprise-level shared front-end component library. It wraps and centrally manages common support components for the front end, reducing repetitive development across each front-end project and unifying resources such as access control, secure encryption and basic utilities.
+
+## Repository Structure
+
+This repository maintains all shared front-end components/plugins as sub-packages, and currently includes:
+
+| Sub-package | Description |
+| ----------- | ----------- |
+| [lib-vue-base](./lib-vue-base) | Enterprise-level front-end foundation components: unified access control, secure encryption, request wrapper, basic utilities, etc. |
+| [ll-editor](./ll-editor) | Pluggable code editor kernel (based on Monaco), with pluggable runtime and plugin marketplace |
+
+> Note: besides the components above, more shared components/plugins will be continuously added to this repository as sub-packages in the future.
 
 ## Change Log
 
@@ -30,13 +41,13 @@ Enterprise-level front-end framework, based on VUE framework, realizes the front
 - Get the project code
 
 ```bash
-git clone https://gitee.com/linlannet/vue-base-frame.git
+git clone https://gitee.com/linlannet/vue-base.git
 ```
 
 - Install dependencies
 
 ```bash
-cd vue-base-frame
+cd vue-base
 
 npm install
 
@@ -45,7 +56,7 @@ npm install
 - run
 
 ```bash
-npm serve
+npm run dev
 ```
 
 - build
@@ -56,7 +67,7 @@ npm build
 
 ## How to contribute
 
-You are very welcome to join！[Raise an issue](https://gitee.com/linlannet/vue-base-frame/issues/new/choose) or submit a Pull Request。
+You are very welcome to join！[Raise an issue](https://gitee.com/linlannet/vue-base/issues/new/choose) or submit a Pull Request。
 
 **Pull Request:**
 
@@ -69,4 +80,4 @@ You are very welcome to join！[Raise an issue](https://gitee.com/linlannet/vue-
 
 ## License
 
-[Apache 2.0 © vue-base-frame 2023](LICENSE)
+[Apache 2.0 © vue-base 2023](LICENSE)

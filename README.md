@@ -1,12 +1,23 @@
-# vue-base-frame
+# vue-base
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 ![java version](https://img.shields.io/badge/JAVA-1.8-green.svg)
-![gitee star](https://gitee.com/linlannet/vue-base-frame/badge/star.svg)
+![gitee star](https://gitee.com/linlannet/vue-base/badge/star.svg)
 
 ## 简介
 
-企业级前端框架基础支撑组件，对前端通用支撑组件进行封装和统一管理，降低每个前端工程共性开发，统一访问控制、安全加密、基础工具类等资源。
+企业级前端公共组件库，对前端通用支撑组件进行封装和统一管理，降低每个前端工程的共性开发成本，统一访问控制、安全加密、基础工具类等资源。
+
+## 仓库组成
+
+本仓库以子包形式统一维护各类前端公共组件/插件，当前已包含：
+
+| 子包 | 说明 |
+| ---- | ---- |
+| [lib-vue-base](./lib-vue-base) | 企业级前端框架基础支撑组件：统一访问控制、安全加密、请求封装、基础工具类等 |
+| [ll-editor](./ll-editor) | 插件化代码编辑器内核（基于 Monaco），可插拔运行时与插件市场 |
+
+> 说明：除上述组件外，后续将持续沉淀、增加更多公共组件/插件，统一在本仓库中以子包形式维护与发布。
 
 
 ## 修改历史记录
@@ -31,13 +42,13 @@
 - 获取项目代码
 
 ```bash
-git clone https://gitee.com/linlannet/vue-base-frame.git
+git clone https://gitee.com/linlannet/vue-base.git
 ```
 
 - 安装依赖
 
 ```bash
-cd vue-base-frame
+cd vue-base
 
 npm install
 
@@ -57,7 +68,7 @@ npm build
 
 ## 参与贡献
 
-欢迎你的加入！[提交 issue](https://gitee.com/linlannet/vue-base-frame/issues/new/choose) 或者提交拉取请求。
+欢迎你的加入！[提交 issue](https://gitee.com/linlannet/vue-base/issues/new/choose) 或者提交拉取请求。
 
 **拉取请求步骤:**
 
@@ -69,4 +80,4 @@ npm build
 
 ## 版权
 
-[Apache 2.0 © vue-base-frame 2023](./LICENSE)
+[Apache 2.0 © vue-base 2023](./LICENSE)

@@ -1,0 +1,59 @@
+{
+    "name": "@linlannet/lib-vue-base",
+    "version": "1.1.0",
+    "description": "企业级前端框架基础支撑组件，对前端通用支撑组件进行封装和统一管理，降低每个前端工程共性开发，统一访问控制、安全加密、基础工具类等资源。",
+    "private": false,
+    "scripts": {
+        "dev": "vite --mode development --open",
+        "build": "run-p type-check build-only && npm run build-publish",
+        "preview": "vite preview",
+        "build-publish": "release.bat",
+        "test:unit": "vitest",
+        "build-only": "vite build",
+        "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
+        "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+        "format": "prettier --write src/"
+    },
+    "dependencies": {
+        "axios": "^1.4.0",
+        "pinia": "^2.0.36",
+        "pinia-plugin-persist": "^1.0.0",
+        "vue": "^3.3.2"
+    },
+    "devDependencies": {
+        "@rushstack/eslint-patch": "^1.2.0",
+        "@types/jsdom": "^21.1.0",
+        "@types/node": "^18.14.2",
+        "@vitejs/plugin-vue": "^4.0.0",
+        "@vitejs/plugin-vue-jsx": "^3.0.0",
+        "@vue/eslint-config-prettier": "^7.1.0",
+        "@vue/eslint-config-typescript": "^11.0.2",
+        "@vue/test-utils": "^2.3.0",
+        "@vue/tsconfig": "^0.1.3",
+        "eslint": "^8.34.0",
+        "eslint-plugin-vue": "^9.9.0",
+        "jsdom": "^21.1.0",
+        "npm-run-all": "^4.1.5",
+        "prettier": "^2.8.4",
+        "typescript": "~4.8.4",
+        "unplugin-vue-components": "^0.25.1",
+        "vite": "^4.1.4",
+        "vitest": "^0.29.1",
+        "vue-tsc": "^1.2.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://gitee.com/linlannet/vue-base.git"
+    },
+    "keywords": [],
+    "author": "linlaninfo",
+    "license": "Apache2",
+    "bugs": {
+        "url": "https://gitee.com/linlannet/vue-base/issues"
+    },
+    "homepage": "https://gitee.com/linlannet/vue-base"
+
+}

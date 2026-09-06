@@ -1,0 +1,9 @@
+{
+    "name":"lib-vue-base",
+    "version": "1.0.0",
+    "description": "框架基础",
+    "main": "index.es.js",
+    "keywords": ["框架"],
+    "author": "linlan",
+    "license": "ISC"
+}
