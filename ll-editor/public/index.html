@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ll-editor dist smoke test</title>
+  <link rel="stylesheet" href="./style.css" />
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; flex-direction: column; }
+    #toolbar {
+      display: flex; gap: 8px; padding: 8px 12px;
+      background: #f3f4f6; border-bottom: 1px solid #e5e7eb;
+    }
+    #toolbar button { cursor: pointer; }
+    #editor { flex: 1; min-height: 0; }
+    #status { padding: 6px 12px; font-size: 12px; color: #666; border-top: 1px solid #e5e7eb; }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "vue": "https://unpkg.com/vue@3.4.27/dist/vue.esm-browser.js",
+      "monaco-editor": "https://esm.sh/monaco-editor@0.52.2",
+      "monaco-editor/": "https://esm.sh/monaco-editor@0.52.2/"
+    }
+  }
+  </script>
+
+  <!-- 宿主注入 Monaco worker：库已 external monaco，内置 ?worker 构造器在 CDN 场景失效，
+       此处用 getWorkerUrl + data-url 从 CDN 加载 workerMain，保证语言服务/剪贴板/快捷键正常 -->
+  <script>
+    self.MonacoEnvironment = {
+      getWorkerUrl: function (_workerId, label) {
+        var base = 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/'
+        var code = "self.MonacoEnvironment={baseUrl:'" + base + "'};importScripts('" + base + "vs/base/worker/workerMain.js');"
+        return 'data:text/javascript;charset=utf-8,' + encodeURIComponent(code)
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="toolbar">
+    <button id="addDoc">+ 新文档</button>
+    <button id="saveDoc">保存当前</button>
+    <button id="toggleTheme">切换主题</button>
+    <button id="listDocs">列出已打开</button>
+  </div>
+  <div id="editor"></div>
+  <div id="status">加载中...</div>
+
+  <script type="module">
+    import { LLEditor } from './ll-editor.js'
+
+    const editor = new LLEditor(document.getElementById('editor'), {
+      defaultTheme: 'light',
+      initialDocs: [
+        {
+          id: 'demo',
+          language: 'typescript',
+          name: 'demo.ts',
+          content: '// ll-editor smoke test\nconst greeting: string = "hello ll-editor"\nconsole.log(greeting)\n',
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        }
+      ]
+    })
+
+    const status = document.getElementById('status')
+    const log = (msg) => {
+      status.textContent = msg
+      console.log('[ll-editor]', msg)
+    }
+
+    editor.bus.on('doc:opened', ({ id }) => log(`已打开: ${id}`))
+    editor.bus.on('tab:switched', ({ id }) => log(`切换到: ${id}`))
+    editor.bus.on('doc:saved', (doc) => log(`已保存: ${doc.name}`))
+    editor.bus.on('theme:changed', (theme) => log(`主题: ${theme}`))
+
+    let counter = 1
+    document.getElementById('addDoc').addEventListener('click', () => {
+      const id = `new-${counter++}`
+      editor.open({
+        id,
+        language: 'javascript',
+        name: `${id}.js`,
+        content: `// ${id}\nconst n = ${counter};\n`,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
+      })
+    })
+
+    document.getElementById('saveDoc').addEventListener('click', async () => {
+      await editor.save()
+    })
+
+    document.getElementById('toggleTheme').addEventListener('click', () => {
+      const next = document.body.classList.contains('dark') ? 'light' : 'dark'
+      document.body.classList.toggle('dark')
+      editor.setTheme(next)
+    })
+
+    document.getElementById('listDocs').addEventListener('click', async () => {
+      const all = await editor.list()
+      log(`存储中的文档: ${all.map(d => d.name).join(', ') || '(空)'}`)
+    })
+
+    log('ll-editor 已初始化')
+  </script>
+</body>
+</html>
