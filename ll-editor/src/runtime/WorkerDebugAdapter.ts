@@ -5,6 +5,7 @@ import { transpileToJs } from './transpile'
 export interface BreakpointPayload {
   line: number
   stack?: string
+  vars?: Record<string, unknown>
 }
 
 /**
@@ -56,8 +57,8 @@ export class WorkerDebugAdapter implements DebugAdapter {
             output += text + '\n'
             this.emit('output', { level, text })
           },
-          onBreakpoint: (line, stack) => {
-            this.emit('breakpoint', { line, stack } as BreakpointPayload)
+          onBreakpoint: (line, stack, vars) => {
+            this.emit('breakpoint', { line, stack, vars } as BreakpointPayload)
           },
           onError: (text) => {
             output += text + '\n'

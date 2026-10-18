@@ -2,7 +2,7 @@ export type RunInput = { code: string; language: string; breakpoints: number[] }
 
 export interface SandboxCallbacks {
   onOutput?: (level: string, text: string) => void
-  onBreakpoint?: (line: number, stack?: string) => void
+  onBreakpoint?: (line: number, stack?: string, vars?: Record<string, unknown>) => void
   onError?: (text: string) => void
   onEnd?: (result: { exitCode: number; vars: Record<string, unknown> }) => void
 }
@@ -39,10 +39,19 @@ self.onmessage = function (e) {
   LEVELS.forEach(function (l) { console[l] = make(l) })
   var bpSet = {}
   ;(d.breakpoints || []).forEach(function (n) { bpSet[n] = true })
+  function snapshotVars() {
+    var vars = {}
+    Object.keys(globalThis).forEach(function (k) {
+      if (before.indexOf(k) === -1 && k !== 'self' && k !== 'globalThis' && k !== 'postMessage' && k !== 'onmessage' && k !== 'addEventListener' && k !== 'removeEventListener') {
+        try { vars[k] = globalThis[k] } catch (err) {}
+      }
+    })
+    return vars
+  }
   function __bp__(line) {
     return new Promise(function (resolve) {
       var stack = new Error().stack
-      self.postMessage({ type: 'breakpoint', line: line, stack: stack })
+      self.postMessage({ type: 'breakpoint', line: line, stack: stack, vars: snapshotVars() })
       resolver = resolve
     })
   }
@@ -88,7 +97,7 @@ function defaultExecutor(input: RunInput, cb: SandboxCallbacks): void {
   const handler = (e: MessageEvent) => {
     const msg = e.data
     if (msg.type === 'output') cb.onOutput?.(msg.level, msg.text)
-    else if (msg.type === 'breakpoint') cb.onBreakpoint?.(msg.line, msg.stack)
+    else if (msg.type === 'breakpoint') cb.onBreakpoint?.(msg.line, msg.stack, msg.vars)
     else if (msg.type === 'error') cb.onError?.(msg.text)
     else if (msg.type === 'end') {
       cb.onEnd?.(msg.result)

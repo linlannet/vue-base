@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
+// @ts-ignore - 项目暂未安装 @types/node
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({

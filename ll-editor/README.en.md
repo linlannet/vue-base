@@ -1,4 +1,4 @@
-# ll-editor
+﻿# ll-editor
 
 > A plugin-based code editor core + pluggable runtime + plugin marketplace (renamed from `ss-editor`).
 
@@ -6,7 +6,7 @@
 
 `ll-editor` is a **framework-agnostic** code editor core built on [Monaco Editor](https://github.com/microsoft/monaco-editor):
 
-- The **core** borrows magic-editor's Monaco multi-tab editor (business logic stripped out).
+- The **core** borrows linlan-editor's Monaco multi-tab editor (business logic stripped out).
 - The **architecture** borrows aieditor's layering + whitelisted exports + plugin/tool registry.
 - The **ecosystem** borrows deepseek harness's Manifest + plugin marketplace distribution model.
 

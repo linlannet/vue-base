@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { readFileSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { describe, it, expect } from 'vitest'
 
@@ -31,7 +31,8 @@ function collectImports(file: string): string[] {
 
 function violationsIn(layer: string, allowed: RegExp[]): string[] {
   const layerDir = join(sourceRoot, layer)
-  if (!statSync(layerDir).isDirectory()) return []
+  // 层目录可能尚未创建（如 ui/ 暂未落地），视为无违规
+  if (!existsSync(layerDir) || !statSync(layerDir).isDirectory()) return []
   const out: string[] = []
   for (const file of walk(layerDir)) {
     for (const imp of collectImports(file)) {

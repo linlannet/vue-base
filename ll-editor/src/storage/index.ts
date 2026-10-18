@@ -1,4 +1,4 @@
-import type { StorageOptions } from '../core/types'
+﻿import type { StorageOptions } from '../core/types'
 import type { StorageProvider } from './StorageProvider'
 import { LocalStorageProvider } from './LocalStorageProvider'
 import { IndexedDBProvider } from './IndexedDBProvider'
@@ -7,7 +7,7 @@ export * from './StorageProvider'
 export * from './LocalStorageProvider'
 export * from './IndexedDBProvider'
 
-/** 根据配置创建存储后端（统一收敛端点/实现，消除 magic-editor 散落 API 问题） */
+/** 根据配置创建存储后端（统一收敛端点/实现，消除 linlan-editor 散落 API 问题） */
 export function createStorage(options?: StorageOptions): StorageProvider {
   switch (options?.type) {
     case 'indexeddb':

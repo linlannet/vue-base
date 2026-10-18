@@ -9,5 +9,6 @@ export * from './languages'
 export * from './storage'
 export * from './editor'
 export * from './plugin-api'
+export * from './runtime'
 
-// P2+ 将导出 ./runtime；P3 将导出 ./plugins / ./plugin-runtime / ./plugin-market
+// P3 将导出 ./plugins / ./plugin-runtime / ./plugin-market

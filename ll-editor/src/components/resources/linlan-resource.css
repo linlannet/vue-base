@@ -1,0 +1,126 @@
+/**
+ * java-linlan-api - 基于Magic-api的工程，用于数据接口配置项目，可通过配置SQL、mybatis方式实现api输出，支持配置promQL编写Prometheus脚本，实现监控流数据和即时状态查询机展示
+ * Copyright © 2020-2025 Linlan (open@linlan.net)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+.ll-tree-wrapper:not(.ll-dialog-wrapper) {
+    text-align: left;
+    float: left;
+    border-right: 1px solid var(--toolbox-border-right-color);
+    overflow: auto;
+    width: 250px;
+    min-width: 250px;
+    background: var(--toolbox-background);
+    position: relative;
+}
+
+.ll-tree-wrapper .ll-tree-item .ll-tree-item-header {
+    font-weight: bold;
+    height: 20px;
+    line-height: 20px;
+}
+
+.ll-tree-wrapper .ll-tree-item .ll-tree-sub-items > * {
+    line-height: 20px;
+    /* padding-left: 17px; */
+    white-space: nowrap;
+}
+.ll-tree-wrapper .ll-tree-item .ll-tree-item-header[dragtarget] label{
+    border-color: red;
+}
+.ll-tree-wrapper .ll-tree-hover:hover,
+.ll-tree-wrapper .ll-tree-select {
+    background: var(--toolbox-list-hover-background);
+}
+
+.ll-tree-wrapper .ll-tree-item .ll-tree-sub-items > *.selected {
+    background: var(--toolbox-list-selected-background);
+}
+
+.ll-tree-wrapper .ll-icon {
+    color: var(--toolbox-list-icon-color);
+    padding-right: 2px;
+    font-size: 14px;
+}
+.ll-tree-wrapper .ll-icon-arrow-bottom {
+    color: var(--toolbox-list-arrow-color);
+}
+
+.ll-tree-wrapper span {
+    color: var(--toolbox-list-span-color);
+    display: inline-block;
+    height: 22px;
+    line-height: 22px;
+}
+
+.ll-tree-wrapper .ll-icon-lock {
+    color: var(--toolbox-list-label-color);
+    margin-left: 5px;
+}
+
+.ll-tree-wrapper label {
+    color: var(--toolbox-list-label-color);
+    display: inline-block;
+    border: 1px solid transparent;
+}
+
+.ll-tree-wrapper .ll-tree-toolbar-search {
+    flex: 1;
+}
+
+.ll-tree-wrapper .ll-tree-toolbar-search input {
+    border: none;
+    background: none;
+    height: 100%;
+    color: var(--input-color);
+}
+
+.ll-tree-wrapper .ll-tree-toolbar-search input:focus {
+    outline: none;
+}
+
+.ll-tree-wrapper .ll-tree-toolbar {
+    background: var(--background);
+    color: var(--toolbox-list-label-color);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    /* flex-direction: row-reverse; */
+    padding: 1px;
+}
+
+.ll-tree-wrapper .ll-tree-toolbar-btn {
+    padding: 2px;
+    align-self: flex-end;
+    display: inline-block;
+}
+
+.ll-tree-wrapper .ll-tree-toolbar-btn:hover,
+.ll-tree-wrapper .ll-tree-toolbar-btn.hover {
+    background: var(--toolbox-list-hover-background);
+}
+
+.ll-tree-wrapper .ll-tree-toolbar i {
+    color: var(--toolbox-list-header-icon-color);
+}
+
+.ll-tree-wrapper .ll-tree-container {
+    height: calc(100% - 25px);
+    overflow: auto;
+}
+
+.ll-tree-wrapper .ll-icon-datasource{
+    color: #089910;
+}

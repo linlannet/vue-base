@@ -66,6 +66,30 @@ export interface Diagnostic {
   source?: string
 }
 
+/** 知识库存储方式（P3：本地文件 / 数据库后端；当前仅作为元数据保存） */
+export type KBStorageType = 'file' | 'database'
+
+/** 知识库文件类型 */
+export type KBFileKind = 'text' | 'code' | 'md'
+
+/** 知识库文件（可为普通文本、markdown 或代码，如 python） */
+export interface KBFile {
+  id: string
+  name: string
+  /** monaco languageId，如 markdown / python / plaintext */
+  language: string
+  kind: KBFileKind
+  content: string
+}
+
+/** 知识库（类似 d1/d2/d3；可配置多个，并选择保存方式） */
+export interface KnowledgeBase {
+  id: string
+  name: string
+  storage: KBStorageType
+  files: KBFile[]
+}
+
 /** 调试事件类型（P2 沙箱/断点联动） */
 export type DebugEvent = 'output' | 'breakpoint' | 'error' | 'end' | 'paused' | 'resumed'
 
@@ -96,6 +120,18 @@ export interface LLEditorOptions {
   locale?: 'zh-CN' | 'en'
   /** 宿主注入的扩展点（P3 也可运行时注册） */
   plugins?: unknown[]
+  /** 初始断点配置（P2 调试） */
+  breakpoints?: Breakpoint[]
+  /** 初始知识库（P3 模式，知识库/接口/函数三者之一） */
+  knowledgeBases?: KnowledgeBase[]
+  /** magic-api 工作台后端前缀（默认 /magic-api/rest/web，dev 走 vite 代理） */
+  baseURL?: string
+  /** 运行接口的后端根（默认由 baseURL 去掉 /rest/web 推导） */
+  serverURL?: string
+  /** 前端版本号文本（用于前后端版本一致性校验） */
+  magicApiVersionText?: string
+  /** 跳过后端版本校验 */
+  ignoreVersion?: boolean
 }
 
 /** 存储后端配置 */

@@ -39,10 +39,21 @@ export interface LLEditorEvents {
   'theme:changed': string
   'language:registered': string
   'breakpoint:changed': Breakpoint[]
-  // P2+ 预留
+  // P2 调试/运行
   'run:started': { docId: string }
   'run:output': string
+  'run:error': { message: string; line?: number }
   'run:ended': RunResult
+  'debug:breakpoint': DebugBreakpointEvent
+  'debug:resumed': void
+  'problems:changed': Diagnostic[]
 }
 
-import type { EditorDoc, Breakpoint, RunResult } from './types'
+/** 断点命中事件载荷 */
+export interface DebugBreakpointEvent {
+  line: number
+  vars: Record<string, unknown>
+  stack?: string
+}
+
+import type { EditorDoc, Breakpoint, RunResult, Diagnostic } from './types'

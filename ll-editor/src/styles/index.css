@@ -117,3 +117,1615 @@
   margin-top: 4px;
   cursor: pointer;
 }
+
+.ll-editor-debug-line {
+  background: rgba(255, 213, 0, 0.25);
+}
+
+.ll-toolbar-sep {
+  width: 1px;
+  height: 18px;
+  background: #d0d7de;
+  margin: 0 4px;
+}
+
+.ll-editor-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ll-editor-btn.ll-run {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.ll-editor-btn.ll-run:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+/* 底部调试面板 */
+.ll-editor-bottom {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #e5e7eb;
+  background: #fafafa;
+  font-size: 13px;
+}
+
+.ll-editor-bottom-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #f6f8fa;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.ll-editor-tab2 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #f6f8fa;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.ll-editor-tab2 button {
+  border: none;
+  background: transparent;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  font-size: 13px;
+  color: #57606a;
+}
+
+.ll-editor-tab2 button.active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+  font-weight: 600;
+}
+
+.ll-editor-tab2-spacer {
+  flex: 1;
+}
+
+.ll-editor-clear {
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 4px;
+  padding: 1px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #57606a;
+}
+
+.ll-editor-toggle {
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  color: #57606a;
+  margin-left: 4px;
+}
+
+.ll-editor-toggle:hover {
+  background: #eef2f7;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.ll-editor-bottom.collapsed .ll-editor-tab2 {
+  border-bottom: none;
+}
+
+.ll-editor-panel {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: #fff;
+}
+
+/* ===== 接口模式：接口信息行（linlan 风格） ===== */
+.ll-api-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  background: #fafbfc;
+  border-bottom: 1px solid var(--ll-border);
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+
+.ll-api-info-label {
+  font-weight: 600;
+  color: var(--ll-fg);
+}
+
+.ll-api-info-field {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ll-api-info-key {
+  color: #57606a;
+}
+
+.ll-api-info-method {
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  height: 22px;
+  background: #fff;
+  color: #1f2328;
+}
+
+.ll-api-info-method.m-active-GET,
+  .ll-api-info-method option[value="GET"] { color: #1f2328; }
+
+.ll-api-info-input {
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 12px;
+  height: 22px;
+  min-width: 120px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+.ll-api-info-path-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.ll-api-info-path-field .ll-api-info-input {
+  flex: 1;
+  min-width: 180px;
+}
+
+/* ===== 接口模式：紫色工具栏（linlan 风格） ===== */
+.ll-api-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #e8e0f7;
+  border-bottom: 1px solid var(--ll-border);
+}
+
+.ll-tb-btn {
+  border: 1px solid #c8b6e6;
+  background: #fff;
+  border-radius: 3px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #4a3a78;
+}
+
+.ll-tb-btn:hover {
+  background: #f4eef9;
+  border-color: #8b6dc8;
+  color: #2f1d6e;
+}
+
+/* ===== 接口模式下 Tab 内容区 ===== */
+.ll-api-section {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  background: #fff;
+}
+
+.ll-api-addrow {
+  padding: 4px 8px;
+  background: #fafbfc;
+  border-bottom: 1px solid var(--ll-border);
+}
+
+.ll-tb-mini {
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 3px;
+  padding: 1px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #2563eb;
+}
+
+.ll-tb-mini:hover {
+  background: #e8f0fe;
+  border-color: #2563eb;
+}
+
+.ll-param-table-9 th,
+.ll-param-table-9 td {
+  padding: 4px 6px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.ll-api-req-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  background: #fafbfc;
+  border-bottom: 1px solid var(--ll-border);
+}
+
+.ll-api-section-body .ll-api-req-body {
+  flex: 1;
+  min-height: 80px;
+}
+
+.ll-api-run-inline {
+  border-top: 1px solid var(--ll-border);
+  padding: 4px 8px;
+  background: #fff;
+  max-height: 100px;
+  overflow: auto;
+}
+
+.ll-api-run-title {
+  font-size: 12px;
+  color: #57606a;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.ll-api-desc {
+  flex: 1;
+  min-height: 80px;
+}
+
+.ll-api-history {
+  border-top: 1px solid var(--ll-border);
+  padding: 4px 8px;
+  max-height: 100px;
+  overflow: auto;
+}
+
+.ll-tab-spacer {
+  flex: 1;
+}
+
+.ll-editor-btn-mini {
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 6px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.ll-editor-bottom-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: #fff;
+}
+
+.ll-editor-console .ll-log {
+  padding: 2px 10px;
+  white-space: pre-wrap;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.ll-log.lv-error { color: #cf222e; }
+.ll-log.lv-warn { color: #9a6700; }
+.ll-log.lv-info { color: #0969da; }
+
+.ll-editor-debug table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ll-editor-debug th,
+.ll-editor-debug td {
+  text-align: left;
+  padding: 4px 10px;
+  border-bottom: 1px solid #f3f4f6;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+.ll-editor-debug th {
+  background: #f6f8fa;
+  color: #57606a;
+}
+
+.ll-editor-problems .ll-problem {
+  padding: 3px 10px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.ll-problem.error { color: #cf222e; }
+.ll-problem.warning { color: #9a6700; }
+
+.ll-sev {
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+.ll-empty {
+  padding: 10px;
+  color: #999;
+}
+
+.ll-status-run { color: #2563eb; }
+.ll-status-pause { color: #cf222e; }
+
+/* ===== 应用级外壳（知识库/接口/函数 三模式） ===== */
+.ll-app {
+  height: 100%;
+}
+
+.ll-app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  background: #f6f8fa;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.ll-app-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #1f2328;
+  letter-spacing: 0.3px;
+}
+
+.ll-app-modes {
+  display: flex;
+  gap: 4px;
+}
+
+.ll-app-modes button {
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #57606a;
+}
+
+.ll-app-modes button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
+
+.ll-app-path {
+  flex: 1;
+  min-width: 80px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+.ll-app-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.ll-app-actions button {
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ll-app-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ll-app-actions button:not(:disabled):hover {
+  background: #f3f4f6;
+}
+
+.ll-app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.ll-app-center {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.ll-app-empty {
+  padding: 24px;
+  color: #999;
+  text-align: center;
+}
+
+/* ===== 知识库侧栏 ===== */
+.ll-sidebar-modes {
+  display: flex;
+  gap: 4px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.ll-sidebar-modes button {
+  flex: 1;
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 0;
+  cursor: pointer;
+  font-size: 13px;
+  color: #57606a;
+}
+
+.ll-sidebar-modes button.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+  font-weight: 600;
+}
+
+.ll-sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.ll-kb-group {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ll-kb-base {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ll-kb-base:hover,
+.ll-kb-file:hover {
+  background: #eef2ff;
+}
+
+.ll-kb-base.active {
+  background: #e0ecff;
+}
+
+.ll-kb-caret {
+  color: #999;
+  font-size: 11px;
+}
+
+.ll-kb-name {
+  font-weight: 600;
+  flex: 1;
+}
+
+.ll-kb-store {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  color: #fff;
+}
+
+.ll-kb-store.file {
+  background: #2563eb;
+}
+
+.ll-kb-store.database {
+  background: #16a34a;
+}
+
+.ll-kb-files {
+  padding-left: 16px;
+}
+
+.ll-kb-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  border-bottom: 1px solid #fafafa;
+}
+
+.ll-kb-file.active {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+/* ===== 知识库设置面板（右侧） ===== */
+.ll-kb-config {
+  width: 240px;
+  border-left: 1px solid #e5e7eb;
+  background: #fafafa;
+  padding: 14px;
+  overflow: auto;
+}
+
+.ll-kb-config h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.ll-kb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: #57606a;
+}
+
+.ll-kb-field input,
+.ll-kb-field select {
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 13px;
+}
+
+.ll-kb-hint {
+  font-size: 12px;
+  color: #8b949e;
+  background: #fff;
+  border: 1px dashed #d0d7de;
+  border-radius: 6px;
+  padding: 8px;
+  line-height: 1.5;
+}
+
+/* ===== 知识库预览 ===== */
+.ll-kb-preview {
+  padding: 16px 20px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #1f2328;
+}
+
+.ll-kb-preview h1,
+.ll-kb-preview h2,
+.ll-kb-preview h3 { margin: 0.6em 0 0.3em; }
+.ll-kb-preview code {
+  background: #f3f4f6;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+}
+.ll-kb-preview pre {
+  background: #0d1117;
+  color: #e6edf3;
+  padding: 12px;
+  border-radius: 8px;
+  overflow: auto;
+}
+.ll-kb-preview pre code { background: transparent; color: inherit; padding: 0; }
+.ll-kb-preview blockquote {
+  border-left: 3px solid #d0d7de;
+  margin: 0.5em 0;
+  padding: 2px 12px;
+  color: #57606a;
+}
+.ll-kb-preview table { border-collapse: collapse; }
+.ll-kb-preview th,
+.ll-kb-preview td { border: 1px solid #d0d7de; padding: 4px 10px; }
+
+.ll-kb-preview-hint {
+  padding: 16px;
+  color: #8b949e;
+  background: #fff;
+  border: 1px dashed #d0d7de;
+  border-radius: 8px;
+}
+
+/* 断点 glyph 标记 */
+.ll-editor-bp {
+  background: #ef4444;
+  width: 9px !important;
+  height: 9px !important;
+  border-radius: 50%;
+  margin-left: 7px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+/* ===== linlan-editor 风格外壳（知识库 / 接口 / 函数 三模式） ===== */
+.ll-container {
+  --ll-primary: #3a8ee6;
+  --ll-bg: #f5f7fa;
+  --ll-fg: #303133;
+  --ll-border: #e3e6eb;
+  --ll-side: #fafbfc;
+  --ll-active: #e8f0fe;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--ll-fg);
+  background: var(--ll-bg);
+  outline: none;
+}
+
+.ll-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 12px;
+  background: #fff;
+  border-bottom: 1px solid var(--ll-border);
+  font-size: 13px;
+}
+
+.ll-title {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+}
+
+.ll-path {
+  flex: 1;
+  min-width: 80px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+.ll-spacer {
+  flex: 1;
+}
+
+.ll-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.ll-btn {
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 4px;
+  padding: 2px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #303133;
+}
+
+.ll-btn:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.ll-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ll-btn-primary {
+  background: var(--ll-primary);
+  border-color: var(--ll-primary);
+  color: #fff;
+}
+
+.ll-btn-primary:hover:not(:disabled) {
+  background: #2f7fd6;
+}
+
+.ll-hint {
+  font-size: 12px;
+  color: #8b949e;
+}
+
+.ll-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.ll-toolbar-container {
+  width: 52px;
+  background: var(--ll-side);
+  border-right: 1px solid var(--ll-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.ll-toolbar-icon {
+  width: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #57606a;
+  user-select: none;
+}
+
+.ll-toolbar-icon:hover {
+  background: #eef2f7;
+}
+
+.ll-toolbar-icon.active {
+  background: var(--ll-active);
+  color: var(--ll-primary);
+}
+
+.ll-toolbar-glyph {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: #eef2f7;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ll-toolbar-icon.active .ll-toolbar-glyph {
+  background: var(--ll-primary);
+  color: #fff;
+}
+
+.ll-toolbar-text {
+  font-size: 11px;
+}
+
+.ll-main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.ll-middle-container {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.ll-sidebar {
+  flex-shrink: 0;
+}
+
+.ll-sidebar-inner {
+  height: 100%;
+}
+
+.ll-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ll-config {
+  flex-shrink: 0;
+}
+
+.ll-bottom {
+  flex-shrink: 0;
+}
+
+.ll-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  padding: 24px;
+  text-align: center;
+}
+
+.ll-resizer {
+  background: var(--ll-border);
+  flex-shrink: 0;
+  transition: background 0.15s;
+  position: relative;
+  z-index: 2;
+}
+
+.ll-resizer:hover {
+  background: var(--ll-primary);
+}
+
+.ll-resizer-x {
+  width: 5px;
+  cursor: col-resize;
+}
+
+.ll-resizer-y {
+  height: 5px;
+  cursor: row-resize;
+}
+
+.ll-resizer-y::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 2px;
+  background: transparent;
+  border-radius: 1px;
+}
+
+.ll-resizer-y:hover::before {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.ll-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: #57606a;
+  background: #fff;
+  border-top: 1px solid var(--ll-border);
+}
+
+.ll-status-run {
+  color: var(--ll-primary);
+}
+
+.ll-status-pause {
+  color: #cf222e;
+}
+
+.ll-status-spacer {
+  flex: 1;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#app {
+  height: 100vh;
+}
+
+/* ===== 中心编辑区（linlan-script-editor） ===== */
+.ll-editor-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+}
+
+.ll-editor-canvas-wrap {
+  position: relative;
+}
+
+.ll-editor-api {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ll-editor-api .ll-editor-tabs {
+  flex-shrink: 0;
+}
+
+.ll-editor-api .ll-editor-canvas {
+  flex: 1;
+  min-height: 0;
+}
+
+/* KB 编辑器宿主铺层 */
+.ll-kb-editor,
+.ll-kb-editor-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.ll-kb-editor {
+  position: absolute;
+  inset: 0;
+}
+
+/* 侧栏小操作按钮（新建 / 刷新） */
+.ll-sidebar-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.ll-mini {
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 4px;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  color: #57606a;
+}
+
+.ll-mini:hover {
+  background: #f3f4f6;
+}
+
+.ll-logo {
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  color: var(--ll-fg);
+  flex-shrink: 0;
+}
+
+.ll-logo label {
+  cursor: default;
+}
+
+.ll-toolbar-container li {
+  list-style: none;
+  width: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #57606a;
+  user-select: none;
+}
+
+.ll-toolbar-container li:hover {
+  background: #eef2f7;
+}
+
+.ll-toolbar-container li.selected {
+  background: var(--ll-active);
+  color: var(--ll-primary);
+}
+
+.ll-toolbar-container li.selected .ll-toolbar-glyph {
+  background: var(--ll-primary);
+  color: #fff;
+}
+
+/* ===== 缺失组件 class 补齐（linlan-* 组件实际使用的类名） ===== */
+
+/* 头部按钮栏容器 */
+.ll-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 知识库 / API / 函数 / 数据源列表根容器（组件中 .ll-sidebar） */
+.ll-sidebar {
+  flex-shrink: 0;
+  height: 100%;
+  background: var(--ll-side);
+  border-right: 1px solid var(--ll-border);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 知识库分组（.ll-kb 包裹 .ll-kb-row + .ll-kb-body） */
+.ll-kb {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* 知识库搜索框 */
+.ll-sidebar-search {
+  padding: 6px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.ll-sidebar-search input {
+  width: 100%;
+  height: 26px;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 0 8px;
+  font-size: 12px;
+  background: #fff;
+  outline: none;
+}
+
+.ll-sidebar-search input:focus {
+  border-color: #2563eb;
+}
+
+/* 知识库标题行（折叠 + 名称 + 操作按钮） */
+.ll-kb-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-right: 6px;
+}
+
+.ll-kb-row:hover {
+  background: #eef2ff;
+}
+
+/* 折叠箭头 */
+.ll-kb-caret {
+  width: 16px;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 10px;
+  color: #6b7280;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 知识库名称（占中间，hover 保持显示） */
+.ll-kb-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+}
+
+.ll-kb-name:hover {
+  background: transparent;
+}
+
+.ll-kb-name.active {
+  background: #e0ecff;
+}
+
+.ll-kb-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.ll-kb-name-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* KB 行右侧操作按钮（默认隐藏，hover 显示） */
+.ll-kb-actions {
+  display: inline-flex;
+  gap: 2px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.ll-kb-row:hover .ll-kb-actions,
+.ll-kb-actions:hover {
+  opacity: 1;
+}
+
+/* KB 展开区域 */
+.ll-kb-body {
+  padding: 0 0 4px;
+}
+
+/* KB 下的分组（文档 / 资源库） */
+.ll-kb-group {
+  margin-bottom: 4px;
+}
+
+.ll-kb-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px 4px 22px;
+  font-size: 11px;
+  color: #6b7280;
+  background: #fafafa;
+}
+
+.ll-kb-empty {
+  padding: 16px 12px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.ll-kb-empty-row {
+  padding: 2px 10px 2px 36px;
+  color: #c0c4cc;
+  font-size: 12px;
+}
+
+/* 知识库 / API 文件行（.ll-file-row） */
+.ll-file {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px 4px 26px;
+  cursor: pointer;
+  font-size: 13px;
+  border-bottom: 1px solid #fafafa;
+  position: relative;
+}
+
+.ll-file:hover {
+  background: #eef2ff;
+}
+
+.ll-file.active {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.ll-file-icon {
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.ll-file-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 列表行 hover 才显示的删除按钮 */
+.ll-mini-fade {
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.ll-file:hover .ll-mini-fade,
+.ll-mini-fade:hover {
+  opacity: 1;
+}
+
+/* 危险操作按钮（删除） */
+.ll-mini.danger {
+  color: #ef4444;
+}
+
+.ll-mini.danger:hover {
+  background: #fee2e2;
+  border-color: #fecaca;
+}
+
+/* 知识库配置面板（组件中 .ll-config-row，原 .ll-kb-field 未使用） */
+.ll-kb-config {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ll-config-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #57606a;
+}
+
+.ll-config-row input,
+.ll-config-row select {
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 13px;
+}
+
+.ll-config-submit {
+  align-self: flex-start;
+  margin-top: 4px;
+  border: 1px solid #d0d7de;
+  background: #fff;
+  border-radius: 6px;
+  padding: 5px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #1f2328;
+}
+
+.ll-config-submit:hover {
+  background: #f3f4f6;
+}
+
+/* 底部面板：预览（markdown 渲染）容器 */
+.ll-editor-preview {
+  padding: 12px 16px;
+  overflow: auto;
+  background: #fff;
+  font-size: 14px;
+  color: #1f2328;
+  line-height: 1.6;
+}
+
+.ll-editor-preview h1,
+.ll-editor-preview h2,
+.ll-editor-preview h3,
+.ll-editor-preview h4 {
+  margin: 12px 0 6px;
+  line-height: 1.3;
+}
+
+.ll-editor-preview h1 { font-size: 22px; }
+.ll-editor-preview h2 { font-size: 19px; }
+.ll-editor-preview h3 { font-size: 16px; }
+
+.ll-editor-preview p { margin: 6px 0; }
+
+.ll-editor-preview ul,
+.ll-editor-preview ol {
+  padding-left: 22px;
+  margin: 6px 0;
+}
+
+.ll-editor-preview pre {
+  background: #f6f8fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 10px 12px;
+  overflow: auto;
+}
+
+.ll-editor-preview code {
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 13px;
+}
+
+.ll-editor-preview :not(pre) > code {
+  background: #f6f8fa;
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.ll-editor-preview blockquote {
+  border-left: 3px solid #d0d7de;
+  margin: 6px 0;
+  padding: 2px 12px;
+  color: #57606a;
+}
+
+.ll-editor-preview a { color: #2563eb; }
+
+/* 控制台日志行（组件用 .ll-console-line） */
+.ll-editor-console .ll-console-line {
+  padding: 2px 10px;
+  white-space: pre-wrap;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.ll-console-line.lv-error { color: #cf222e; }
+.ll-console-line.lv-warn { color: #9a6700; }
+.ll-console-line.lv-info { color: #0969da; }
+
+/* 调试变量行（组件中 .ll-debug-row） */
+.ll-editor-debug .ll-debug-row {
+  display: flex;
+  gap: 12px;
+  padding: 4px 10px;
+  border-bottom: 1px solid #f3f4f6;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+.ll-debug-key {
+  color: #57606a;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.ll-debug-val {
+  color: #1f2328;
+  word-break: break-all;
+}
+
+/* 问题面板行（组件中 .ll-problem-row + sev-<severity>） */
+.ll-editor-problems .ll-problem-row {
+  display: flex;
+  gap: 8px;
+  padding: 3px 10px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.ll-problem-row.sev-error { color: #cf222e; }
+.ll-problem-row.sev-warning { color: #9a6700; }
+
+.ll-problem-sev { flex-shrink: 0; }
+.ll-problem-msg { flex: 1; }
+.ll-problem-pos { margin-left: auto; color: #999; }
+
+/* ===== magic-api 资源树（linlan-api-node / linlan-api-list） ===== */
+.ll-tree-node {
+  font-size: 13px;
+}
+
+.ll-tree-group,
+.ll-tree-api {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.ll-tree-group.drag-over {
+  outline: 1px dashed var(--ll-primary, #3a8ee6);
+  background: rgba(58, 142, 230, 0.12);
+}
+
+/* 按钮始终占位、hover 时变实色，避免鼠标进入按钮区时主容器 hover 失效导致按钮消失 */
+.ll-node-actions {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 2px;
+  flex-shrink: 0;
+  padding-left: 6px;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.ll-tree-group:hover .ll-node-actions,
+.ll-tree-api:hover .ll-node-actions,
+.ll-node-actions:hover {
+  opacity: 1;
+}
+
+.ll-mini-sm {
+  font-size: 10px;
+  line-height: 16px;
+  min-width: 16px;
+  height: 18px;
+  width: auto;
+  padding: 0 4px;
+}
+
+.ll-tree-group:hover,
+.ll-tree-api:hover {
+  background: #eef2ff;
+}
+
+.ll-tree-api.active {
+  background: #dbeafe;
+}
+
+.ll-caret {
+  width: 12px;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.ll-glyph {
+  font-size: 12px;
+}
+
+.ll-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ll-method {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: #fff;
+  flex-shrink: 0;
+  min-width: 38px;
+  text-align: center;
+}
+
+.m-GET {
+  background: #2da44e;
+}
+
+.m-POST {
+  background: #0969da;
+}
+
+.m-PUT {
+  background: #bf8700;
+}
+
+.m-DELETE {
+  background: #cf222e;
+}
+
+.m-HEAD,
+.m-PATCH,
+.m-OPTIONS {
+  background: #8250df;
+}
+
+.ll-tree-error {
+  padding: 8px 10px;
+  color: #cf222e;
+  font-size: 12px;
+}
+
+/* ===== 顶部 linlan 风格 方法 + 路径 栏 ===== */
+.ll-api-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  padding: 0 8px;
+}
+
+.ll-method {
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #fff;
+  color: #1f2328;
+  flex-shrink: 0;
+  height: 22px;
+  line-height: 1;
+}
+
+.ll-method.m-active-GET { background: #2da44e; color: #fff; border-color: #2da44e; }
+.ll-method.m-active-POST { background: #0969da; color: #fff; border-color: #0969da; }
+.ll-method.m-active-PUT { background: #bf8700; color: #fff; border-color: #bf8700; }
+.ll-method.m-active-DELETE { background: #cf222e; color: #fff; border-color: #cf222e; }
+
+.ll-path-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #d0d7de;
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-size: 12px;
+  height: 22px;
+  line-height: 1.4;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+/* ===== 接口模式底部面板：请求 / 参数 / 日志 / 历史 ===== */
+.ll-api-request {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.ll-api-req-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ll-api-req-path {
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 13px;
+  color: #1f2328;
+  word-break: break-all;
+}
+
+.ll-api-req-body {
+  flex: 1;
+  min-height: 80px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 8px;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 13px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.ll-api-params {
+  padding: 8px 10px;
+  overflow: auto;
+}
+
+.ll-param-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.ll-param-table th,
+.ll-param-table td {
+  border: 1px solid #e5e7eb;
+  padding: 4px 8px;
+  text-align: left;
+}
+
+.ll-param-table th {
+  background: #f6f8fa;
+  font-weight: 600;
+  color: #57606a;
+}
+
+.ll-history-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12px;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.ll-history-ts { color: #8b949e; font-family: 'SFMono-Regular', Consolas, monospace; }
+.ll-ok { color: #1a7f37; }
+.ll-fail { color: #cf222e; }
+.ll-method {
+  display: inline-block;
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+}
+.ll-method.m-GET { background: #2da44e; }
+.ll-method.m-POST { background: #0969da; }
+.ll-method.m-PUT { background: #bf8700; }
+.ll-method.m-DELETE { background: #cf222e; }
+.ll-method.m-PATCH { background: #8250df; }
+
+/* 旧版 ll-history/ll-method 兼容样式（保留旧类名） */
+
+.ll-history-path {
+  flex: 1;
+  word-break: break-all;
+}

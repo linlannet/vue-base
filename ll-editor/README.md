@@ -1,4 +1,4 @@
-# ll-editor
+﻿# ll-editor
 
 > 插件化代码编辑器内核 + 可插拔运行时 + 插件市场（由 `ss-editor` 重命名而来）。
 
@@ -6,7 +6,7 @@
 
 `ll-editor` 是一个基于 [Monaco Editor](https://github.com/microsoft/monaco-editor) 的**框架无关**代码编辑器内核：
 
-- **内核**借鉴 magic-editor 的 monaco 多标签编辑器（剥离业务）。
+- **内核**借鉴 linlan-editor 的 monaco 多标签编辑器（剥离业务）。
 - **架构**借鉴 aieditor 的分层 + 白名单导出 + 插件/工具注册表。
 - **生态**借鉴 deepseek harness 的 Manifest + 插件市场分发模式。
 

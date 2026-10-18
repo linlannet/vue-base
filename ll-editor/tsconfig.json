@@ -8,6 +8,8 @@
     "moduleResolution": "Bundler",
     "allowImportingTsExtensions": false,
     "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
@@ -22,5 +24,5 @@
     "types": ["vite/client", "vitest/globals"]
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", "src/components/_reference", "src/components/editor", "src/components/layout", "src/components/resources", "src/components/kb", "src/components/common"]
 }

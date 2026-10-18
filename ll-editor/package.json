@@ -1,6 +1,6 @@
 {
   "name": "ll-editor",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A plugin-based, business-agnostic code editor with syntax highlight, save/load and pluggable runtime/debugging.",
   "type": "module",
   "main": "./dist/ll-editor.cjs",
@@ -35,6 +35,7 @@
     "preview": "vite preview --port 3000 --strictPort"
   },
   "dependencies": {
+    "aieditor": "^2.0.0",
     "monaco-editor": "^0.52.2",
     "typescript": "~5.6.3"
   },
@@ -50,5 +51,9 @@
     "vitest": "^2.1.8",
     "vue": "^3.5.13",
     "vue-tsc": "^2.1.10"
+  },
+  "allowScripts": {
+    "esbuild@0.21.5": true,
+    "fsevents@2.3.3": true
   }
 }

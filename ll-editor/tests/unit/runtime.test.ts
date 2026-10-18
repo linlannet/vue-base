@@ -99,4 +99,35 @@ describe('runtime: WorkerDebugAdapter (with mock executor)', () => {
     await adapter.run(makeDoc('a=1\nb=2'))
     expect(paused).toBe(true)
   })
+
+  it('P2：断点命中事件携带当前作用域变量（调试变量面板数据源）', async () => {
+    const executor: RuntimeExecutor = (input, cb) => {
+      cb.onBreakpoint?.(1, 'stack', { myVar: 42, name: 'll' })
+      cb.onEnd?.({ exitCode: 0, vars: { myVar: 42, name: 'll' } })
+    }
+    const adapter = new WorkerDebugAdapter('javascript', new Sandbox(executor))
+    const bps: unknown[] = []
+    adapter.on('breakpoint', (p) => bps.push(p))
+    await adapter.run(makeDoc('const a=1'))
+    expect(bps).toHaveLength(1)
+    const bp = bps[0] as { line: number; vars: Record<string, unknown> }
+    expect(bp.line).toBe(1)
+    expect(bp.vars).toEqual({ myVar: 42, name: 'll' })
+  })
+
+  it('P2：运行期间输出写入 ConsoleModel（UI 控制台数据源）', async () => {
+    const executor: RuntimeExecutor = (input, cb) => {
+      cb.onOutput?.('log', 'step-1')
+      cb.onOutput?.('warn', 'careful')
+      cb.onEnd?.({ exitCode: 0, vars: {} })
+    }
+    const model = new ConsoleModel()
+    const adapter = new WorkerDebugAdapter('javascript', new Sandbox(executor))
+    adapter.on('output', (raw) => {
+      const e = raw as { level: string; text: string }
+      model.add(e.level as never, e.text)
+    })
+    await adapter.run(makeDoc('console.log(1)'))
+    expect(model.getEntries().map((x) => x.text)).toEqual(['step-1', 'careful'])
+  })
 })

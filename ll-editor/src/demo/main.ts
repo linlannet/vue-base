@@ -1,5 +1,14 @@
 import { createApp } from 'vue'
-import DemoApp from './DemoApp.vue'
+import LLEditor from '@/components/LLEditor.vue'
 import '../styles/index.css'
+// 引入 common/ 组件（ll-icon 等）图标生效
+import '@/assets/iconfont/iconfont.css'
+import { LinlanModalPlugin } from '@/components/common/modal'
+import { LinlanContextmenuPlugin } from '@/components/common/linlan-contextmenu'
 
-createApp(DemoApp).mount('#app')
+// 注册 linlan-editor 运行时全局能力（this.$linlanAlert / this.$linlanConfirm / this.$linlanContextmenu 等）
+// demo 跳过后端版本一致性校验（demo 前端无注入版本号，避免每次刷新弹「检测到新版本」）
+const app = createApp(LLEditor, { Config: { ignoreVersion: true } })
+app.use(LinlanModalPlugin)
+app.use(LinlanContextmenuPlugin)
+app.mount('#app')

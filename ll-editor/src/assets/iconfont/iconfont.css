@@ -1,0 +1,265 @@
+/**
+ * java-magic-api - 基于Magic-api的工程，用于数据接口配置项目，可通过配置SQL、mybatis方式实现api输出，支持配置promQL编写Prometheus脚本，实现监控流数据和即时状态查询机展示
+ * Copyright © 2020-2025 Linlan (open@linlan.net)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+@font-face {
+  font-family: "magic-iconfont"; /* Project id 1928593 */
+  src: url('iconfont.ttf?t=1628077606269') format('truetype');
+}
+
+.ll-icon, .ma-icon {
+  font-family: "magic-iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ll-icon-lock:before, .ma-icon-lock:before {
+  content: "\e64f";
+}
+
+.ll-icon-unlock:before, .ma-icon-unlock:before {
+  content: "\e783";
+}
+
+.ll-icon-collapse:before, .ma-icon-collapse:before {
+  content: "\e609";
+}
+
+.ll-icon-expand:before, .ma-icon-expand:before {
+  content: "\efad";
+}
+
+.ll-icon-mysql:before, .ma-icon-mysql:before {
+  content: "\e61e";
+}
+
+.ll-icon-postgresql:before, .ma-icon-postgresql:before {
+  content: "\e603";
+}
+
+.ll-icon-oracle:before, .ma-icon-oracle:before {
+  content: "\e7c8";
+}
+
+.ll-icon-event:before, .ma-icon-event:before {
+  content: "\e664";
+}
+
+.ll-icon-sql-server:before, .ma-icon-sql-server:before {
+  content: "\e605";
+}
+
+.ll-icon-clickhouse:before, .ma-icon-clickhouse:before {
+  content: "\ec35";
+}
+
+.ll-icon-todo:before, .ma-icon-todo:before {
+  content: "\e602";
+}
+
+.ll-icon-push:before, .ma-icon-push:before {
+  content: "\e79d";
+}
+
+.ll-icon-copy:before, .ma-icon-copy:before {
+  content: "\ec7a";
+}
+
+.ll-icon-move:before, .ma-icon-move:before {
+  content: "\e727";
+}
+
+.ll-icon-update:before, .ma-icon-update:before {
+  content: "\e7e4";
+}
+
+.ll-icon-logout:before, .ma-icon-logout:before {
+  content: "\e65a";
+}
+
+.ll-icon-datasource:before, .ma-icon-datasource:before {
+  content: "\e615";
+}
+
+.ll-icon-table:before, .ma-icon-table:before {
+  content: "\e619";
+}
+
+.ll-icon-upload:before, .ma-icon-upload:before {
+  content: "\e658";
+}
+
+.ll-icon-download:before, .ma-icon-download:before {
+  content: "\e659";
+}
+
+.ll-icon-http-api:before, .ma-icon-http-api:before {
+  content: "\e6e3";
+}
+
+.ll-icon-function:before, .ma-icon-function:before {
+  content: "\e604";
+}
+
+.ll-icon-search:before, .ma-icon-search:before {
+  content: "\e608";
+}
+
+.ll-icon-refresh:before, .ma-icon-refresh:before {
+  content: "\e747";
+}
+
+.ll-icon-ascending:before, .ma-icon-ascending:before {
+  content: "\e7a7";
+}
+
+.ll-icon-descending:before, .ma-icon-descending:before {
+  content: "\e7a8";
+}
+
+.ll-icon-group-add:before, .ma-icon-group-add:before {
+  content: "\e6cd";
+}
+
+.ll-icon-folding:before, .ma-icon-folding:before {
+  content: "\e647";
+}
+
+.ll-icon-minus:before, .ma-icon-minus:before {
+  content: "\e68a";
+}
+
+.ll-icon-plus:before, .ma-icon-plus:before {
+  content: "\e621";
+}
+
+.ll-icon-api:before, .ma-icon-api:before {
+  content: "\e700";
+}
+
+.ll-icon-settings:before, .ma-icon-settings:before {
+  content: "\e786";
+}
+
+.ll-icon-star:before, .ma-icon-star:before {
+  content: "\e601";
+}
+
+.ll-icon-unfold:before, .ma-icon-unfold:before {
+  content: "\e732";
+}
+
+.ll-icon-fold:before, .ma-icon-fold:before {
+  content: "\e66b";
+}
+
+.ll-icon-step-over:before, .ma-icon-step-over:before {
+  content: "\e7b2";
+}
+
+.ll-icon-history:before, .ma-icon-history:before {
+  content: "\e668";
+}
+
+.ll-icon-log:before, .ma-icon-log:before {
+  content: "\efac";
+}
+
+.ll-icon-minimize:before, .ma-icon-minimize:before {
+  content: "\e707";
+}
+
+.ll-icon-save:before, .ma-icon-save:before {
+  content: "\e66c";
+}
+
+.ll-icon-close:before, .ma-icon-close:before {
+  content: "\e652";
+}
+
+.ll-icon-skin:before, .ma-icon-skin:before {
+  content: "\e606";
+}
+
+.ll-icon-qq:before, .ma-icon-qq:before {
+  content: "\e635";
+}
+
+.ll-icon-help:before, .ma-icon-help:before {
+  content: "\e60d";
+}
+
+.ll-icon-git:before, .ma-icon-git:before {
+  content: "\e64a";
+}
+
+.ll-icon-gitee:before, .ma-icon-gitee:before {
+  content: "\e6d6";
+}
+
+.ll-icon-delete:before, .ma-icon-delete:before {
+  content: "\e607";
+}
+
+.ll-icon-clear:before, .ma-icon-clear:before {
+  content: "\e673";
+}
+
+.ll-icon-continue:before, .ma-icon-continue:before {
+  content: "\e663";
+}
+
+.ll-icon-format:before, .ma-icon-format:before {
+  content: "\e6c1";
+}
+
+.ll-icon-script:before, .ma-icon-script:before {
+  content: "\e61d";
+}
+
+.ll-icon-arrow-right:before, .ma-icon-arrow-right:before {
+  content: "\e600";
+}
+
+.ll-icon-arrow-bottom:before, .ma-icon-arrow-bottom:before {
+  content: "\efa2";
+}
+
+.ll-icon-list:before, .ma-icon-list:before {
+  content: "\e679";
+}
+
+.ll-icon-options:before, .ma-icon-options:before {
+  content: "\e60f";
+}
+
+.ll-icon-debug-info:before, .ma-icon-debug-info:before {
+  content: "\efa1";
+}
+
+.ll-icon-run:before, .ma-icon-run:before {
+  content: "\e626";
+}
+
+.ll-icon-parameter:before, .ma-icon-parameter:before {
+  content: "\e6e9";
+}
+
+.ll-icon-position:before, .ma-icon-position:before {
+  content: "\e60b";
+}

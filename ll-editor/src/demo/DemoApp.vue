@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import LLEditor from '../ui/LLEditor.vue'
-import type { LLEditorOptions } from '../core/types'
+import LLEditor from '@/components/LLEditor.vue'
+import type { LLEditorOptions } from '@/core/types'
 
 const config: LLEditorOptions = {
   storage: { type: 'local' },
