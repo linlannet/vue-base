@@ -14,7 +14,11 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, (globalThis as { process?: { cwd(): string } }).process?.cwd?.() ?? '.', '')
   const target = env.VITE_MAGIC_API_TARGET || 'http://localhost:8088'
+  // mode=app：构建可独立部署的编辑器页面（与 java-magic-api 的 magic-editor 同构）
+  // 其它 mode：构建可被宿主集成的库（build.lib）
+  const isApp = mode === 'app'
   return {
+    base: isApp ? './' : undefined,
     plugins: [vue()],
     resolve: {
       alias: {
@@ -33,22 +37,35 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
-    build: {
-      lib: {
-        entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
-        name: 'LLEditor',
-        formats: ['es', 'cjs'],
-        fileName: (format) => `ll-editor.${format === 'es' ? 'js' : 'cjs'}`
-      },
-      rollupOptions: {
-        external: ['vue', 'monaco-editor', 'monaco-editor/esm/vs/editor/editor.api'],
-        output: {
-          globals: {
-            vue: 'Vue',
-            'monaco-editor': 'monaco'
+    build: isApp
+      ? {
+          outDir: 'dist-app',
+          emptyOutDir: true,
+          rollupOptions: {
+            output: {
+              manualChunks: {
+                vue: ['vue'],
+                monaco: ['monaco-editor']
+              }
+            }
           }
         }
-      }
-    }
+      : {
+          lib: {
+            entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
+            name: 'LLEditor',
+            formats: ['es', 'cjs'],
+            fileName: (format) => `ll-editor.${format === 'es' ? 'js' : 'cjs'}`
+          },
+          rollupOptions: {
+            external: ['vue', 'monaco-editor', 'monaco-editor/esm/vs/editor/editor.api'],
+            output: {
+              globals: {
+                vue: 'Vue',
+                'monaco-editor': 'monaco'
+              }
+            }
+          }
+        }
   }
 })

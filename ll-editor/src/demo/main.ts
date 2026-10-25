@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 import LLEditor from '@/components/LLEditor.vue'
+// Monaco 编辑器基础样式（应用构建/开发页面都需要，库构建由使用方引入）
+import 'monaco-editor/min/vs/editor/editor.main.css'
 // 引入 common/ 组件（ll-icon 等）图标生效（已包含蓝色线性图标覆盖）
 import '@/assets/iconfont/iconfont.css'
 import '@/assets/index.css'

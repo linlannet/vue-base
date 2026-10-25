@@ -1,23 +1,8 @@
-import * as ts from 'typescript'
-
 /**
  * 将源码转译为可在沙箱中执行的 JS。
- * - TypeScript：使用 typescript 编译器去掉类型注解（输出为普通脚本，无 import/export）。
- * - JavaScript：原样返回。
+ * 已移除运行时 TypeScript 编译器（约 3.4MB）：TS 源码原样返回，
+ * 如需在沙箱执行 TS，请改由宿主注入转译器或直接使用 JavaScript。
  */
-export function transpileToJs(code: string, language: string): string {
-  if (language === 'typescript' || language === 'ts') {
-    const out = ts.transpileModule(code, {
-      reportDiagnostics: false,
-      compilerOptions: {
-        target: ts.ScriptTarget.ES2018,
-        module: ts.ModuleKind.None,
-        isolatedModules: true,
-        removeComments: false
-      },
-      fileName: 'doc.ts'
-    })
-    return out.outputText
-  }
+export function transpileToJs(code: string, _language: string): string {
   return code
 }

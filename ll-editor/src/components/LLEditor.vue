@@ -11,6 +11,8 @@ import bus from '@/scripts/bus'
 import store from '@/scripts/store'
 import request from '@/api/request'
 import { displayName, displayIp, logoutCurrentUser } from '@/scripts/user'
+// 侧栏 LOGO：走资源导入，应用构建时由 Vite 按 base 生成正确路径
+import logoSrc from '@/assets/favicon.ico'
 
 import LinlanHeader from '@/components/layout/linlan-header.vue'
 import LinlanKbList from '@/components/resources/linlan-kb-list.vue'
@@ -505,7 +507,7 @@ function toggleBottom(): void {
         <!-- 一级菜单列：知识库 / 接口 / 函数 / 数据源 -->
         <div class="ll-sidebar-menu">
           <div class="ll-sidebar-top">
-            <img class="ll-sidebar-logo" src="/favicon.ico" alt="LL-Editor" />
+            <img class="ll-sidebar-logo" :src="logoSrc" alt="LL-Editor" />
             <span v-show="!sidebarCollapsed" class="ll-sidebar-name">LL-Editor</span>
             <span
               class="ll-sidebar-toggle"
@@ -581,19 +583,19 @@ function toggleBottom(): void {
           <span v-show="!sidebarCollapsed" class="ll-user-name">{{ displayName || '未登录' }}</span>
         </div>
         <div v-show="!sidebarCollapsed" class="ll-user-actions">
-          <span class="ll-user-action" title="多端" @click.stop="onMultiDeviceClick">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="4" width="14" height="11" rx="1.5" />
-              <path d="M6 19h8" />
-              <rect x="16.5" y="10" width="5.5" height="9" rx="1.2" />
-            </svg>
-          </span>
           <span class="ll-user-action" title="通知" @click.stop="onNotifyClick">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
               <path d="M13.7 21a2 2 0 0 1-3.4 0" />
             </svg>
             <span v-if="notifyCount > 0" class="ll-user-badge">{{ notifyCount > 99 ? '99+' : notifyCount }}</span>
+          </span>
+          <span class="ll-user-action" title="多端" @click.stop="onMultiDeviceClick">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="14" height="11" rx="1.5" />
+              <path d="M6 19h8" />
+              <rect x="16.5" y="10" width="5.5" height="9" rx="1.2" />
+            </svg>
           </span>
         </div>
         <div v-if="userMenuOpen" class="ll-user-popover" @click.stop>

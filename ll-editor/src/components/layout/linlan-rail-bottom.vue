@@ -97,13 +97,13 @@ onBeforeUnmount(() => {
     </span>
     <span class="ll-rail-sep"></span>
     <!-- 四个快捷入口：与状态栏同源的彩色圆形图标 -->
-    <span class="ll-rail-entry" title="Gitee" @click="open('https://gitee.com/linlannet/vue-base')">
+    <span class="ll-rail-entry" title="Gitee" @click="open('https://github.com/linlannet/vue-base')">
       <i class="ll-icon ll-icon-gitee ll-icon-badge ll-icon-badge-gitee"></i>
     </span>
-    <span class="ll-rail-entry" title="Github" @click="open('https://gitee.com/linlannet/vue-base')">
+    <span class="ll-rail-entry" title="Github" @click="open('https://github.com/linlannet/vue-base')">
       <i class="ll-icon ll-icon-git ll-icon-badge ll-icon-badge-git"></i>
     </span>
-    <span class="ll-rail-entry" title="帮助文档" @click="open('https://gitee.com/linlannet/vue-base')">
+    <span class="ll-rail-entry" title="帮助文档" @click="open('https://github.com/linlannet/vue-base')">
       <i class="ll-icon ll-icon-help ll-icon-badge ll-icon-badge-help"></i>
     </span>
     <span v-if="user && user.username" class="ll-rail-entry" :title="userTitle" @click="logoutCurrentUser()">

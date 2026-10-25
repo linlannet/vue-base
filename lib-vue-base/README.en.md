@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 ![java version](https://img.shields.io/badge/JAVA-1.8-green.svg)
-![gitee star](https://gitee.com/linlannet/vue-base/badge/star.svg)
+![gitee star](https://github.com/linlannet/vue-base/badge/star.svg)
 
 ## Introduction
 
@@ -30,7 +30,7 @@ Enterprise-level front-end framework, based on VUE framework, realizes the front
 - Get the project code
 
 ```bash
-git clone https://gitee.com/linlannet/vue-base.git
+git clone https://github.com/linlannet/vue-base.git
 ```
 
 - Install dependencies
@@ -56,7 +56,7 @@ npm build
 
 ## How to contribute
 
-You are very welcome to join！[Raise an issue](https://gitee.com/linlannet/vue-base/issues/new/choose) or submit a Pull Request。
+You are very welcome to join！[Raise an issue](https://github.com/linlannet/vue-base/issues/new/choose) or submit a Pull Request。
 
 **Pull Request:**
 

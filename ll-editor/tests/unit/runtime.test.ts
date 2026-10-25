@@ -8,10 +8,9 @@ function makeDoc(content: string, language = 'javascript'): EditorDoc {
 }
 
 describe('runtime: transpile', () => {
-  it('转译 TS 时去除类型注解', () => {
-    const out = transpileToJs('const a: number = 1\nconsole.log(a)', 'typescript')
-    expect(out).not.toContain(': number')
-    expect(out).toContain('console.log(a)')
+  it('TS 源码原样返回（运行时不再内置 TypeScript 编译器）', () => {
+    const code = 'const a: number = 1\nconsole.log(a)'
+    expect(transpileToJs(code, 'typescript')).toBe(code)
   })
 
   it('JS 原样返回', () => {
@@ -32,9 +31,9 @@ describe('runtime: lint', () => {
     expect(diags).toHaveLength(0)
   })
 
-  it('TS 语法错误产生诊断', () => {
+  it('TS 不做静态诊断（运行时不再内置 TypeScript 编译器）', () => {
     const diags: Diagnostic[] = lintCode('const a: number =', 'typescript', 'd1')
-    expect(diags.length).toBeGreaterThan(0)
+    expect(diags).toHaveLength(0)
   })
 })
 

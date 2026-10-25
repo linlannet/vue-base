@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 ![java version](https://img.shields.io/badge/JAVA-1.8-green.svg)
-![gitee star](https://gitee.com/linlannet/vue-base/badge/star.svg)
+![gitee star](https://github.com/linlannet/vue-base/badge/star.svg)
 
 [简体中文](./README.md) | English
 
@@ -73,7 +73,7 @@ Each sub-package manages its own dependencies and build. Enter the sub-package d
 - Get the project code
 
 ```bash
-git clone https://gitee.com/linlannet/vue-base.git
+git clone https://github.com/linlannet/vue-base.git
 ```
 
 - Install dependencies and start the dev server
@@ -97,7 +97,7 @@ npm run test:run
 
 ## How to contribute
 
-You are very welcome to join！[Raise an issue](https://gitee.com/linlannet/vue-base/issues/new/choose) or submit a Pull Request。
+You are very welcome to join！[Raise an issue](https://github.com/linlannet/vue-base/issues/new/choose) or submit a Pull Request。
 
 **Pull Request:**
 

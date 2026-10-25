@@ -30,9 +30,9 @@ import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import CssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
 import HtmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
-import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 
 // Monaco worker 环境（与 magic-editor 的 worker-loader 等价，Vite 下用 ?worker）
+// 与官方一致：不再内置 ts.worker（约 5.7MB），typescript/javascript 走通用 editor worker
 ;(self as any).MonacoEnvironment = {
   getWorker(_moduleId: string, label: string) {
     switch (label) {
@@ -46,9 +46,6 @@ import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
       case 'handlebars':
       case 'razor':
         return new HtmlWorker()
-      case 'typescript':
-      case 'javascript':
-        return new TsWorker()
       default:
         return new EditorWorker()
     }

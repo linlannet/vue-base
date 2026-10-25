@@ -1,37 +1,29 @@
-import * as ts from 'typescript'
 import type { Diagnostic } from '../core/types'
 
 /**
- * 语法/类型纠错（语法纠错扩展点）。
- * 使用 typescript 编译器对 JS/TS 源码做语法诊断，返回统一的 Diagnostic 列表。
- * UI 据此在编辑器内标记问题（Problems 面板 + monaco markers）。
+ * 轻量语法检查（不再内置 TypeScript 编译器）。
+ * 仅对 javascript / js 通过 Function 构造器做一次快速解析；
+ * TS 及其它语言不做静态诊断，语法/运行时错误由执行阶段回报。
+ * 目的：避免把约 3.4MB 的 typescript 编译器打进运行时产物。
  */
 export function lintCode(code: string, language: string, docId: string): Diagnostic[] {
-  const isTs = language === 'typescript' || language === 'ts'
-  const fileName = isTs ? 'doc.ts' : 'doc.js'
-  const scriptKind = isTs ? ts.ScriptKind.TS : ts.ScriptKind.JS
-  const sf = ts.createSourceFile(fileName, code, ts.ScriptTarget.Latest, true, scriptKind)
-
-  const out = ts.transpileModule(code, {
-    reportDiagnostics: true,
-    compilerOptions: {
-      target: ts.ScriptTarget.ES2018,
-      module: ts.ModuleKind.None,
-      noEmit: true
-    },
-    fileName
-  })
-
-  return (out.diagnostics ?? []).map((d) => {
-    const start = d.start ?? 0
-    const { line, character } = sf.getLineAndCharacterOfPosition(start)
-    return {
-      docId,
-      line: line + 1,
-      column: character + 1,
-      severity: d.category === ts.DiagnosticCategory.Error ? 'error' : 'warning',
-      message: ts.flattenDiagnosticMessageText(d.messageText, '\n'),
-      source: isTs ? 'typescript' : 'javascript'
-    } as Diagnostic
-  })
+  const lang = (language || '').toLowerCase()
+  if ((lang !== 'javascript' && lang !== 'js') || !code.trim()) return []
+  try {
+    // 只编译不执行，用于捕获语法错误
+    new Function(code)
+    return []
+  } catch (e) {
+    const err = e as Error
+    return [
+      {
+        docId,
+        line: 1,
+        column: 1,
+        severity: 'error',
+        message: err.message,
+        source: 'javascript'
+      } as Diagnostic
+    ]
+  }
 }

@@ -14,6 +14,7 @@
 11. 内核能力：LLEditorOptions 与 EditorHost 新增 editorOptions 透传 monaco.editor.create，主题名直接透传 Monaco（兼容 light / dark 与自定义皮肤）
 12. 缺陷修复：修复事件总线 $emit / emit 多参被打包成数组导致的参数错位（update-response-body、WebSocket 消息），补充 formatJson 类型声明与 WebSocket 握手用的 CLIENT_ID 常量
 13. 移除 aieditor 依赖：删除 AiEditor 富文本编辑器（含 aieditor/style.css 与其内部样式覆盖），知识库 md 编辑统一由 Monaco 承载（markdown 语言 + 软换行 + 右侧分屏预览），package.json 与 package-lock.json 同步移除 aieditor
+14. 对dist打包文件进行精简，增加dist-app输出
 
 ### 版本号：1.1.0
 - 更新日期：2026-10-22

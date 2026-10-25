@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache%202-green.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 ![java version](https://img.shields.io/badge/JAVA-1.8-green.svg)
-![gitee star](https://gitee.com/linlannet/vue-base/badge/star.svg)
+![gitee star](https://github.com/linlannet/vue-base/badge/star.svg)
 
 ## 简介
 
@@ -31,7 +31,7 @@
 - 获取项目代码
 
 ```bash
-git clone https://gitee.com/linlannet/vue-base.git
+git clone https://github.com/linlannet/vue-base.git
 ```
 
 - 安装依赖
@@ -57,7 +57,7 @@ npm build
 
 ## 参与贡献
 
-欢迎你的加入！[提交 issue](https://gitee.com/linlannet/vue-base/issues/new/choose) 或者提交拉取请求。
+欢迎你的加入！[提交 issue](https://github.com/linlannet/vue-base/issues/new/choose) 或者提交拉取请求。
 
 **拉取请求步骤:**
 

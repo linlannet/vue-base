@@ -46,14 +46,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://gitee.com/linlannet/vue-base.git"
+        "url": "https://github.com/linlannet/vue-base.git"
     },
     "keywords": [],
     "author": "linlaninfo",
     "license": "Apache2",
     "bugs": {
-        "url": "https://gitee.com/linlannet/vue-base/issues"
+        "url": "https://github.com/linlannet/vue-base/issues"
     },
-    "homepage": "https://gitee.com/linlannet/vue-base"
+    "homepage": "https://github.com/linlannet/vue-base"
 
 }
