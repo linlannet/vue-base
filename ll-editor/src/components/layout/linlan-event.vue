@@ -31,18 +31,18 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-event">
-    <div class="ma-layout">
-      <div class="not-select ma-sider">
-        <div @click="clearLog"><i class="ma-icon ma-icon-clear" /></div>
+  <div class="ll-event">
+    <div class="ll-layout">
+      <div class="not-select ll-sider">
+        <div @click="clearLog"><i class="ll-icon ll-icon-clear" /></div>
       </div>
-      <div class="ma-layout-container">
-        <div class="ma-header ma-table-row">
+      <div class="ll-layout-container">
+        <div class="ll-header ll-table-row">
           <div>时间</div>
           <div>事件内容</div>
         </div>
-        <div class="ma-content">
-          <div v-for="(item, key) in eventList" :key="'event_' + key" class="ma-table-row content-bg">
+        <div class="ll-content">
+          <div v-for="(item, key) in eventList" :key="'event_' + key" class="ll-table-row content-bg">
             <div>{{ item.timestamp }}</div>
             <div v-html="item.content"></div>
           </div>
@@ -53,7 +53,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.ma-event {
+.ll-event {
   background: var(--background);
   height: 100%;
   width: 100%;
@@ -61,30 +61,30 @@ export default defineComponent({
   outline: 0;
 }
 
-.ma-event .ma-layout {
+.ll-event .ll-layout {
   height: 100%;
 }
 
-.ma-event .ma-layout .ma-content .content-bg span {
+.ll-event .ll-layout .ll-content .content-bg span {
   color: var(--toolbox-list-span-color);
 }
 
-.ma-event .ma-layout .ma-content .content-bg:nth-child(even) {
+.ll-event .ll-layout .ll-content .content-bg:nth-child(even) {
   background: var(--table-even-background);
 }
-.ma-event .ma-layout .ma-content .content-bg:hover {
+.ll-event .ll-layout .ll-content .content-bg:hover {
   background: var(--toolbox-list-hover-background);
 }
-.ma-layout .ma-table-row{
+.ll-layout .ll-table-row{
   display: flex;
 }
-.ma-layout .ma-table-row > * {
+.ll-layout .ll-table-row > * {
   width: 150px !important;
   background: none;
   padding:0 2px;
 }
 
-.ma-layout .ma-table-row > *:last-child {
+.ll-layout .ll-table-row > *:last-child {
   flex: 1;
   width: auto;
 }

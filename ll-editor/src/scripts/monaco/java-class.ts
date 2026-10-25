@@ -1,9 +1,21 @@
 // @ts-nocheck
 import request from '@/api/request'
 import contants from '@/scripts/contants'
-import {HighLightOptions} from '@/scripts/editor/high-light'
+import {HighLightOptions} from '@/scripts/monaco/high-light'
+import {initMybatis} from '@/scripts/monaco/mybatis'
 import * as monaco from "monaco-editor";
 
+let languageInited = false;
+// 对齐官方 initializeMagicScript()：同步注册 mybatis 嵌入语言 + magicscript 语言与 tokenizer。
+// 必须在创建编辑器/模型之前调用，否则 """ ... """ 中的 SQL 不会走 mybatis 高亮（整片纯黑），
+// 且 magicscript 语言不在 Registry 时 token 样式不生效。
+const initializeMagicScript = function () {
+    if (languageInited) return;
+    languageInited = true;
+    initMybatis();
+    monaco.languages.register({ id: 'magicscript' });
+    monaco.languages.setMonarchTokensProvider('magicscript', HighLightOptions);
+}
 let scriptClass = {}
 let extensions = {}
 let importClass = []
@@ -53,12 +65,14 @@ const matchTypes = (parameters, args, extension) => {
     }
 }
 const initClasses = function () {
+    initializeMagicScript();
     return new Promise((resolve, reject) => {
         request.send('classes').success(data => {
             scriptClass = data.classes || {}
             extensions = data.extensions || {}
             functions = data.functions || []
             HighLightOptions.builtinFunctions = functions.map(it => it.name);
+            // 内置函数列表就绪后刷新 tokenizer（语言已由 initializeMagicScript 注册）
             monaco.languages.setMonarchTokensProvider('magicscript', HighLightOptions);
             resolve()
         }).exception(res => {
@@ -299,7 +313,6 @@ const exportValue = {
     setFunctionFinder,
     getApiFinder,
     getFunctionFinder,
-
-
+    initializeMagicScript,
 }
 export default exportValue;

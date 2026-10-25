@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { ParseException, Span, TokenStream, TokenType} from './index'
 import tokenizer from './tokenizer'
-import JavaClass from '../editor/java-class'
+import JavaClass from '../monaco/java-class'
 import {
     Assert,
     AsyncCall,
@@ -38,7 +38,7 @@ import {
     WholeLiteral,
     Throw
 } from './ast'
-import RequestParameter from "@/scripts/editor/request-parameter";
+import RequestParameter from "@/scripts/monaco/request-parameter";
 
 export const keywords = ["import", "as", "var", "let", "const", "return", "break", "continue", "if", "for", "in", "new", "true", "false", "null", "else", "try", "catch", "finally", "async", "while", "exit", "and", "or", "throw"/*"assert"*/];
 export const linqKeywords = ["from", "join", "left", "group", "by", "as", "having", "and", "or", "in", "where", "on", "limit", "offset"];

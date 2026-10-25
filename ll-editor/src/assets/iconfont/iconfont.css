@@ -20,7 +20,7 @@
   src: url('iconfont.ttf?t=1628077606269') format('truetype');
 }
 
-.ll-icon, .ma-icon {
+.ll-icon {
   font-family: "magic-iconfont" !important;
   font-size: 16px;
   font-style: normal;
@@ -28,238 +28,499 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.ll-icon-lock:before, .ma-icon-lock:before {
+.ll-icon-lock:before, .ll-icon-lock:before {
   content: "\e64f";
 }
 
-.ll-icon-unlock:before, .ma-icon-unlock:before {
+.ll-icon-unlock:before, .ll-icon-unlock:before {
   content: "\e783";
 }
 
-.ll-icon-collapse:before, .ma-icon-collapse:before {
+.ll-icon-collapse:before, .ll-icon-collapse:before {
   content: "\e609";
 }
 
-.ll-icon-expand:before, .ma-icon-expand:before {
+.ll-icon-expand:before, .ll-icon-expand:before {
   content: "\efad";
 }
 
-.ll-icon-mysql:before, .ma-icon-mysql:before {
+.ll-icon-mysql:before, .ll-icon-mysql:before {
   content: "\e61e";
 }
 
-.ll-icon-postgresql:before, .ma-icon-postgresql:before {
+.ll-icon-postgresql:before, .ll-icon-postgresql:before {
   content: "\e603";
 }
 
-.ll-icon-oracle:before, .ma-icon-oracle:before {
+.ll-icon-oracle:before, .ll-icon-oracle:before {
   content: "\e7c8";
 }
 
-.ll-icon-event:before, .ma-icon-event:before {
+.ll-icon-event:before, .ll-icon-event:before {
   content: "\e664";
 }
 
-.ll-icon-sql-server:before, .ma-icon-sql-server:before {
+.ll-icon-sql-server:before, .ll-icon-sql-server:before {
   content: "\e605";
 }
 
-.ll-icon-clickhouse:before, .ma-icon-clickhouse:before {
+.ll-icon-clickhouse:before, .ll-icon-clickhouse:before {
   content: "\ec35";
 }
 
-.ll-icon-todo:before, .ma-icon-todo:before {
+.ll-icon-todo:before, .ll-icon-todo:before {
   content: "\e602";
 }
 
-.ll-icon-push:before, .ma-icon-push:before {
+.ll-icon-push:before, .ll-icon-push:before {
   content: "\e79d";
 }
 
-.ll-icon-copy:before, .ma-icon-copy:before {
+.ll-icon-copy:before, .ll-icon-copy:before {
   content: "\ec7a";
 }
 
-.ll-icon-move:before, .ma-icon-move:before {
+.ll-icon-move:before, .ll-icon-move:before {
   content: "\e727";
 }
 
-.ll-icon-update:before, .ma-icon-update:before {
+.ll-icon-update:before, .ll-icon-update:before {
   content: "\e7e4";
 }
 
-.ll-icon-logout:before, .ma-icon-logout:before {
+.ll-icon-logout:before, .ll-icon-logout:before {
   content: "\e65a";
 }
 
-.ll-icon-datasource:before, .ma-icon-datasource:before {
+.ll-icon-datasource:before, .ll-icon-datasource:before {
   content: "\e615";
 }
 
-.ll-icon-table:before, .ma-icon-table:before {
+.ll-icon-table:before, .ll-icon-table:before {
   content: "\e619";
 }
 
-.ll-icon-upload:before, .ma-icon-upload:before {
+.ll-icon-upload:before, .ll-icon-upload:before {
   content: "\e658";
 }
 
-.ll-icon-download:before, .ma-icon-download:before {
+.ll-icon-download:before, .ll-icon-download:before {
   content: "\e659";
 }
 
-.ll-icon-http-api:before, .ma-icon-http-api:before {
+.ll-icon-http-api:before, .ll-icon-http-api:before {
   content: "\e6e3";
 }
 
-.ll-icon-function:before, .ma-icon-function:before {
+.ll-icon-function:before, .ll-icon-function:before {
   content: "\e604";
 }
 
-.ll-icon-search:before, .ma-icon-search:before {
+.ll-icon-search:before, .ll-icon-search:before {
   content: "\e608";
 }
 
-.ll-icon-refresh:before, .ma-icon-refresh:before {
+.ll-icon-refresh:before, .ll-icon-refresh:before {
   content: "\e747";
 }
 
-.ll-icon-ascending:before, .ma-icon-ascending:before {
+.ll-icon-ascending:before, .ll-icon-ascending:before {
   content: "\e7a7";
 }
 
-.ll-icon-descending:before, .ma-icon-descending:before {
+.ll-icon-descending:before, .ll-icon-descending:before {
   content: "\e7a8";
 }
 
-.ll-icon-group-add:before, .ma-icon-group-add:before {
+.ll-icon-group-add:before, .ll-icon-group-add:before {
   content: "\e6cd";
 }
 
-.ll-icon-folding:before, .ma-icon-folding:before {
+.ll-icon-folding:before, .ll-icon-folding:before {
   content: "\e647";
 }
 
-.ll-icon-minus:before, .ma-icon-minus:before {
+.ll-icon-minus:before, .ll-icon-minus:before {
   content: "\e68a";
 }
 
-.ll-icon-plus:before, .ma-icon-plus:before {
+.ll-icon-plus:before, .ll-icon-plus:before {
   content: "\e621";
 }
 
-.ll-icon-api:before, .ma-icon-api:before {
+.ll-icon-api:before, .ll-icon-api:before {
   content: "\e700";
 }
 
-.ll-icon-settings:before, .ma-icon-settings:before {
+.ll-icon-settings:before, .ll-icon-settings:before {
   content: "\e786";
 }
 
-.ll-icon-star:before, .ma-icon-star:before {
+.ll-icon-star:before, .ll-icon-star:before {
   content: "\e601";
 }
 
-.ll-icon-unfold:before, .ma-icon-unfold:before {
+.ll-icon-unfold:before, .ll-icon-unfold:before {
   content: "\e732";
 }
 
-.ll-icon-fold:before, .ma-icon-fold:before {
+.ll-icon-fold:before, .ll-icon-fold:before {
   content: "\e66b";
 }
 
-.ll-icon-step-over:before, .ma-icon-step-over:before {
+.ll-icon-step-over:before, .ll-icon-step-over:before {
   content: "\e7b2";
 }
 
-.ll-icon-history:before, .ma-icon-history:before {
+.ll-icon-history:before, .ll-icon-history:before {
   content: "\e668";
 }
 
-.ll-icon-log:before, .ma-icon-log:before {
+.ll-icon-log:before, .ll-icon-log:before {
   content: "\efac";
 }
 
-.ll-icon-minimize:before, .ma-icon-minimize:before {
+.ll-icon-minimize:before, .ll-icon-minimize:before {
   content: "\e707";
 }
 
-.ll-icon-save:before, .ma-icon-save:before {
+.ll-icon-save:before, .ll-icon-save:before {
   content: "\e66c";
 }
 
-.ll-icon-close:before, .ma-icon-close:before {
+.ll-icon-close:before, .ll-icon-close:before {
   content: "\e652";
 }
 
-.ll-icon-skin:before, .ma-icon-skin:before {
+.ll-icon-skin:before, .ll-icon-skin:before {
   content: "\e606";
 }
 
-.ll-icon-qq:before, .ma-icon-qq:before {
+.ll-icon-qq:before, .ll-icon-qq:before {
   content: "\e635";
 }
 
-.ll-icon-help:before, .ma-icon-help:before {
+.ll-icon-help:before, .ll-icon-help:before {
   content: "\e60d";
 }
 
-.ll-icon-git:before, .ma-icon-git:before {
+.ll-icon-git:before, .ll-icon-git:before {
   content: "\e64a";
 }
 
-.ll-icon-gitee:before, .ma-icon-gitee:before {
+.ll-icon-gitee:before, .ll-icon-gitee:before {
   content: "\e6d6";
 }
 
-.ll-icon-delete:before, .ma-icon-delete:before {
+.ll-icon-delete:before, .ll-icon-delete:before {
   content: "\e607";
 }
 
-.ll-icon-clear:before, .ma-icon-clear:before {
+.ll-icon-clear:before, .ll-icon-clear:before {
   content: "\e673";
 }
 
-.ll-icon-continue:before, .ma-icon-continue:before {
+.ll-icon-continue:before, .ll-icon-continue:before {
   content: "\e663";
 }
 
-.ll-icon-format:before, .ma-icon-format:before {
+.ll-icon-format:before, .ll-icon-format:before {
   content: "\e6c1";
 }
 
-.ll-icon-script:before, .ma-icon-script:before {
+.ll-icon-script:before, .ll-icon-script:before {
   content: "\e61d";
 }
 
-.ll-icon-arrow-right:before, .ma-icon-arrow-right:before {
+.ll-icon-arrow-right:before, .ll-icon-arrow-right:before {
   content: "\e600";
 }
 
-.ll-icon-arrow-bottom:before, .ma-icon-arrow-bottom:before {
+.ll-icon-arrow-bottom:before, .ll-icon-arrow-bottom:before {
   content: "\efa2";
 }
 
-.ll-icon-list:before, .ma-icon-list:before {
+.ll-icon-list:before, .ll-icon-list:before {
   content: "\e679";
 }
 
-.ll-icon-options:before, .ma-icon-options:before {
+.ll-icon-options:before, .ll-icon-options:before {
   content: "\e60f";
 }
 
-.ll-icon-debug-info:before, .ma-icon-debug-info:before {
+.ll-icon-debug-info:before, .ll-icon-debug-info:before {
   content: "\efa1";
 }
 
-.ll-icon-run:before, .ma-icon-run:before {
+.ll-icon-run:before, .ll-icon-run:before {
   content: "\e626";
 }
 
-.ll-icon-parameter:before, .ma-icon-parameter:before {
+.ll-icon-parameter:before, .ll-icon-parameter:before {
   content: "\e6e9";
 }
 
-.ll-icon-position:before, .ma-icon-position:before {
+.ll-icon-position:before, .ll-icon-position:before {
   content: "\e60b";
+}
+
+/* ===== merged from styles/ll-icons.css：蓝色线性图标集，覆盖 iconfont 原字形 ===== */
+/**
+ * 蓝色线性图标集
+ * ------------------------------------------------------------------
+ * 用内联 SVG 蒙版替换原有 iconfont 字形，统一为「清新 / 线性 / 蓝色」风格，
+ * 主色取自 favicon.ico 的品牌蓝。蒙版使用 alpha 通道，颜色由 background-color: currentColor 决定。
+ *
+ * 使用方式不变：<i class="ll-icon ll-icon-xxx" />，无需改动业务模板。
+ */
+
+:root {
+  --ll-icon-blue: #2f8ef7;
+  --ll-icon-blue-strong: #1668e3;
+}
+
+/* 关闭被替换图标的旧字体字形 */
+i.ll-icon:is(
+    .ll-icon-list,
+    .ll-icon-api,
+    .ll-icon-function,
+    .ll-icon-datasource,
+    .ll-icon-plus,
+    .ll-icon-upload,
+    .ll-icon-download,
+    .ll-icon-save,
+    .ll-icon-search,
+    .ll-icon-history,
+    .ll-icon-push,
+    .ll-icon-skin,
+    .ll-icon-refresh,
+    .ll-icon-run,
+    .ll-icon-format,
+    .ll-icon-delete,
+    .ll-icon-group-add,
+    .ll-icon-ascending,
+    .ll-icon-descending,
+    .ll-icon-position,
+    .ll-icon-minus,
+    .ll-icon-arrow-bottom,
+    .ll-icon-arrow-right,
+    .ll-icon-fold,
+    .ll-icon-unfold,
+    .ll-icon-expand,
+    .ll-icon-collapse,
+    .ll-icon-minimize,
+    .ll-icon-script,
+    .ll-icon-file-text,
+    .ll-icon-parameter,
+    .ll-icon-debug-info,
+    .ll-icon-log,
+    .ll-icon-settings,
+    .ll-icon-todo,
+    .ll-icon-event
+  )::before {
+  content: none !important;
+}
+
+/* 统一盒模型：1em 尺寸，随字号缩放 */
+i.ll-icon:is(
+    .ll-icon-list,
+    .ll-icon-api,
+    .ll-icon-function,
+    .ll-icon-datasource,
+    .ll-icon-plus,
+    .ll-icon-upload,
+    .ll-icon-download,
+    .ll-icon-save,
+    .ll-icon-search,
+    .ll-icon-history,
+    .ll-icon-push,
+    .ll-icon-skin,
+    .ll-icon-refresh,
+    .ll-icon-run,
+    .ll-icon-format,
+    .ll-icon-delete,
+    .ll-icon-group-add,
+    .ll-icon-ascending,
+    .ll-icon-descending,
+    .ll-icon-position,
+    .ll-icon-minus,
+    .ll-icon-arrow-bottom,
+    .ll-icon-arrow-right,
+    .ll-icon-fold,
+    .ll-icon-unfold,
+    .ll-icon-expand,
+    .ll-icon-collapse,
+    .ll-icon-minimize,
+    .ll-icon-script,
+    .ll-icon-file-text,
+    .ll-icon-parameter,
+    .ll-icon-debug-info,
+    .ll-icon-log,
+    .ll-icon-settings,
+    .ll-icon-todo,
+    .ll-icon-event
+  ) {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  font-family: inherit !important;
+  color: var(--ll-icon-blue) !important;
+  background-color: currentColor;
+  -webkit-mask: var(--ll-ic) center / contain no-repeat;
+  mask: var(--ll-ic) center / contain no-repeat;
+}
+
+/* 侧栏选中项用更深的品牌蓝，保持选中反馈 */
+.ll-sidebar-nav > li.selected > i.ll-icon {
+  color: var(--ll-icon-blue-strong) !important;
+}
+
+/* ===== 导航 ===== */
+i.ll-icon.ll-icon-list {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-api {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6-6 6 6 6'/%3E%3Cpath d='m15 6 6 6-6 6'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-function {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 20c0-4.5.7-9.5 2-12.5.5-1.2 1.4-2 2.7-2 1 0 1.8.5 2.3 1.3'/%3E%3Cpath d='M6 10.5h10'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-datasource {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='12' cy='5.5' rx='7.5' ry='2.8'/%3E%3Cpath d='M4.5 5.5v6c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-6'/%3E%3Cpath d='M4.5 11.5v6c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-6'/%3E%3C/svg%3E");
+}
+
+/* ===== 通用动作 ===== */
+i.ll-icon.ll-icon-plus {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-minus {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-upload {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 13v8M8 17l4-4 4 4'/%3E%3Cpath d='M20 16.5a4.5 4.5 0 0 0-2.5-8.1h-1.6A7 7 0 1 0 4 15'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-download {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 13v8M8 17l4 4 4-4'/%3E%3Cpath d='M20 16.5a4.5 4.5 0 0 0-2.5-8.1h-1.6A7 7 0 1 0 4 15'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-save {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z'/%3E%3Cpath d='M17 21v-8H7v8'/%3E%3Cpath d='M7 3v5h8'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-search {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-history {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12a9 9 0 1 0 2.6-6.4L3 8'/%3E%3Cpath d='M3 3v5h5'/%3E%3Cpath d='M12 8v5l3 2'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-push {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m22 2-7 20-4-9-9-4z'/%3E%3Cpath d='M22 2 11 13'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-skin {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3a9 9 0 1 0 0 18h1.6a1.7 1.7 0 0 0 1.2-2.9 1.7 1.7 0 0 1 1.2-2.9H18a3 3 0 0 0 3-3A9 9 0 0 0 12 3z'/%3E%3Ccircle cx='7.5' cy='10.5' r='1.2'/%3E%3Ccircle cx='10.5' cy='7.5' r='1.2'/%3E%3Ccircle cx='14.5' cy='7.5' r='1.2'/%3E%3Ccircle cx='17.5' cy='11' r='1.2'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-refresh {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12a9 9 0 1 1-2.6-6.4'/%3E%3Cpath d='M21 3v6h-6'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-run {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 5.5v13l11-6.5z'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-format {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-delete {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v5M14 11v5'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-group-add {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/%3E%3Cpath d='M12 10v6M9 13h6'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-ascending {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 18V6M2 8l2-2 2 2'/%3E%3Cpath d='M11 6h9M11 11h6M11 16h3'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-descending {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6v12M2 16l2 2 2-2'/%3E%3Cpath d='M11 6h3M11 11h6M11 16h9'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-position {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='7'/%3E%3Cpath d='M12 2v3M12 19v3M2 12h3M19 12h3'/%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-arrow-bottom {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-arrow-right {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 6 6 6-6 6'/%3E%3C/svg%3E");
+}
+
+/* ===== 侧栏折叠 / 列表展开收起 ===== */
+i.ll-icon.ll-icon-fold {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5h16v14H4z'/%3E%3Cpath d='M9 5v14'/%3E%3Cpath d='m15 9-3 3 3 3'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-unfold {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5h16v14H4z'/%3E%3Cpath d='M9 5v14'/%3E%3Cpath d='m12 9 3 3-3 3'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-expand {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 6 5 5 5-5'/%3E%3Cpath d='m7 13 5 5 5-5'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-collapse {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m7 11 5-5 5 5'/%3E%3Cpath d='m7 18 5-5 5 5'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-minimize {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+}
+
+/* ===== 文件类型 ===== */
+i.ll-icon.ll-icon-script {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5'/%3E%3Cpath d='m10 12-2 2 2 2M14 12l2 2-2 2'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-file-text {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5'/%3E%3Cpath d='M9 13h6M9 17h4'/%3E%3C/svg%3E");
+}
+
+/* ===== 底部面板标签 ===== */
+i.ll-icon.ll-icon-parameter {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6h6M14 6h6M4 12h10M18 12h2M4 18h4M12 18h8'/%3E%3Ccircle cx='12' cy='6' r='2'/%3E%3Ccircle cx='16' cy='12' r='2'/%3E%3Ccircle cx='10' cy='18' r='2'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-debug-info {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m8 4 1.5 2.5M16 4l-1.5 2.5'/%3E%3Crect x='7' y='7' width='10' height='12' rx='5'/%3E%3Cpath d='M3 11h4M17 11h4M3 15h4M17 15h4M6 20l-1.5 1.5M18 20l1.5 1.5'/%3E%3Cpath d='M12 10v5M9.5 12.5h5'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-log {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='2'/%3E%3Cpath d='m7 9 3 3-3 3M13 15h4'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-settings {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 2.5a2 2 0 0 1 2 2v.4a6.5 6.5 0 0 1 1.7 1l.3-.2a2 2 0 1 1 2 3.4l-.4.2a6.5 6.5 0 0 1 0 2l.4.2a2 2 0 1 1-2 3.4l-.3-.2a6.5 6.5 0 0 1-1.7 1v.4a2 2 0 1 1-4 0v-.4a6.5 6.5 0 0 1-1.7-1l-.3.2a2 2 0 1 1-2-3.4l.4-.2a6.5 6.5 0 0 1 0-2l-.4-.2a2 2 0 1 1 2-3.4l.3.2a6.5 6.5 0 0 1 1.7-1v-.4a2 2 0 0 1 2-2z'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-todo {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 6 1.5 1.5L7 5M10 7h11M3 12l1.5 1.5L7 11M10 13h11M3 18l1.5 1.5L7 17M10 19h11'/%3E%3C/svg%3E");
+}
+
+i.ll-icon.ll-icon-event {
+  --ll-ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5M12 8h.01'/%3E%3C/svg%3E");
 }

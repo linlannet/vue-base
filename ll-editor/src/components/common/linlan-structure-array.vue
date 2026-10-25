@@ -44,8 +44,8 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-structure-a">
-    <label v-if="simple" @click.stop="expand = !expand"><i class="ma-icon" :class="{'ma-icon-collapse': expand, 'ma-icon-expand': !expand}"></i></label>
+  <div class="ll-structure-a">
+    <label v-if="simple" @click.stop="expand = !expand"><i class="ll-icon" :class="{'ll-icon-collapse': expand, 'll-icon-expand': !expand}"></i></label>
     <div v-if="simple">
       <span class="array">Array({{data.length}})</span>
     </div>
@@ -53,7 +53,7 @@ export default defineComponent({
       <template v-if="chunk">
         <div v-for="(range,key) in chunkRange" :key="'root_array_' + key">
           <label @click.stop="doExpand(key)">
-            <i class="ma-icon" :class="{'ma-icon-collapse': expandKeys[key] === true, 'ma-icon-expand': expandKeys[key] !== true}"></i>
+            <i class="ll-icon" :class="{'ll-icon-collapse': expandKeys[key] === true, 'll-icon-expand': expandKeys[key] !== true}"></i>
           </label>
           <span class="array">[{{range[0]}} ... {{range[1]}}]</span>
           <linlan-structure-array v-if="expandKeys[key]" :data="data.slice(range[0],range[1])" :fromIndex="range[0]" :indent="indent + 1" :simple="false"/>
@@ -63,7 +63,7 @@ export default defineComponent({
 <template v-else>
         <div v-for="(value,key) in data" :key="'root_line_' + key">
           <label v-if="value && typeof value === 'object'" @click.stop="doExpand(key)">
-            <i class="ma-icon" :class="{'ma-icon-collapse': expandKeys[key] === true, 'ma-icon-expand': expandKeys[key] !== true}"></i>
+            <i class="ll-icon" :class="{'ll-icon-collapse': expandKeys[key] === true, 'll-icon-expand': expandKeys[key] !== true}"></i>
           </label>
           <span class="property">{{fromIndex + key}}</span>
           <span class="colon">:</span>

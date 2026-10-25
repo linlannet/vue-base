@@ -4,7 +4,7 @@ import tokenizer from '../parsing/tokenizer'
 import {TokenStream} from '../parsing/index'
 import {Parser} from '../parsing/parser'
 import * as monaco from 'monaco-editor'
-import RequestParameter from "@/scripts/editor/request-parameter";
+import RequestParameter from "@/scripts/monaco/request-parameter";
 import {MemberAccess, MethodCall, NewStatement, VariableAccess} from "@/scripts/parsing/ast";
 
 const completionImportJavaPackage = (suggestions, keyword, start, position) => {

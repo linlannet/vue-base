@@ -150,20 +150,20 @@ export default defineComponent({
 
 <template>
   <div class="linlan-context-menu-container">
-    <ul class="ma-contextmenu" :class="commonClass" :style="style">
+    <ul class="ll-contextmenu" :class="commonClass" :style="style">
       <template v-for="(item, index) in menus">
-        <li v-if="item.divided" class="ma-contextmenu-divided" :key="'d_' + index"></li>
+        <li v-if="item.divided" class="ll-contextmenu-divided" :key="'d_' + index"></li>
         <li
           v-else
           :key="index"
-          class="ma-contextmenu-item"
+          class="ll-contextmenu-item"
           :style="{ cursor: item.disabled ? 'not-allowed' : 'pointer' }"
           @click="item.disabled ? null : clickItem(item, index, $event)"
           @mouseenter="enterItem(index, $event)"
           @mouseleave="leaveItem(index)"
         >
-          <i v-if="item.icon" class="ma-icon" :class="item.icon"></i>
-          <span class="ma-contextmenu-item-title" :title="item.title">{{ item.title }}</span>
+          <i v-if="item.icon" class="ll-icon" :class="item.icon"></i>
+          <span class="ll-contextmenu-item-title" :title="item.title">{{ item.title }}</span>
         </li>
       </template>
     </ul>

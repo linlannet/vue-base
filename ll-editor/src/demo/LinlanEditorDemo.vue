@@ -1,5 +1,5 @@
 <template>
-  <div class="ma-container" style="height: 100vh">
+  <div class="ll-container" style="height: 100vh">
     <MagicEditor :config="config" />
   </div>
 </template>

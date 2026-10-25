@@ -1,5 +1,5 @@
 // @ts-nocheck
-import JavaClass from '../editor/java-class'
+import JavaClass from '../monaco/java-class'
 import {Span, TokenType} from './index'
 
 class Node {

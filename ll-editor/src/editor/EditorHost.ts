@@ -59,14 +59,18 @@ export class EditorHost {
   private models = new Map<string, monaco.editor.ITextModel>()
   private changeCb?: (doc: EditorDoc) => void
 
-  constructor(container: HTMLElement, options?: { theme?: string; language?: string }) {
+  constructor(
+    container: HTMLElement,
+    options?: { theme?: string; language?: string; editorOptions?: Record<string, unknown> }
+  ) {
     this.editor = monaco.editor.create(container, {
       theme: options?.theme ?? 'vs',
       automaticLayout: true,
       minimap: { enabled: true },
       glyphMargin: true,
       fontSize: 14,
-      scrollBeyondLastLine: false
+      scrollBeyondLastLine: false,
+      ...(options?.editorOptions || {})
     })
   }
 

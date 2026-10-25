@@ -92,7 +92,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-json-container">
+  <div class="ll-json-container">
     <div class="json-view f_c">
       <!-- 解决子组件不强制刷新 -->
       <div v-show="forceUpdate"></div>

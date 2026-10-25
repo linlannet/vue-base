@@ -251,28 +251,28 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-request-wrapper">
-    <div class="ma-api-info">
+  <div class="ll-request-wrapper">
+    <div class="ll-api-info">
       <label>请求方法</label>
-      <linlan-select :options="options" v-model:value="info.method" defaultValue="GET"/>
+      <linlan-select :options="options" v-model:value="info.method" defaultValue="GET" style="width: 100px"/>
       <label>接口名称</label>
-      <linlan-input v-model:value="info.name" placeholder="请输入接口名称" style="flex:1"/>
+      <linlan-input v-model:value="info.name" placeholder="请输入接口名称" style="flex:1 1 120px"/>
       <label>接口路径</label>
-      <linlan-input v-model:value="info.path" placeholder="请输入接口路径" style="flex: 2"/>
+      <linlan-input v-model:value="info.path" placeholder="请输入接口路径" style="flex:2 1 200px"/>
     </div>
-    <div class="ma-request-parameters">
-      <ul class="not-select ma-nav-tab">
+    <div class="ll-request-parameters">
+      <ul class="not-select ll-nav-tab">
         <li v-for="(item, key) in navs" :key="'request_item_' + key" :class="{ selected: showIndex === key }"
             @click="showIndex = key;initRequestBodyDom();">{{ item }}
         </li>
       </ul>
-      <div class="ma-layout">
-        <div v-show="showIndex < 3" class="not-select ma-sider">
-          <div @click="addRow"><i class="ma-icon ma-icon-plus"/></div>
-          <div @click="removeRow"><i class="ma-icon ma-icon-minus"/></div>
+      <div class="ll-layout">
+        <div v-show="showIndex < 3" class="not-select ll-sider">
+          <div @click="addRow"><i class="ll-icon ll-icon-plus"/></div>
+          <div @click="removeRow"><i class="ll-icon ll-icon-minus"/></div>
         </div>
-        <div v-show="showIndex === 0" class="ma-layout-container">
-          <div class="ma-header ma-table-row ma-table-request-row">
+        <div v-show="showIndex === 0" class="ll-layout-container">
+          <div class="ll-header ll-table-row ll-table-request-row">
             <div style="width: 32px">必填</div>
             <div style="width: 80px">Key</div>
             <div style="flex:1">Value</div>
@@ -283,9 +283,9 @@ export default defineComponent({
             <div style="flex:1">验证说明</div>
             <div style="flex:2">描述</div>
           </div>
-          <div class="ma-content">
+          <div class="ll-content">
             <div v-for="(item, key) in info.parameters" :key="'request_parameter_' + key"
-                 class="ma-table-row ma-table-request-row">
+                 class="ll-table-row ll-table-request-row">
               <div style="width: 32px">
                 <linlan-checkbox :focus="() => (parameterIndex = key)" v-model:value="item.required"/>
               </div>
@@ -318,8 +318,8 @@ export default defineComponent({
             </div>
           </div>
         </div>
-        <div v-show="showIndex === 1" class="ma-layout-container">
-          <div class="ma-header ma-table-row ma-table-request-row">
+        <div v-show="showIndex === 1" class="ll-layout-container">
+          <div class="ll-header ll-table-row ll-table-request-row">
             <div style="width:32px">必填</div>
             <div style="width: 80px">Key</div>
             <div style="flex:1">Value</div>
@@ -330,9 +330,9 @@ export default defineComponent({
             <div style="flex:1">验证说明</div>
             <div style="flex:2">描述</div>
           </div>
-          <div class="ma-content">
+          <div class="ll-content">
             <div v-for="(item, key) in info.headers" :key="'request_header_' + key"
-                 class="ma-table-row ma-table-request-row">
+                 class="ll-table-row ll-table-request-row">
               <div style="width: 32px">
                 <linlan-checkbox :focus="() => (headerIndex = key)" v-model:value="item.required"/>
               </div>
@@ -366,8 +366,8 @@ export default defineComponent({
           </div>
         </div>
 
-        <div v-show="showIndex === 2" class="ma-layout-container">
-          <div class="ma-header ma-table-row ma-table-request-row">
+        <div v-show="showIndex === 2" class="ll-layout-container">
+          <div class="ll-header ll-table-row ll-table-request-row">
             <div style="width: 80px">Key</div>
             <div style="flex: 1">Value</div>
             <div style="width: 100px">参数类型</div>
@@ -376,9 +376,9 @@ export default defineComponent({
             <div style="flex: 1">验证说明</div>
             <div style="flex: 2">描述</div>
           </div>
-          <div class="ma-content">
+          <div class="ll-content">
             <div v-for="(item, key) in info.paths" :key="'request_header_' + key"
-                 class="ma-table-row ma-table-request-row">
+                 class="ll-table-row ll-table-request-row">
               <div :class="{ focus: pathIndex === key && !item.name }" style="width: 80px">
                 <linlan-input :focus="() => (pathIndex = key)" v-model:value="item.name" style="width: 100%"/>
               </div>
@@ -406,12 +406,12 @@ export default defineComponent({
           </div>
         </div>
 
-        <div v-show="showIndex === 3" class="ma-layout-container">
+        <div v-show="showIndex === 3" class="ll-layout-container">
 
           <div style="display: flex; flex-direction: row; height: calc(100% - 24px);">
             <div style="width: 50%">
               <div class="header">编辑器</div>
-              <div ref="bodyEditor" class="ma-body-editor"></div>
+              <div ref="bodyEditor" class="ll-body-editor"></div>
             </div>
             <div style="width: 50%">
               <linlan-json :jsonData="requestBody || []" :forceUpdate="forceUpdate" :height="layoutHeight" type="request"></linlan-json>
@@ -419,10 +419,10 @@ export default defineComponent({
           </div>
 
         </div>
-        <div v-show="showIndex === 4" class="ma-layout-container">
+        <div v-show="showIndex === 4" class="ll-layout-container">
           <linlan-option :info="info"/>
         </div>
-        <div v-show="showIndex === 5" class="ma-layout-container" style="overflow: hidden; right: 0">
+        <div v-show="showIndex === 5" class="ll-layout-container" style="overflow: hidden; right: 0">
           <linlan-textarea v-model:value="info.description" style="width: 100%; height: 100%; margin: 2px"/>
         </div>
       </div>
@@ -431,9 +431,52 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.ma-body-editor {
+.ll-body-editor {
   width: 100%;
   height: 100%;
+}
+
+/* 窗口变窄时：请求方法 / 接口名称 / 接口路径 保持同一行等比缩放，不换行
+   （全局 .ll-api-info 有 flex-wrap: wrap，这里覆盖为 nowrap） */
+.ll-api-info {
+  flex-wrap: nowrap;
+  overflow: hidden;
+  gap: 8px;
+  padding: 6px 8px;
+}
+
+/* 标签按文字自适应（全局固定 75px 太占地方）；
+   shrink 取极小值：空间不够时优先压两个输入框，标签基本保持完整 */
+.ll-api-info label {
+  flex: 0 0.05 auto;
+  width: auto;
+  min-width: 0;
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* 下拉框只少量参与收缩 */
+.ll-api-info > :deep(.ll-select) {
+  flex: 0 0.2 auto;
+}
+
+/* input 容器：允许被压缩到 0（默认 min-width: auto 会卡在固有宽度，逼出换行） */
+.ll-api-info > :deep(div:not(.ll-select)) {
+  min-width: 0;
+}
+
+.ll-api-info :deep(input) {
+  min-width: 0;
+}
+
+/* 参数表格：列被压窄时文字不换行（如「表达式或正则表达式」），超出用省略号
+   默认 white-space: normal 会让表头折成两行，导致表头与数据行错位 */
+.ll-table-request-row > * {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 </style>

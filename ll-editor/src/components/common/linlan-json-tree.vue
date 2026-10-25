@@ -65,7 +65,7 @@ export default defineComponent({
 </script>
 
 <template>
-   <ul class="ma-tree">
+   <ul class="ll-tree">
     <li v-for="(item, index) in jsonData" :key="index" @click="handleItemClick(item, index)">
       <!-- 解决子组件不强制刷新 -->
       <div v-show="forceUpdate"></div>

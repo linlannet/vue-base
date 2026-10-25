@@ -76,20 +76,20 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-options">
-    <div class="ma-layout">
-      <div class="not-select ma-sider">
-        <div @click="addRow"><i class="ma-icon ma-icon-plus"/></div>
-        <div @click="removeRow"><i class="ma-icon ma-icon-minus"/></div>
+  <div class="ll-options">
+    <div class="ll-layout">
+      <div class="not-select ll-sider">
+        <div @click="addRow"><i class="ll-icon ll-icon-plus"/></div>
+        <div @click="removeRow"><i class="ll-icon ll-icon-minus"/></div>
       </div>
-      <div class="ma-layout-container">
-        <div class="ma-header ma-table-row">
+      <div class="ll-layout-container">
+        <div class="ll-header ll-table-row">
           <div>键</div>
           <div>值</div>
           <div>描述</div>
         </div>
-        <div class="ma-content">
-          <div v-for="(item, key) in info.option" :key="'request_parameter_' + key" class="ma-table-row">
+        <div class="ll-content">
+          <div v-for="(item, key) in info.option" :key="'request_parameter_' + key" class="ll-table-row">
             <div :class="{ focus: optionIndex === key && !item.name }">
               <linlan-select :focus="() => (optionIndex = key)" :inputable="true" :options="defaultOptions"
                             :select="value => onSelect(value, key)"
@@ -109,7 +109,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.ma-options {
+.ll-options {
   background: var(--background);
   height: 100%;
   width: 100%;

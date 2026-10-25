@@ -7,7 +7,7 @@
 `ll-editor` 是一个基于 [Monaco Editor](https://github.com/microsoft/monaco-editor) 的**框架无关**代码编辑器内核：
 
 - **内核**借鉴 linlan-editor 的 monaco 多标签编辑器（剥离业务）。
-- **架构**借鉴 aieditor 的分层 + 白名单导出 + 插件/工具注册表。
+- **架构**采用分层（core / languages / editor / runtime / storage / plugin-api）+ 白名单导出 + 插件/工具注册表。
 - **生态**借鉴 deepseek harness 的 Manifest + 插件市场分发模式。
 
 核心 `LLEditor` 是一个纯 TypeScript 编排器（位于 `core/`），不依赖 Vue/UI，便于在任意宿主（RuoYi-AI 等）中嵌入。

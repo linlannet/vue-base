@@ -41,7 +41,8 @@ export default defineComponent({
   },
   methods: {
     close() {
-      this.$refs.dialog.hide()
+      const dialog = this.$refs.dialog
+      if (dialog) dialog.hide()
     },
     okHandle() {
       this.close()
@@ -72,8 +73,8 @@ export default defineComponent({
     </template>
 
     <template #buttons>
-      <button class="ma-button active" @click="okHandle">{{ ok }}</button>
-      <button class="ma-button" @click="cancelHandle">{{ cancel }}</button>
+      <button class="ll-button active" @click="okHandle">{{ ok }}</button>
+      <button class="ll-button" @click="cancelHandle">{{ cancel }}</button>
     </template>
   </linlan-dialog>
 </template>

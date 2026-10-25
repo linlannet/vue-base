@@ -4,7 +4,7 @@ import { join, relative } from 'node:path'
 import { describe, it, expect } from 'vitest'
 
 /**
- * 分层依赖守卫（借鉴 aieditor 的 DirectoryBoundaries 测试）：
+ * 分层依赖守卫：
  * - plugin-api 只能依赖 core（稳定白名单），不得依赖具体插件/UI/市场实现
  * - ui / plugins / plugin-runtime 不得反向依赖 plugin-market 内部实现细节
  * - extensions(plugins) 不得依赖 editor/features/menus 之外的内层私有路径（此处简化为白名单）

@@ -7,7 +7,7 @@
 `ll-editor` is a **framework-agnostic** code editor core built on [Monaco Editor](https://github.com/microsoft/monaco-editor):
 
 - The **core** borrows linlan-editor's Monaco multi-tab editor (business logic stripped out).
-- The **architecture** borrows aieditor's layering + whitelisted exports + plugin/tool registry.
+- The **architecture** uses layering (core / languages / editor / runtime / storage / plugin-api) + whitelisted exports + plugin/tool registry.
 - The **ecosystem** borrows deepseek harness's Manifest + plugin marketplace distribution model.
 
 The core `LLEditor` is a plain TypeScript orchestrator (in `core/`) with no Vue/UI dependency, making it easy to embed in any host (e.g. RuoYi-AI).

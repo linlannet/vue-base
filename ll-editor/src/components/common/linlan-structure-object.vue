@@ -31,8 +31,8 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-structure-o">
-    <label v-if="simple" @click.stop="expand = !expand"><i class="ma-icon" :class="{'ma-icon-collapse': expand, 'ma-icon-expand': !expand}"></i></label>
+  <div class="ll-structure-o">
+    <label v-if="simple" @click.stop="expand = !expand"><i class="ll-icon" :class="{'ll-icon-collapse': expand, 'll-icon-expand': !expand}"></i></label>
     <div v-if="simple">
       <span>{</span>
         <span v-for="(value,key,index) in data" :key="'root_' + key">
@@ -52,7 +52,7 @@ export default defineComponent({
     <div v-if="expand || simple === false" class="expand-o" :style="{'margin-left': '20px'}">
       <div v-for="(value,key) in data" :key="'root_line_' + key">
         <label v-if="value && typeof value === 'object'" @click.stop="doExpand(key)">
-          <i class="ma-icon" :class="{'ma-icon-collapse': expandKeys[key] === true, 'ma-icon-expand': expandKeys[key] !== true}"></i>
+          <i class="ll-icon" :class="{'ll-icon-collapse': expandKeys[key] === true, 'll-icon-expand': expandKeys[key] !== true}"></i>
         </label>
         <span class="property">{{key}}</span>
         <span class="colon">:</span>

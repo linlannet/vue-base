@@ -3,7 +3,7 @@
 `ll-editor` = **a plugin-based code editor core + pluggable runtime + plugin marketplace**.
 
 - The core borrows magic-editor's Monaco multi-tab editor (business logic stripped out).
-- The architecture borrows aieditor's **layering + whitelisted exports + plugin/tool registry**.
+- The architecture uses **layering (core / languages / editor / runtime / storage / plugin-api) + whitelisted exports + plugin/tool registry**.
 - The ecosystem borrows deepseek harness's **Manifest + plugin marketplace** distribution model.
 
 ## Core features

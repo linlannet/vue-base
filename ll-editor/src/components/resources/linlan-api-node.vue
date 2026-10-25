@@ -1,33 +1,48 @@
 <script setup lang="ts">
-import { computed, inject, ref } from 'vue'
+// 接口资源树的递归节点（对齐官方 2.1.1 magic-tree 的 .magic-tree-item 结构）：
+// - 分组节点：caret 图标 + 文件夹图标 + 名称 + (/path)
+// - 接口叶子：按方法着色的方法文本（GET/POST/PUT/DEL） + 名称 + (/path)
+// 节点级操作不再用行内按钮，改为右键菜单（事件上抛到 linlan-api-list）。
+import { computed, inject, ref, watch } from 'vue'
 import type { Ref } from 'vue'
 import { linlanApi } from '@/api/linlanApi'
 import type { LinlanApiEntity, LinlanTreeNode } from '@/api/linlanApi'
-import type { I18n } from '@/i18n'
-import { modal } from '@/components/common/modal/index'
 import bus from '@/scripts/bus'
 
 const props = withDefaults(
   defineProps<{ node: LinlanTreeNode; depth?: number; groupName?: string; groupPath?: string }>(),
   { depth: 0, groupName: '', groupPath: '' }
 )
-const i18n = inject<I18n>('ll-i18n')!
 const openApi = inject<(e: LinlanApiEntity) => void>('ll-api-open')!
 const refresh = inject<() => Promise<void>>('ll-tree-refresh')!
-const newGroup = inject<(parentId?: string | null) => Promise<void>>('ll-tree-new-group')!
 const dragId = inject<Ref<string | null>>('ll-drag-id')!
+// 头部「全部展开 / 全部折叠 / 搜索」联动：由 linlan-api-list 通过 ll-tree-ctl 下发
+const treeCtl = inject<{ keyword: string; asc: boolean; seq: number; value: boolean } | null>('ll-tree-ctl')
 
 const expanded = ref(true)
 const error = ref('')
 const over = ref(false)
 
-// 官方 2.1.1 资源树：文件夹节点带 type 且无 method；接口叶子无 type 但有 method。
-// 旧实现用「是否有子节点」判断，会把空文件夹（如 民政资源池）误判为接口并显示 GET 徽标。
+// 「全部展开 / 全部折叠」：seq 变化时按 value 批量下发
+watch(
+  () => treeCtl?.seq,
+  () => {
+    if (treeCtl) expanded.value = treeCtl.value
+  }
+)
+// 搜索时自动展开命中分支
+watch(
+  () => treeCtl?.keyword,
+  (kw) => {
+    if (kw) expanded.value = true
+  }
+)
+
+// 官方 2.1.1 资源树：分组节点带 type、无 groupId；接口叶子带 groupId 与 method。
 function isGroup(): boolean {
-  return !props.node.method
+  return !props.node.groupId
 }
-// 分组链累积（对齐官方顶部标题 groupName/groupPath）：
-// 分组节点向下传递「父链名称/路径 + 自身」，接口叶子直接继承父分组链。
+// 分组链累积（对齐官方顶部标题 groupName/groupPath）
 function joinName(parent: string, name?: string): string {
   return [parent, name].filter((x) => !!x).join('/')
 }
@@ -40,10 +55,15 @@ const currentGroupPath = computed(() => (isGroup() ? joinPath(props.groupPath, p
 function method(): string {
   return String(props.node.method || props.node.attribute?.method || 'GET')
 }
+// 官方 magic-text-icon：DELETE 显示为 DEL
+function methodText(): string {
+  const m = method().toUpperCase()
+  return m === 'DELETE' ? 'DEL' : m
+}
 function toggle(): void {
   expanded.value = !expanded.value
 }
-// 对齐 magic-api-list：分组行单击 = 选中分组（底部打开分组信息 tab），箭头/双击 = 展开收起
+// 分组行单击 = 选中分组（底部打开分组信息 tab），箭头/双击 = 展开收起
 function selectGroup(): void {
   bus.$emit('api-group-selected', { ...props.node })
 }
@@ -51,45 +71,15 @@ async function open(): Promise<void> {
   if (isGroup()) return
   try {
     const entity = await linlanApi.fetchApi(props.node.id)
-    // 注入分组链，供顶部标题显示 groupName/name(groupPath/path)
     openApi({ ...entity, groupName: currentGroupName.value, groupPath: currentGroupPath.value })
   } catch (e) {
     console.error('[ll-editor] 打开接口失败:', e)
   }
 }
 
-async function newApi(): Promise<void> {
-  const name = await modal.linlanPrompt('新建接口名称', '', '新建接口')
-  if (!name) return
-  const entity: LinlanApiEntity = {
-    id: '',
-    groupId: props.node.id,
-    name,
-    path: '/' + name,
-    method: 'POST',
-    script: 'return success();\n',
-    parameters: []
-  }
-  try {
-    const id = await linlanApi.saveApi(props.node.id, entity, '1')
-    await refresh()
-    openApi({ ...entity, id })
-  } catch (e) {
-    error.value = (e as Error).message || '创建接口失败'
-  }
-}
-
-function remove(): void {
-  modal.linlanConfirm(`确认删除「${props.node.name}」？`, {
-    confirm: async () => {
-      try {
-        await linlanApi.deleteResource(props.node.id)
-        await refresh()
-      } catch (e) {
-        error.value = (e as Error).message || '删除失败'
-      }
-    }
-  })
+// 右键：把菜单所需信息上抛给 linlan-api-list 渲染
+function onContextMenu(e: MouseEvent): void {
+  bus.$emit('ll-api-tree-context', { x: e.clientX, y: e.clientY, node: props.node, isGroup: isGroup() })
 }
 
 async function onDrop(): Promise<void> {
@@ -123,7 +113,7 @@ function onDragLeave(): void {
 </script>
 
 <template>
-  <div class="ll-tree-node" :style="{ paddingLeft: (depth || 0) * 12 + 4 + 'px' }">
+  <div class="ll-tree-node" :data-id="node.id" :style="{ paddingLeft: (depth || 0) * 12 + 'px' }">
     <div
       v-if="isGroup()"
       class="ll-tree-group"
@@ -131,34 +121,34 @@ function onDragLeave(): void {
       draggable="true"
       @click="selectGroup"
       @dblclick="toggle"
+      @contextmenu.prevent="onContextMenu"
       @dragstart="onDragStart"
       @dragend="onDragEnd"
       @dragover="onDragOver"
       @dragleave="onDragLeave"
       @drop="onDrop"
     >
-      <span class="ll-caret" @click.stop="toggle">{{ expanded ? '▼' : '▶' }}</span>
-      <span class="ll-glyph">📁</span>
-      <span class="ll-name">{{ node.name }}</span>
-      <span class="ll-node-actions" @click.stop>
-        <button class="ll-mini ll-mini-sm" :title="i18n.t('api.newApi')" @click="newApi">＋API</button>
-        <button class="ll-mini ll-mini-sm" :title="i18n.t('api.newGroup')" @click="newGroup(node.id)">＋</button>
-        <button class="ll-mini ll-mini-sm" :title="i18n.t('api.delete')" @click="remove">🗑</button>
-      </span>
+      <i
+        class="ll-icon ll-caret"
+        :class="expanded ? 'll-icon-arrow-bottom' : 'll-icon-arrow-right'"
+        @click.stop="toggle"
+      ></i>
+      <i class="ll-icon ll-glyph ll-icon-list"></i>
+      <label class="ll-name" :title="node.path || node.name">{{ node.name }}</label>
+      <span v-if="node.path" class="ll-path">({{ node.path }})</span>
     </div>
     <div
       v-else
       class="ll-tree-api"
       draggable="true"
       @click="open"
+      @contextmenu.prevent="onContextMenu"
       @dragstart="onDragStart"
       @dragend="onDragEnd"
     >
-      <span class="ll-method" :class="'m-' + method().toUpperCase()">{{ method().toUpperCase() }}</span>
-      <span class="ll-name">{{ node.name }}</span>
-      <span class="ll-node-actions" @click.stop>
-        <button class="ll-mini ll-mini-sm" :title="i18n.t('api.delete')" @click="remove">🗑</button>
-      </span>
+      <span class="ll-method" :class="'m-' + method().toUpperCase()">{{ methodText() }}</span>
+      <label class="ll-name" :title="node.path || node.name">{{ node.name }}</label>
+      <span v-if="node.path" class="ll-path">({{ node.path }})</span>
     </div>
     <div v-if="error" class="ll-tree-error">{{ error }}</div>
     <template v-if="isGroup() && expanded">

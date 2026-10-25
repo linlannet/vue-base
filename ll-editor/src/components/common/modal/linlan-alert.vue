@@ -57,7 +57,7 @@ export default defineComponent({
     </template>
 
     <template #buttons>
-      <button class="ma-button active" @click="okHandle">{{ ok }}</button>
+      <button class="ll-button active" @click="okHandle">{{ ok }}</button>
     </template>
   </linlan-dialog>
 </template>

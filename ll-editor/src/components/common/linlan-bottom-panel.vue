@@ -19,22 +19,22 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-bottom-content-item">
+  <div class="ll-bottom-content-item">
     <div class="not-select">
       <label>{{ title }}</label>
       <span v-for="button in buttons" :key="'ma_button_' + button.name" :title="button.name">
-        <i :class="'ma-icon ma-icon' + button.icon"></i>
+        <i :class="'ll-icon ll-icon' + button.icon"></i>
       </span>
-      <span title="最小化" @click="$emit('update:selectedTab', null)"><i class="ma-icon ma-icon-minimize"></i></span>
+      <span title="最小化" @click="$emit('update:selectedTab', null)"><i class="ll-icon ll-icon-minimize"></i></span>
     </div>
-    <div class="ma-item-body">
+    <div class="ll-item-body">
       <slot></slot>
     </div>
   </div>
 </template>
 
 <style scoped>
-.ma-bottom-content-item {
+.ll-bottom-content-item {
   background: var(--background);
   overflow: auto;
   height: 100%;
@@ -42,7 +42,7 @@ export default defineComponent({
   color: var(--color);
 }
 
-.ma-bottom-content-item > div:first-child {
+.ll-bottom-content-item > div:first-child {
   background: var(--background);
   border-bottom: 1px solid var(--tab-bar-border-color);
   height: 24px;
@@ -50,7 +50,7 @@ export default defineComponent({
   padding-left: 10px;
 }
 
-.ma-bottom-content-item > div:first-child > span {
+.ll-bottom-content-item > div:first-child > span {
   color: var(--icon-color);
   cursor: pointer;
   padding: 0 3px;
@@ -59,12 +59,12 @@ export default defineComponent({
   line-height: 24px;
 }
 
-.ma-bottom-content-item > div:first-child > span:last-child {
+.ll-bottom-content-item > div:first-child > span:last-child {
   float: right;
   margin-right: 12px;
 }
 
-.ma-bottom-content-item .ma-item-body {
+.ll-bottom-content-item .ll-item-body {
   position: absolute;
   top: 24px;
   bottom: 0px;

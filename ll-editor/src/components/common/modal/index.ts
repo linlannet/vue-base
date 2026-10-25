@@ -6,7 +6,7 @@ import LinlanDialog from './linlan-dialog.vue'
 import LinlanPrompt from './linlan-prompt.vue'
 
 function getRoot() {
-  return document.querySelector('.ma-container') || document.body
+  return document.querySelector('.ll-container') || document.body
 }
 
 function mount(Comp, props) {

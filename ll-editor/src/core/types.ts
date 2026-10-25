@@ -80,6 +80,15 @@ export interface KBFile {
   language: string
   kind: KBFileKind
   content: string
+  /** 所属文件夹 id；空/未设置表示知识库根目录 */
+  parentId?: string | null
+}
+
+/** 知识库文件夹（支持多级：parentId 指向上级文件夹） */
+export interface KBFolder {
+  id: string
+  name: string
+  parentId?: string | null
 }
 
 /** 知识库（类似 d1/d2/d3；可配置多个，并选择保存方式） */
@@ -88,6 +97,7 @@ export interface KnowledgeBase {
   name: string
   storage: KBStorageType
   files: KBFile[]
+  folders?: KBFolder[]
 }
 
 /** 调试事件类型（P2 沙箱/断点联动） */
@@ -132,6 +142,8 @@ export interface LLEditorOptions {
   magicApiVersionText?: string
   /** 跳过后端版本校验 */
   ignoreVersion?: boolean
+  /** 透传给 monaco.editor.create 的额外选项（字体、minimap、折叠等） */
+  editorOptions?: Record<string, unknown>
 }
 
 /** 存储后端配置 */

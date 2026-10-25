@@ -3,7 +3,7 @@
 `ll-editor` = **纯插件化代码编辑器内核 + 可插拔运行时 + 插件市场**。
 
 - 内核借鉴 magic-editor 的 monaco 多标签编辑器（剥离业务）。
-- 架构借鉴 aieditor 的 **分层 + 白名单导出 + 插件/工具注册表**。
+- 架构采用 **分层（core / languages / editor / runtime / storage / plugin-api）+ 白名单导出 + 插件/工具注册表**。
 - 生态借鉴 deepseek harness 的 **Manifest + 插件市场** 分发模式。
 
 ## 核心特性

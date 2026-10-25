@@ -1,4 +1,4 @@
-﻿// @ts-nocheck
+// @ts-nocheck
 import mitt from 'mitt'
 
 // Vue3 事件总线：mitt 封装，保留原 linlan-editor 的 $on/$emit/$off 调用约定
@@ -37,7 +37,11 @@ const bus = {
     emitter.off(type, handler)
   },
   $emit(type, ...args) {
-    emitter.emit(type, args.length > 1 ? args : args[0])
+    // 必须展开参数：监听方按 (a, b) 位置接收。若把多参打包成数组，
+    // 会把整个数组当成第一个参数（例如 update-response-body 把数组传给
+    // editor.setValue 触发 Monaco factory.create is not a function），
+    // websocket 的 (msgType, content) 也会错位。
+    emitter.emit(type, ...args)
   },
   $getStatusLog() {
     return statusLogs
@@ -53,7 +57,7 @@ const bus = {
     emitter.off(type, handler)
   },
   emit(type, ...args) {
-    emitter.emit(type, args.length > 1 ? args : args[0])
+    emitter.emit(type, ...args)
   },
   // 状态日志（原 linlan-editor bus.statusLog）
   statusLog(type, fnName, content) {

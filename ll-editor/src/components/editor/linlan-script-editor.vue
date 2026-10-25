@@ -6,13 +6,17 @@ import { LLEditor } from '@/core/LLEditor'
 import type { LLEditorOptions, KBFile, KnowledgeBase, Diagnostic, EditorDoc } from '@/core/types'
 import type { ConsoleEntry } from '@/runtime/console'
 import type { LinlanApiEntity } from '@/api/linlanApi'
+import { linlanApi } from '@/api/linlanApi'
 import LinlanKbEditor from '@/components/editor/linlan-kb-editor.vue'
 import LinlanTabs from '@/components/layout/linlan-tabs.vue'
 import LinlanHistory from '@/components/editor/linlan-history.vue'
 import LinlanDialog from '@/components/common/modal/linlan-dialog.vue'
 import request from '@/api/request'
 import bus from '@/scripts/bus'
+import store from '@/scripts/store'
 import { modal } from '@/components/common/modal/index'
+import contants from '@/scripts/contants'
+import JavaClass from '@/scripts/monaco/java-class'
 
 const props = defineProps<{
   mode: number
@@ -37,6 +41,7 @@ const state = inject<{
 const dbg = inject<{ consoleEntries: ConsoleEntry[]; diagnostics: Diagnostic[] }>('ll-debug')!
 
 const apiHost = ref<HTMLDivElement | null>(null)
+const sqlHost = ref<HTMLDivElement | null>(null)
 const kbRef = ref<InstanceType<typeof LinlanKbEditor> | null>(null)
 let coreInst: LLEditor | null = null
 let offs: Array<() => void> = []
@@ -52,21 +57,46 @@ let apiActiveCache = ''
 // 函数模式（mode 2）独立缓存：与接口模式隔离，避免切到「函数」后中栏仍显示接口脚本
 const fnDocsCache = new Map<string, EditorDoc>()
 let fnActiveCache = ''
+// 数据源模式（mode 3）独立缓存：每个数据源一份 SQL 文档，与接口/函数隔离
+const dsDocsCache = new Map<string, EditorDoc>()
+let dsActiveCache = ''
 
 const isFnMode = (): boolean => props.mode === 2
-const docsCache = (): Map<string, EditorDoc> => (isFnMode() ? fnDocsCache : apiDocsCache)
+const isDsMode = (): boolean => props.mode === 3
+const docsCache = (): Map<string, EditorDoc> =>
+  isFnMode() ? fnDocsCache : isDsMode() ? dsDocsCache : apiDocsCache
 
 function buildCore(opts: LLEditorOptions): void {
-  if (!apiHost.value) return
+  // 数据源模式把 Monaco 挂到独立的 sqlHost（与接口/函数模式的 apiHost 互不干扰）
+  const host = isDsMode() ? sqlHost.value : apiHost.value
+  if (!host) return
+  // 对齐官方 initializeMagicScript：在创建编辑器之前同步注册 magicscript / mybatis 语言与
+  // Monarch tokenizer，否则 SQL（""" ... """）块内不会走 mybatis 嵌入高亮，表现为整片纯黑文本。
+  JavaClass.initializeMagicScript()
   const cache = docsCache()
   const cached = [...cache.values()]
-  coreInst = new LLEditor(apiHost.value, {
+  coreInst = new LLEditor(host, {
     showSidebar: false,
     showBottomPanel: false,
+    // 中栏脚本区使用当前皮肤对应的 Monaco 主题（官方 default/dark 等），
+    // 否则 EditorHost 会以内置 vs 主题创建编辑器，把全局主题重置成 vs，
+    // 使 magicscript 的 token 落到 Monaco 默认配色（关键字无颜色、字符串为 vs 红）而非官方配色
+    defaultTheme: (store.get('skin') as string) || 'default',
+    // 对齐官方 magic-script-editor 的编辑器选项（字体、无 minimap、折叠、自动换行等）
+    editorOptions: {
+      minimap: { enabled: false },
+      folding: true,
+      lineDecorationsWidth: 35,
+      wordWrap: 'on',
+      fontFamily: contants.EDITOR_FONT_FAMILY,
+      fontSize: contants.EDITOR_FONT_SIZE,
+      fontLigatures: true,
+      renderWhitespace: 'none'
+    },
     // 函数模式无独立文档来源，中栏保持空态（不复用接口文档，也不注入示例脚本）
     initialDocs: cached.length
       ? cached
-      : isFnMode()
+      : isFnMode() || isDsMode()
         ? []
         : opts.initialDocs ?? [
             {
@@ -87,13 +117,19 @@ function buildCore(opts: LLEditorOptions): void {
     coreInst.bus.on('doc:changed', (d) => {
       // 内容变化持续写入缓存，保证模式切换后可完整恢复
       cache.set(d.id, d)
+      // 数据源 SQL 文档额外落盘：刷新页面后草稿仍在
+      if (isDsMode()) saveSqlDraft(d.id, d.content)
     }),
     coreInst.bus.on('doc:closed', ({ id }) => {
       cache.delete(id)
       state.openDocs = state.openDocs.filter((o) => o.id !== id)
+      // 数据源文档全部关掉后，底部结果区回到「未选择数据源」
+      if (isDsMode()) notifySqlState()
     }),
     coreInst.bus.on('tab:switched', ({ id }) => {
       state.activeId = id
+      // 数据源文档间切换：结果区标题跟着切
+      if (isDsMode()) notifySqlState()
     }),
     coreInst.bus.on('run:started', () => {
       state.running = true
@@ -125,7 +161,7 @@ function buildCore(opts: LLEditorOptions): void {
     })
   ]
   // 恢复上次的激活 tab（按当前模式对应的缓存判断）
-  const activeCache = isFnMode() ? fnActiveCache : apiActiveCache
+  const activeCache = isFnMode() ? fnActiveCache : isDsMode() ? dsActiveCache : apiActiveCache
   if (activeCache && cache.has(activeCache)) {
     coreInst.switch(activeCache)
   }
@@ -135,6 +171,8 @@ function buildCore(opts: LLEditorOptions): void {
   state.openDocs.length = 0
   coreInst.getPluginApi().listDocs().forEach((d) => state.openDocs.push({ id: d.id, name: d.name }))
   state.activeId = coreInst.getActiveDoc()?.id ?? ''
+  flushPendingSqlDoc()
+  notifySqlState()
 }
 
 /**
@@ -149,8 +187,10 @@ function rebuildCore(newMode: number, oldMode: number): void {
     kbActiveCache = state.activeId
   } else if (oldMode === 1) {
     apiActiveCache = state.activeId
-  } else if (oldMode > 0) {
+  } else if (oldMode === 2) {
     fnActiveCache = state.activeId
+  } else if (oldMode === 3) {
+    dsActiveCache = state.activeId
   }
   offs.forEach((o) => o())
   offs = []
@@ -164,20 +204,28 @@ function rebuildCore(newMode: number, oldMode: number): void {
     state.openDocs.push(...kbDocsCache)
     state.activeId = kbActiveCache
   } else {
-    // API 模式重建：等下一次 tick 让 v-if 渲染出 apiHost 容器，再挂载 Monaco
+    // 重建：等下一次 tick 让 v-if 渲染出对应模式的容器，再挂载 Monaco
+    // 数据源模式（3）挂在 sqlHost，接口/函数模式挂在 apiHost
     nextTick(() => {
-      if (apiHost.value) buildCore(props.Config ?? {})
+      const host = isDsMode() ? sqlHost.value : apiHost.value
+      if (host) buildCore(props.Config ?? {})
     })
   }
 }
 
 watch(() => props.mode, (nv, ov) => rebuildCore(nv as number, ov as number))
+// 底部结果区请求执行当前数据源的 SQL（带分页参数）
+function onSqlRun(p?: { page?: number; size?: number }): void {
+  void runSql(p?.page ?? 1, p?.size ?? SQL_MAX_ROWS)
+}
 onMounted(() => {
   rebuildCore(props.mode, -1)
   bus.$on('viewHistory', viewHistory)
+  bus.$on('ll-sql-run', onSqlRun)
 })
 onBeforeUnmount(() => {
   bus.$off('viewHistory', viewHistory)
+  bus.$off('ll-sql-run', onSqlRun)
   offs.forEach((o) => o())
   offs = []
   coreInst?.dispose()
@@ -244,6 +292,98 @@ function openApi(entity: LinlanApiEntity): void {
     ...(entity.groupPath ? { groupPath: entity.groupPath } : {})
   })
 }
+// ===== 数据源 SQL 查询（mode 3）=====
+const SQL_DRAFT_PREFIX = 'll-ds-sql-'
+// 单次查询最多返回行数（防止误执行全表扫描拖垮前端）
+const SQL_MAX_ROWS = 200
+// 数据源文档状态广播给底部结果区：决定执行按钮可用态与结果区标题
+function notifySqlState(): void {
+  const doc = coreInst?.getActiveDoc?.()
+  bus.$emit('ll-sql-state', { hasDoc: !!doc, docName: doc?.name ?? '' })
+}
+
+function readSqlDraft(id: string): string | null {
+  try {
+    return localStorage.getItem(SQL_DRAFT_PREFIX + id)
+  } catch {
+    return null
+  }
+}
+function saveSqlDraft(id: string, content: string): void {
+  try {
+    localStorage.setItem(SQL_DRAFT_PREFIX + id, content)
+  } catch {
+    /* 存储不可用时忽略 */
+  }
+}
+
+// 数据源文档 id 与数据源一一对应：有后端 id 用 id，否则落到 key
+function sqlDocId(ds: { id?: string | null; name?: string; key?: string }): string {
+  return 'ds-sql-' + String(ds.id || ds.key || ds.name || 'default')
+}
+
+// 切进数据源模式时 core 尚未重建（buildCore 在 nextTick 里执行），
+// 先把待打开的数据源排队，等 core 就绪后自动打开
+let pendingSqlDoc: { id?: string | null; name?: string; key?: string } | null = null
+
+/** 打开（或激活）某个数据源的 SQL 文档：右侧编辑区即可编写并查询该数据源 */
+function openSqlDoc(ds: { id?: string | null; name?: string; key?: string }): void {
+  // 点击瞬间 props.mode 还未更新（isDsMode 仍为 false），先排队，
+  // 等切进数据源模式且 core 就绪后由 flushPendingSqlDoc 真正打开
+  pendingSqlDoc = ds
+  flushPendingSqlDoc()
+}
+
+function flushPendingSqlDoc(): void {
+  const ds = pendingSqlDoc
+  if (!ds || !coreInst || !isDsMode()) return
+  pendingSqlDoc = null
+  const docId = sqlDocId(ds)
+  // 已打开过则直接激活，避免用旧内容覆盖编辑区里的改动
+  if (dsDocsCache.has(docId)) {
+    coreInst.switch(docId)
+    notifySqlState()
+    return
+  }
+  const name = ds.name || ds.key || 'datasource'
+  coreInst.open({
+    id: docId,
+    name: `${name}.sql`,
+    language: 'sql',
+    content: readSqlDraft(docId) ?? `-- ${name}\nSELECT * FROM `,
+    updatedAt: Date.now(),
+    // meta 保存数据源定位信息，执行 SQL 时随文档取用
+    meta: { dsId: ds.id ?? '', dsKey: ds.key ?? '' }
+  })
+  notifySqlState()
+}
+
+/** 执行当前数据源 SQL 文档：结果/错误统一广播给底部结果工作区 */
+async function runSql(page = 1, size = SQL_MAX_ROWS): Promise<void> {
+  const fail = (text: string): void => {
+    bus.$emit('ll-sql-result', { result: null, error: text, page, size })
+  }
+  const doc = coreInst?.getActiveDoc?.()
+  if (!doc) return fail(i18n.t('datasource.sqlEmptyDoc'))
+  const sql = (doc.content ?? '').trim()
+  if (!sql) return fail(i18n.t('datasource.sqlEmpty'))
+  const meta = (doc.meta ?? {}) as Record<string, unknown>
+  try {
+    const result = await linlanApi.executeSql({
+      id: String(meta.dsId ?? ''),
+      key: String(meta.dsKey ?? ''),
+      sql,
+      page,
+      size
+    })
+    bus.$emit('ll-sql-result', { result, error: '', page, size })
+  } catch (e) {
+    const msg = (e as Error).message || ''
+    // 后端未实现查询端点（404/405 或代理不通）时给出可操作的提示
+    fail(/404|405|Failed to fetch|NetworkError/.test(msg) ? i18n.t('datasource.sqlUnsupported') : msg)
+  }
+}
+
 function getContent(): string {
   const doc = core.value?.getPluginApi()?.getActiveDoc?.()
   return (doc?.content as string) ?? ''
@@ -284,11 +424,11 @@ function closeKbFile(fileId: string): void {
 }
 provide('ll-kb-tab-actions', { activate: activateKbFile, close: closeKbFile })
 
-defineExpose({ run, continueDbg, stepDbg, save, openApi, getContent })
+defineExpose({ run, continueDbg, stepDbg, save, openApi, openSqlDoc, runSql, getContent })
 </script>
 
 <template>
-  <div class="ma-editor-container ll-editor-canvas-wrap">
+  <div class="ll-editor-container ll-editor-canvas-wrap">
     <!-- KB 模式：与 API 模式共用 LinlanTabs（同一份 openDocs/activeId 状态） -->
     <template v-if="mode === 0">
       <div class="ll-editor-api">
@@ -303,7 +443,7 @@ defineExpose({ run, continueDbg, stepDbg, save, openApi, getContent })
             @update:content="onKbContent"
             @state="onKbState"
           />
-          <div v-else class="ma-empty">{{ i18n.t('knowledge.selectFile') }}</div>
+          <div v-else class="ll-empty">{{ i18n.t('knowledge.selectFile') }}</div>
         </div>
       </div>
     </template>
@@ -314,7 +454,14 @@ defineExpose({ run, continueDbg, stepDbg, save, openApi, getContent })
         <div ref="apiHost" class="ll-editor-canvas"></div>
       </div>
     </template>
-    <div v-else class="ma-empty">数据源模式（占位）</div>
+    <!-- 数据源模式：编辑器只写 SQL，查询结果在底部结果工作区 -->
+    <template v-else-if="mode === 3">
+      <div class="ll-editor-api">
+        <LinlanTabs />
+        <div ref="sqlHost" class="ll-editor-canvas"></div>
+      </div>
+    </template>
+    <div v-else class="ll-empty">{{ i18n.t('datasource.sqlHint') }}</div>
     <!-- 历史记录对话框（对齐 magic-script-editor） -->
     <linlan-dialog
       :title="'历史记录：' + historyDocName"
@@ -332,7 +479,7 @@ defineExpose({ run, continueDbg, stepDbg, save, openApi, getContent })
       </template>
       <template #buttons>
         <button
-          class="ma-button active"
+          class="ll-button active"
           @click="
             () => {
               ;(historyRef as any)?.reset?.()

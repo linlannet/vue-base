@@ -25,12 +25,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-debug-container">
+  <div class="ll-debug-container">
     <ul>
       <li :class="{ disabled: !debuging }" title="继续(F8)" @click="bus.$emit('doContinue')"><i
-          class="ma-icon ma-icon-continue"/></li>
+          class="ll-icon ll-icon-continue"/></li>
       <li :class="{ disabled: !debuging }" title="单步(F6)" @click="bus.$emit('doStepInto')"><i
-          class="ma-icon ma-icon-step-over"/></li>
+          class="ll-icon ll-icon-step-over"/></li>
     </ul>
     <div>
       <table>

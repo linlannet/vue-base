@@ -49,7 +49,7 @@ export default defineComponent({
   },
   mounted() {
     this.commonClass = {
-      'ma-contextmenu': true,
+      'll-contextmenu': true,
       [this.customClass]: this.customClass
     }
     this.isShow = true
@@ -182,7 +182,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-contextmenu-wrapper"></div>
+  <div class="ll-contextmenu-wrapper"></div>
 </template>
 
 <style>

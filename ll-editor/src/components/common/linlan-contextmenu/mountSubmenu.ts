@@ -13,7 +13,7 @@ export function closeRoot() {
 
 export function mountSubmenu(options) {
   const container = document.createElement('div')
-  const rootEl = document.querySelector('.ma-container') || document.body
+  const rootEl = document.querySelector('.ll-container') || document.body
   rootEl.appendChild(container)
   const app = createApp(Submenu, { ...options, onDestroy: () => closeRoot() })
   const proxy = app.mount(container)

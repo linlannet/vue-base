@@ -1,6 +1,6 @@
 export { default as LLEditor } from './LLEditor.vue'
 export { default as LinlanHeader } from './layout/linlan-header.vue'
-export { default as LinlanStatusBar } from './layout/linlan-status-bar.vue'
+
 export { default as LinlanOptions } from './layout/linlan-options.vue'
 export { default as LinlanTabs } from './layout/linlan-tabs.vue'
 export { default as LinlanKbList } from './resources/linlan-kb-list.vue'

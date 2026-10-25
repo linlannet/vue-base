@@ -75,7 +75,7 @@ export default defineComponent({
   },
   mounted() {
     this.$nextTick(() => {
-      if (this.moveable) {
+      if (this.moveable && this.$refs.title) {
         let moving = false
         let rect
         let start
@@ -121,7 +121,7 @@ export default defineComponent({
       this.hide()
     },
     getRootEl() {
-      return document.getElementsByClassName('ma-container')[0]
+      return document.getElementsByClassName('ll-container')[0]
     },
     appendDom() {
       this.$nextTick(() => {
@@ -138,19 +138,19 @@ export default defineComponent({
 </script>
 
 <template>
-  <div v-show="visible" :class="[{ moveable,shade },'ma-dialog-wrapper ' + className]">
-    <div :style="{ position, top, left,width,height,'max-width': maxWidth }" class="ma-dialog">
-      <div ref="title" class="ma-dialog-header not-select">
+  <div v-show="visible" :class="[{ moveable,shade },'ll-dialog-wrapper ' + className]">
+    <div :style="{ position, top, left,width,height,'max-width': maxWidth }" class="ll-dialog">
+      <div ref="title" class="ll-dialog-header not-select">
         {{ title }}
-        <span v-if="showClose" @click="close"><i class="ma-icon ma-icon-close"/></span>
+        <span v-if="showClose" @click="close"><i class="ll-icon ll-icon-close"/></span>
       </div>
-      <div :style="{padding,'max-height': maxHeight,height: contentHeight, overflow: 'auto'}" class="ma-dialog-content">
+      <div :style="{padding,'max-height': maxHeight,height: contentHeight, overflow: 'auto'}" class="ll-dialog-content">
         <template v-if="content">
           {{ content }}
         </template>
         <slot v-else name="content"></slot>
       </div>
-      <div v-if="$slots.buttons" :class="{ 'button-align-right': align === 'right' }" class="ma-dialog-buttons not-select">
+      <div v-if="$slots.buttons" :class="{ 'button-align-right': align === 'right' }" class="ll-dialog-buttons not-select">
         <slot name="buttons"></slot>
       </div>
     </div>
@@ -158,7 +158,7 @@ export default defineComponent({
 </template>
 
 <style>
-.ma-dialog-wrapper {
+.ll-dialog-wrapper {
   position: fixed;
   top: 0;
   left: 0;
@@ -168,15 +168,15 @@ export default defineComponent({
   text-align: center;
 }
 
-.ma-dialog-wrapper.shade {
+.ll-dialog-wrapper.shade {
   background: rgba(0, 0, 0, 0.6);
 }
 
-.ma-dialog-wrapper.moveable .ma-dialog .ma-dialog-header {
+.ll-dialog-wrapper.moveable .ll-dialog .ll-dialog-header {
   cursor: move;
 }
 
-.ma-dialog-wrapper::before {
+.ll-dialog-wrapper::before {
   content: '';
   display: inline-block;
   height: 100%;
@@ -184,7 +184,7 @@ export default defineComponent({
   margin-right: -0.25em;
 }
 
-.ma-dialog-wrapper .ma-dialog {
+.ll-dialog-wrapper .ll-dialog {
   background: var(--background);
   border: 1px solid var(--dialog-border-color);
   display: inline-block;
@@ -196,7 +196,7 @@ export default defineComponent({
   color: var(--color);
 }
 
-.ma-dialog-wrapper .ma-dialog .ma-dialog-header {
+.ll-dialog-wrapper .ll-dialog .ll-dialog-header {
   height: 30px;
   line-height: 30px;
   padding-left: 30px;
@@ -206,7 +206,7 @@ export default defineComponent({
   text-align: left;
 }
 
-.ma-dialog-wrapper .ma-dialog .ma-dialog-header span {
+.ll-dialog-wrapper .ll-dialog .ll-dialog-header span {
   display: inline-block;
   width: 30px;
   position: absolute;
@@ -218,28 +218,28 @@ export default defineComponent({
   line-height: 30px;
 }
 
-.ma-dialog-wrapper .ma-dialog .ma-dialog-header span:hover:not(.disabled) {
+.ll-dialog-wrapper .ll-dialog .ll-dialog-header span:hover:not(.disabled) {
   background: #e81123;
 }
-.ma-dialog-wrapper .ma-dialog .ma-dialog-header span:hover:not(.disabled) i{
+.ll-dialog-wrapper .ll-dialog .ll-dialog-header span:hover:not(.disabled) i{
   color: var(--select-icon-background);
 }
 
-.ma-dialog-wrapper .ma-dialog .ma-dialog-content {
+.ll-dialog-wrapper .ll-dialog .ll-dialog-content {
   text-align: left;
   word-break: break-word;
 }
 
-.ma-dialog-wrapper .ma-dialog .ma-dialog-buttons {
+.ll-dialog-wrapper .ll-dialog .ll-dialog-buttons {
   padding: 5px 0;
 }
 
-.ma-dialog-wrapper .ma-dialog .ma-dialog-buttons.button-align-right {
+.ll-dialog-wrapper .ll-dialog .ll-dialog-buttons.button-align-right {
   text-align: right;
   margin-right: 10px;
 }
 
-.ma-dialog-wrapper .ma-dialog .ma-dialog-buttons button:not(:last-child) {
+.ll-dialog-wrapper .ll-dialog .ll-dialog-buttons button:not(:last-child) {
   margin-right: 10px;
 }
 

@@ -47,7 +47,7 @@ function doLogin(): void {
       <linlan-input :onEnter="doLogin" v-model:value="password" type="password" />
     </template>
     <template #buttons>
-      <button class="ma-button active" @click="doLogin">登录</button>
+      <button class="ll-button active" @click="doLogin">登录</button>
     </template>
   </linlan-dialog>
 </template>

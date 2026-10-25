@@ -18,6 +18,7 @@ const contants = {
   HEADER_CONTENT_DISPOSITION: 'ma-content-disposition',
   HEADER_MAGIC_TOKEN: 'magic-token',
   HEADER_MAGIC_TOKEN_VALUE: 'unauthorization',
+  CLIENT_ID: '', // WebSocket 登录握手使用的客户端标识（16 位十六进制随机串）
   IGNORE_VERSION: false, // 是否跳过后端版本一致性校验（宿主 Config.ignoreVersion 或后端 config.json 可开启）
   RECENT_OPENED_TAB: 'recent_opened_tab',
   RECENT_OPENED: 'recent_opened',

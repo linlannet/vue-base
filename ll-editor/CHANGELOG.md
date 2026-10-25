@@ -1,4 +1,31 @@
+### 版本号：1.1.1
+- 更新日期：2026-10-25
+- 更新内容：
+1. 知识库多级目录：KBFile 增加 parentId，新增 KBFolder 类型与 KnowledgeBase.folders，支持知识库内多级文件夹的新建、改名、删除与文件移动
+2. 知识库导入导出：新增 kbZip.ts（基于 fflate，纯前端）支持知识库 zip 导出与导入（按顶层层级还原多个知识库，未知后缀自动跳过），并支持本地文件上传（类型与大小校验）
+3. 知识库持久化与文件识别：新增 useKbStorage.ts 基于 localStorage 的版本化持久化（数据非法时回退默认，避免白屏），新增 kbFiles.ts 统一「后缀 → monaco language + 文件类别」映射
+4. 知识库编辑器增强：md 与其他类型统一走 Monaco（md 以 markdown 语言编辑并开启软换行），支持右侧分屏预览（历史 HTML 内容直接渲染、markdown 源码走内置渲染）、面板开关状态记忆与 AI 面板宽度拖拽
+5. AI 对话面板：新增 linlan-ai-chat.vue，支持多会话（新建/历史/删除）、BaseUrl / Model / ApiKey 配置、思考过程与回答展示，并可将回答保存回知识库
+6. 资源树操作增强：接口/函数树增加关键字过滤（命中节点保留整棵子树）、名称升/降序、全部展开与折叠、定位当前文件与隐藏；新增右键菜单组件（linlan-tree-menu / treeMenu）与复制分组弹窗（linlan-copy-group）
+7. 最近打开：新增最近打开弹窗（Ctrl+E 呼出），最多保留 30 条并持久化，打开时从资源树实时解析显示信息并自动清理已删除资源
+8. 状态栏与在线用户：新增在线用户头像组与在线人数（WebSocket 事件 login_response / user_login / user_logout / online_users，ping-pong 保活），展示当前登录用户名与 IP，并提供 Gitee / Github / 帮助 / 注销彩色图标入口
+9. 顶栏国际化与皮肤：新增中/英语言切换（store 持久化，切换后提示刷新生效）与皮肤选择器（default / dark / gray-new / dark-new，自动恢复上次皮肤）
+10. 图标与样式：新增 ll-icons.css 蓝色线性图标集覆盖 iconfont 字形，并按 ma-* 命名规范重构工作台样式，贴近官方控制台视觉
+11. 内核能力：LLEditorOptions 与 EditorHost 新增 editorOptions 透传 monaco.editor.create，主题名直接透传 Monaco（兼容 light / dark 与自定义皮肤）
+12. 缺陷修复：修复事件总线 $emit / emit 多参被打包成数组导致的参数错位（update-response-body、WebSocket 消息），补充 formatJson 类型声明与 WebSocket 握手用的 CLIENT_ID 常量
+13. 移除 aieditor 依赖：删除 AiEditor 富文本编辑器（含 aieditor/style.css 与其内部样式覆盖），知识库 md 编辑统一由 Monaco 承载（markdown 语言 + 软换行 + 右侧分屏预览），package.json 与 package-lock.json 同步移除 aieditor
 
+### 版本号：1.1.0
+- 更新日期：2026-10-22
+- 更新内容：
+1. 接口运行链路：linlanRun 直连已部署接口端点运行（context-path + 分组路径 + 接口路径），支持路径变量替换、请求 Header 与参数（GET/DELETE 走 query，其余按表单或 requestBody 提交 JSON），响应体格式化与响应 Header、响应结构展示，运行结果写回接口实体并刷新「执行结果」面板，同时记录运行日志与历史（状态码、大小、耗时）
+2. 接口与函数资源树：基于 POST /resource 构建接口、函数资源树，支持分组与接口/函数的增删改、复制分组（/resource/folder/copy）、导出分组 zip、锁定/解锁与删除
+3. 备份与历史：新增全量备份（POST /backup/full）与备份列表（GET /backups，含时间、类型、操作人、名称），支持脚本备份对比（Monaco DiffEditor）与回滚
+4. 导出、推送与上传：支持接口/函数 zip 导出、远程增量与全量推送（magic-push-target / secret-key / mode 请求头）、zip 上传导入
+5. 底部面板与工作模式：按知识库/接口/函数/数据源模式切换底部面板页签（知识库为预览、控制台、调试变量、问题；接口为请求、参数、日志、历史），支持面板折叠与最小化
+6. 登录与用户：对接 /login 登录并回写 magic-token，支持当前用户查询（/user）与注销（/logout）
+7. 全局搜索与 TODO：提供脚本内容全局搜索（POST /search，命中片段高亮）与全局 TODO 列表（GET /todo），支持点击定位并打开资源
+8. 选项与数据源：提供全局选项元数据（GET /options）维护与数据源连通性测试（/datasource/jdbc/test）
 
 ### 版本号：1.0.0
 - 更新日期：2026-10-18

@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
 import LLEditor from '@/components/LLEditor.vue'
-import '../styles/index.css'
-// 引入 common/ 组件（ll-icon 等）图标生效
+// 引入 common/ 组件（ll-icon 等）图标生效（已包含蓝色线性图标覆盖）
 import '@/assets/iconfont/iconfont.css'
+import '@/assets/index.css'
 import { LinlanModalPlugin } from '@/components/common/modal'
 import { LinlanContextmenuPlugin } from '@/components/common/linlan-contextmenu'
 

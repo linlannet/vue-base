@@ -11,7 +11,7 @@ import { MockDebugAdapter, pythonMockExecutor } from '../runtime'
 import { lintCode } from '../runtime/lint'
 
 /**
- * ll-editor 引擎编排器（框架无关，类似 aieditor 的 AiEditor）。
+ * ll-editor 引擎编排器（框架无关，可嵌入任意宿主）。
  * 组合：languages + storage + editor host + tabs + 事件总线；不依赖 Vue/UI。
  * P2 起内置基于前端沙箱（Web Worker）的调试/运行能力。
  */
@@ -36,9 +36,15 @@ export class LLEditor {
   constructor(container: HTMLElement, options: LLEditorOptions = {}) {
     registerBuiltinLanguages(this.languages)
     this.storage = createStorage(options.storage)
-    this.host = new EditorHost(container, {
-      theme: options.defaultTheme === 'dark' ? 'vs-dark' : 'vs'
-    })
+    // 主题名直接透传给 Monaco：官方皮肤（default/dark/gray-new/dark-new）由宿主 defineTheme 注册后即可用；
+    // 兼容早期的 'light'/'dark' 写法（映射到 Monaco 内置 vs/vs-dark）
+    const theme =
+      options.defaultTheme === 'dark'
+        ? 'vs-dark'
+        : options.defaultTheme === 'light'
+          ? 'vs'
+          : options.defaultTheme || 'vs'
+    this.host = new EditorHost(container, { theme, editorOptions: options.editorOptions })
     this.tabs = new TabManager(this.host)
     this.breakpoints = new BreakpointManager(this.host, (bps) => this.onBreakpointsChanged(bps))
     this.api = createPluginApi({

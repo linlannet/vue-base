@@ -51,18 +51,18 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-todo">
-    <div class="ma-layout">
-      <div class="not-select ma-sider">
-        <div @click="getTodoList"><i class="ma-icon ma-icon-refresh" /></div>
+  <div class="ll-todo">
+    <div class="ll-layout">
+      <div class="not-select ll-sider">
+        <div @click="getTodoList"><i class="ll-icon ll-icon-refresh" /></div>
       </div>
-      <div class="ma-layout-container" v-show="!showLoading">
-        <div class="ma-header ma-table-row">
+      <div class="ll-layout-container" v-show="!showLoading">
+        <div class="ll-header ll-table-row">
           <div>名称</div>
           <div>行号：内容</div>
         </div>
-        <div class="ma-content">
-          <div v-for="(item, key) in todoList" :key="'todo_' + key" class="ma-table-row content-bg" @click="openItem(item)">
+        <div class="ll-content">
+          <div v-for="(item, key) in todoList" :key="'todo_' + key" class="ll-table-row content-bg" @click="openItem(item)">
             <div>
               <linlan-text-icon v-if="item.type === 1" v-model="item.cache.method"/>
               <linlan-text-icon v-if="item.type === 2" value="function"/>
@@ -79,7 +79,7 @@ export default defineComponent({
     </div>
     <div class="loading" v-show="showLoading">
       <div class="icon">
-        <i class="ma-icon ma-icon-refresh "></i>
+        <i class="ll-icon ll-icon-refresh "></i>
       </div>
       加载中...
     </div>
@@ -88,7 +88,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.ma-todo {
+.ll-todo {
   background: var(--background);
   height: 100%;
   width: 100%;
@@ -96,48 +96,48 @@ export default defineComponent({
   outline: 0;
 }
 
-.ma-todo .ma-layout {
+.ll-todo .ll-layout {
   height: 100%;
 }
 
-.ma-todo .ma-layout .ma-content .content-bg {
+.ll-todo .ll-layout .ll-content .content-bg {
   cursor: pointer;
 }
 
-.ma-todo .ma-layout .ma-content .content-bg span {
+.ll-todo .ll-layout .ll-content .content-bg span {
   color: var(--toolbox-list-span-color);
 }
 
-.ma-todo .ma-layout .ma-content .content-bg:nth-child(even) {
+.ll-todo .ll-layout .ll-content .content-bg:nth-child(even) {
   background: var(--table-even-background);
 }
-.ma-todo .ma-layout .ma-content .content-bg .todo-item{
+.ll-todo .ll-layout .ll-content .content-bg .todo-item{
   font-style: italic;
   color:var(--todo-color)
 }
-.ma-todo .ma-layout .ma-content .content-bg:hover {
+.ll-todo .ll-layout .ll-content .content-bg:hover {
   background: var(--toolbox-list-hover-background);
 }
 
-.ma-layout .ma-table-row > * {
+.ll-layout .ll-table-row > * {
   width: 30% !important;
   background: none;
 }
 
-.ma-layout .ma-table-row > *:last-child {
+.ll-layout .ll-table-row > *:last-child {
   width: 70% !important;
 }
 
-.ma-todo .loading i {
+.ll-todo .loading i {
   color: var(--color);
   font-size: 20px;
 }
-.ma-todo .loading .icon {
+.ll-todo .loading .icon {
   width: 20px;
   margin: 0 auto;
   animation: rotate 1s linear infinite;
 }
-.ma-todo .loading {
+.ll-todo .loading {
   color: var(--color);
   position: absolute;
   text-align: center;
@@ -145,7 +145,7 @@ export default defineComponent({
   top: 50%;
   margin-top: -20px;
 }
-.ma-todo .no-data {
+.ll-todo .no-data {
   color: var(--color);
   position: absolute;
   top: 50%;

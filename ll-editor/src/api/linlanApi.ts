@@ -40,12 +40,31 @@ export interface LinlanApiEntity {
   [key: string]: unknown
 }
 
+// 数据源 SQL 查询：id/key 二选一定位数据源，sql 为待执行语句，page/size 控制分页
+export interface SqlQueryRequest {
+  id?: string
+  key?: string
+  sql: string
+  page?: number
+  size?: number
+}
+
+// 查询结果：columns 为列名顺序，rows 为 { 列名: 值 } 数组
+export interface SqlQueryResult {
+  columns: string[]
+  rows: Record<string, unknown>[]
+  total?: number
+  cost?: number
+}
+
 export interface LinlanTreeNode {
   id: string
   name: string
   path?: string
   type?: string
   method?: string
+  // 分组节点无 groupId（只有 type/parentId）；文件节点（接口/函数）带 groupId
+  groupId?: string | null
   leaf?: boolean
   children?: LinlanTreeNode[]
   attribute?: Record<string, unknown>
@@ -185,9 +204,9 @@ export const linlanApi = {
       body: JSON.stringify(entity)
     })
   },
-  // 兼容旧名：保存接口
-  saveApi(folder: string, entity: LinlanApiEntity, auto = '0'): Promise<string> {
-    return this.saveEntity(folder, entity, auto)
+  // 兼容旧名：保存接口（后端 folder 固定为 api）
+  saveApi(entity: LinlanApiEntity, auto = '0'): Promise<string> {
+    return this.saveEntity('api', entity, auto)
   },
   deleteResource(id: string): Promise<boolean> {
     return requestForm('/resource/delete', { id })
@@ -204,6 +223,12 @@ export const linlanApi = {
   // 测试数据源连接：后端返回 "ok" 表示连通
   testDatasource(entity: Record<string, unknown>): Promise<string> {
     return request('/datasource/jdbc/test', { method: 'POST', body: JSON.stringify(entity) })
+  },
+  // 基于数据源执行 SQL：需要后端提供 POST {BASE}/datasource/jdbc/query
+  // 请求体 { id, key, sql, page, size }（id/key 二选一定位数据源，sql 为待执行语句）
+  // 响应体 { columns, rows, total, cost }：columns 为列名，rows 为 { 列名: 值 } 数组
+  executeSql(req: SqlQueryRequest): Promise<SqlQueryResult> {
+    return request('/datasource/jdbc/query', { method: 'POST', body: JSON.stringify(req) })
   },
 
   // ---- 工作台（MagicWorkbenchController）----

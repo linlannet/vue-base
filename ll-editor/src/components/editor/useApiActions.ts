@@ -8,6 +8,7 @@ import type { Ref } from 'vue'
 import { linlanApi } from '@/api/linlanApi'
 import type { LinlanApiEntity } from '@/api/linlanApi'
 import { runApi, apiTab, runLogs } from '@/api/linlanRun'
+import bus from '@/scripts/bus'
 
 export interface ApiActionsDeps {
   /** 当前打开的接口实体（ll-api） */
@@ -20,7 +21,10 @@ export function useApiActions(deps: ApiActionsDeps) {
   async function onRun(): Promise<void> {
     const api = deps.currentApi.value
     if (!api) {
-      console.log('[ll-editor] 当前无接口，无法运行')
+      // 知识库 / 函数模式：交给脚本编辑器按当前模式分派运行，
+      // 并切到底部控制台，让代码文件的运行输出立即可见
+      deps.scriptRef.value?.run?.()
+      bus.$emit('switch-tab', 'console')
       return
     }
     const script = deps.scriptRef.value?.getContent?.() ?? api.script ?? ''
@@ -28,14 +32,14 @@ export function useApiActions(deps: ApiActionsDeps) {
     try {
       // 运行前自动保存，确保执行的是最新脚本
       if (entity.groupId) {
-        await linlanApi.saveApi(entity.groupId, entity, '1')
+        await linlanApi.saveApi(entity, '1')
       } else {
         runLogs.value.push({ id: Date.now(), ts: Date.now(), level: 'error', text: '请先将接口保存到分组后再运行' })
         apiTab.value = 'logs'
         return
       }
+      // runApi 内部会把结果写入底部「执行结果」并切换到该 tab（对齐官方 doTest）
       await runApi(entity)
-      apiTab.value = 'logs'
     } catch (e) {
       runLogs.value.push({ id: Date.now(), ts: Date.now(), level: 'error', text: '运行失败: ' + (e as Error).message })
       apiTab.value = 'logs'
@@ -50,7 +54,7 @@ export function useApiActions(deps: ApiActionsDeps) {
     }
     const content = deps.scriptRef.value?.getContent?.() ?? ''
     try {
-      await linlanApi.saveApi(api.groupId || '', { ...api, script: content }, api.id ? '0' : '1')
+      await linlanApi.saveApi({ ...api, script: content }, api.id ? '0' : '1')
       console.info('[ll-editor] 接口已保存', api.name)
     } catch (e) {
       console.error('[ll-editor] 保存失败:', e)

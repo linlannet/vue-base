@@ -15,6 +15,7 @@ declare module '@/api/request' {
 declare module '@/scripts/utils' {
   export function getQueryVariable(name?: string): any
   export function replaceURL(key?: string, value?: string): any
+  export function formatJson(val?: unknown, defaultVal?: string): string
   const _default: any
   export default _default
 }

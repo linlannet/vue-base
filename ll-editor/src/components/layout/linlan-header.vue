@@ -4,8 +4,7 @@ import type { Ref } from 'vue'
 import * as monaco from 'monaco-editor'
 import bus from '@/scripts/bus'
 import store from '@/scripts/store'
-import contants from '@/scripts/contants'
-import { Themes } from '@/scripts/editor/theme'
+import { Themes } from '@/scripts/monaco/theme'
 import { modal } from '@/components/common/modal/index'
 import request from '@/api/request'
 import LinlanSearch from './linlan-search.vue'
@@ -35,6 +34,23 @@ const i18n = inject<I18n>('ll-i18n')
 const api = inject<Ref<LinlanApiEntity | null>>('ll-api')
 
 const skinVisible = ref(false)
+// ===== 语言切换（对齐官方 magic-header：i18n 按钮 + locale-selector，切换后提示刷新） =====
+const localeVisible = ref(false)
+const locales = [
+  { id: 'zh-CN', name: '简体中文' },
+  { id: 'en', name: 'English' }
+]
+const currentLocale = ref(store.get('locale') || 'zh-CN')
+function switchLocale(id: string): void {
+  localeVisible.value = false
+  if (id === currentLocale.value) return
+  store.set('locale', id)
+  const name = locales.find((l) => l.id === id)?.name ?? id
+  ;(modal as any).linlanConfirm(`已切换至${name}，刷新页面后生效，是否刷新？`, {
+    title: '提示',
+    onOk: () => window.location.reload()
+  })
+}
 const searchRef = ref<InstanceType<typeof LinlanSearch> | null>(null)
 const uploadFileRef = ref<InstanceType<typeof LinlanFile> | null>(null)
 const resourceExportRef = ref<InstanceType<typeof LinlanResourceChoose> | null>(null)
@@ -45,22 +61,28 @@ const exportVisible = ref(false)
 const pushTarget = ref('http://host:port/_magic-api-sync')
 const pushSecretKey = ref('123456789')
 
-const version = computed(() => contants.MAGIC_API_VERSION_TEXT || '(v?)')
 const themeKeys = computed(() => Object.keys(Themes))
 // 对齐 magic-header：groupName/name(groupPath/path)
-// 仅接口模式（mode=1）显示当前打开的接口标题；函数/知识库模式回落到 path，
-// 避免切到「函数」后顶部仍是接口的标题
+// 标题按模式区分：
+// - 接口模式（mode=1）打开接口时显示接口标题；未打开时留空（对齐官方 .magic-header-title 为空）
+// - 知识库模式（mode=0）显示当前知识库节点路径（ll-editor 自有）
+// - 函数/数据源模式不显示标题，避免残留其他模式的路径
 const displayText = computed(() => {
   const info = api?.value as any
-  if (props.mode === 1 && info && info.name) {
-    const group = `${info.groupName ?? ''}/${info.name ?? ''}`
-    const path = `${info.groupPath ?? ''}/${info.path ?? ''}`
-    return `${group}(${path})`.replace(/\/+/g, '/')
+  if (props.mode === 1) {
+    if (info && info.name) {
+      const group = `${info.groupName ?? ''}/${info.name ?? ''}`
+      const path = `${info.groupPath ?? ''}/${info.path ?? ''}`
+      return `${group}(${path})`.replace(/\/+/g, '/')
+    }
+    return ''
   }
-  return props.path || ''
+  if (props.mode === 0) return props.path || ''
+  return ''
 })
 
 // 换肤：清空并写入 CSS 变量（--xxx），同步 Monaco 主题
+const currentSkin = ref('default')
 function switchTheme(name: string): void {
   Object.keys(props.themeStyle).forEach((key) => delete props.themeStyle[key])
   const theme = (Themes as Record<string, Record<string, string>>)[name] || {}
@@ -68,15 +90,14 @@ function switchTheme(name: string): void {
     props.themeStyle[`--${key}`] = theme[key]
   })
   store.set('skin', name)
+  currentSkin.value = name
+  skinVisible.value = false
   monaco.editor.setTheme(name)
   emit('update:theme-style', props.themeStyle)
 }
 
 function onRun(): void {
-  if (!api?.value && props.mode === 0) {
-    ;(modal as any).linlanAlert(i18n ? i18n.t('toolbar.run') : '当前为知识库模式，无法运行接口')
-    return
-  }
+  // 知识库模式下运行当前代码文件（由 useApiActions 回退到 scriptRef.run 并切到控制台）
   emit('run')
 }
 
@@ -101,14 +122,14 @@ function doUpload(mode: 'increment' | 'full'): void {
     request
       .send('/upload', formData, { method: 'post' })
       .success(() => {
-        ;(modal as any).linlanAlert('上传成功!', { title: '上传接口' })
+        ;(modal as any).linlanAlert('上传成功!', { title: '上传' })
         bus.$emit('status', `${mode === 'full' ? '全量' : '增量'}上传成功`)
         bus.$emit('refresh-resource')
       })
   }
   if (mode === 'full') {
     ;(modal as any).linlanConfirm('全量模式上传时，以上传的数据为准进行覆盖更新操作，可能会删除其他接口<br>在非全量导出时，建议使用增量更新，是否继续？', {
-      title: '上传接口',
+      title: '上传',
       onOk: _upload
     })
   } else {
@@ -161,7 +182,7 @@ function doPush(mode: 'increment' | 'full'): void {
   // 防御：远程地址为空时 fetch 会发空值头（部分链路剥离空值头），
   // 后端 @RequestHeader(required) 将抛 MissingRequestHeaderException——发送前拦截
   if (!pushTarget.value || !pushTarget.value.trim()) {
-    ;(modal as any).linlanAlert('请输入远程地址', { title: '远程推送' })
+    ;(modal as any).linlanAlert('请输入远程地址', { title: '推送' })
     return
   }
   const selected = mode === 'full' ? [] : ((resourcePushRef.value as any)?.getSelected?.() ?? [])
@@ -185,7 +206,7 @@ function doPush(mode: 'increment' | 'full'): void {
   }
   if (mode === 'full') {
     ;(modal as any).linlanConfirm('全量模式推送时，以本地数据为准全量覆盖更新,是否继续？', {
-      title: '远程推送',
+      title: '推送',
       onOk: _push
     })
   } else if (selected.length > 0) {
@@ -210,9 +231,15 @@ function onRefresh(): void {
   bus.$emit('refresh-resource')
 }
 
-const closeSkin = () => (skinVisible.value = false)
+const closeSkin = () => {
+  skinVisible.value = false
+  localeVisible.value = false
+}
 onMounted(() => {
   document.addEventListener('click', closeSkin)
+  // 恢复上次使用的皮肤（对齐官方 magic-header：store 中的 theme 命中内置主题则应用）
+  const saved = store.get('skin')
+  switchTheme(saved && (Themes as Record<string, unknown>)[saved] ? saved : 'default')
 })
 onBeforeUnmount(() => {
   document.removeEventListener('click', closeSkin)
@@ -220,52 +247,56 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="ma-header">
-    <div class="ma-logo">
-      <label :title="title || 'LL-Editor'">{{ title || 'LL-Editor' }}</label>
-      <label class="version" :title="version">{{ version }}</label>
-    </div>
+  <div class="ll-header">
     <div :title="displayText">{{ displayText }}</div>
-    <span title="运行（Ctrl+Q）" @click="onRun">
-      <i class="ma-icon ma-icon-run"></i>
+    <span title="运行(Ctrl + Q)" @click="onRun">
+      <i class="ll-icon ll-icon-run"></i>
     </span>
-    <span title="保存（Ctrl+S）" @click="emit('save')">
-      <i class="ma-icon ma-icon-save"></i>
+    <span title="保存(Ctrl + S)" @click="emit('save')">
+      <i class="ll-icon ll-icon-save"></i>
     </span>
-    <span title="全局搜索" @click="searchRef?.show()">
-      <i class="ma-icon ma-icon-search"></i>
+    <span title="搜索(Ctrl + Shift + F)" @click="searchRef?.show()">
+      <i class="ll-icon ll-icon-search"></i>
     </span>
     <span title="历史记录" @click="onHistory">
-      <i class="ma-icon ma-icon-history"></i>
+      <i class="ll-icon ll-icon-history"></i>
     </span>
-    <span title="上传接口" @click="onUpload">
-      <i class="ma-icon ma-icon-upload"></i>
+    <span title="上传" @click="onUpload">
+      <i class="ll-icon ll-icon-upload"></i>
     </span>
-    <span title="导出接口" @click="onDownload">
-      <i class="ma-icon ma-icon-download"></i>
+    <span title="导出" @click="onDownload">
+      <i class="ll-icon ll-icon-download"></i>
     </span>
-    <span title="远程推送" @click="onPush">
-      <i class="ma-icon ma-icon-push"></i>
+    <span title="推送" @click="onPush">
+      <i class="ll-icon ll-icon-push"></i>
     </span>
-    <span title="换肤" @click.stop="skinVisible = true">
-      <i class="ma-icon ma-icon-skin"></i>
+    <span class="ll-with-dropdown" title="皮肤" @click.stop="skinVisible = true">
+      <i class="ll-icon ll-icon-skin"></i>
+      <div v-show="skinVisible" class="ll-skin-selector">
+        <ul>
+          <li v-for="theme in themeKeys" :key="'theme_' + theme" :class="{ active: theme === currentSkin }" @click.stop="switchTheme(theme)">{{ theme }}</li>
+        </ul>
+      </div>
+    </span>
+    <span class="ll-with-dropdown ll-locale-btn" :title="i18n ? i18n.t('header.locale') : '语言'" @click.stop="localeVisible = true">
+      {{ currentLocale === 'en' ? 'EN' : '中' }}
+      <div v-show="localeVisible" class="ll-locale-selector">
+        <ul>
+          <li v-for="l in locales" :key="'locale_' + l.id" :class="{ active: l.id === currentLocale }" @click.stop="switchLocale(l.id)">{{ l.name }}</li>
+        </ul>
+      </div>
     </span>
     <span title="重新加载所有数据" @click="onRefresh">
-      <i class="ma-icon ma-icon-refresh"></i>
+      <i class="ll-icon ll-icon-refresh"></i>
     </span>
-    <div v-show="skinVisible" class="ma-skin-selector">
-      <ul>
-        <li v-for="theme in themeKeys" :key="'theme_' + theme" @click="switchTheme(theme)">{{ theme }}</li>
-      </ul>
-    </div>
     <!-- 上传接口对话框 -->
-    <linlan-dialog title="上传接口" :value="showUploadDialog" align="right" @onClose="showUploadDialog = false">
+    <linlan-dialog title="上传" :value="showUploadDialog" align="right" @onClose="showUploadDialog = false">
       <template #content>
         <linlan-file ref="uploadFileRef" placeholder="未选择文件" />
       </template>
       <template #buttons>
-        <button class="ma-button active" @click="doUpload('increment')">增量上传</button>
-        <button class="ma-button" @click="doUpload('full')">全量上传</button>
+        <button class="ll-button active" @click="doUpload('increment')">增量上传</button>
+        <button class="ll-button" @click="doUpload('full')">全量上传</button>
       </template>
     </linlan-dialog>
     <!-- 导出接口对话框 -->
@@ -276,25 +307,25 @@ onBeforeUnmount(() => {
       :moveable="false"
       width="340px"
       height="490px"
-      className="ma-tree-wrapper"
+      className="ll-tree-wrapper"
       @onClose="exportVisible = false"
     >
       <template #content>
         <linlan-resource-choose ref="resourceExportRef" height="400px" max-height="400px" />
       </template>
       <template #buttons>
-        <button class="ma-button" @click="(resourceExportRef as any)?.doSelectAll?.(true)">全选</button>
-        <button class="ma-button" @click="(resourceExportRef as any)?.doSelectAll?.(false)">取消全选</button>
-        <button class="ma-button active" @click="doExport">导出</button>
+        <button class="ll-button" @click="(resourceExportRef as any)?.doSelectAll?.(true)">全选</button>
+        <button class="ll-button" @click="(resourceExportRef as any)?.doSelectAll?.(false)">取消全选</button>
+        <button class="ll-button active" @click="doExport">导出</button>
       </template>
     </linlan-dialog>
-    <!-- 远程推送对话框 -->
+    <!-- 推送对话框 -->
     <linlan-dialog
-      title="远程推送"
+      title="推送"
       :value="showPushDialog"
       align="right"
       :moveable="false"
-      class="ma-remote-push-container ma-tree-wrapper"
+      class="ll-remote-push-container ll-tree-wrapper"
       width="400px"
       height="540px"
       @onClose="showPushDialog = false"
@@ -311,10 +342,10 @@ onBeforeUnmount(() => {
         </div>
       </template>
       <template #buttons>
-        <button class="ma-button" @click="(resourcePushRef as any)?.doSelectAll?.(true)">全选</button>
-        <button class="ma-button" @click="(resourcePushRef as any)?.doSelectAll?.(false)">取消全选</button>
-        <button class="ma-button active" @click="doPush('increment')">增量推送</button>
-        <button class="ma-button" @click="doPush('full')">全量推送</button>
+        <button class="ll-button" @click="(resourcePushRef as any)?.doSelectAll?.(true)">全选</button>
+        <button class="ll-button" @click="(resourcePushRef as any)?.doSelectAll?.(false)">取消全选</button>
+        <button class="ll-button active" @click="doPush('increment')">增量推送</button>
+        <button class="ll-button" @click="doPush('full')">全量推送</button>
       </template>
     </linlan-dialog>
     <linlan-search ref="searchRef" style="flex: none" />
@@ -322,7 +353,7 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.ma-header {
+.ll-header {
   height: 30px;
   line-height: 30px;
   text-align: right;
@@ -333,18 +364,15 @@ onBeforeUnmount(() => {
   padding-right: 15px;
 }
 
-.ma-header > .ma-logo {
-  float: left;
-  color: var(--header-title-color);
-  font-weight: bold;
-  font-size: 0px;
-  letter-spacing: 0px;
-  background-repeat: no-repeat;
-  background-position: 4px 7px;
-  padding-left: 25px;
+.ll-header > .ll-header-version {
+  flex: none;
+  padding-left: 10px;
+  font-size: 12px;
+  font-weight: normal;
+  color: var(--header-version-color);
 }
 
-.ma-header > div:not(.ma-logo):not(.ma-skin-selector) {
+.ll-header > div:not(.ll-header-version):not(.ll-skin-selector):not(.ll-locale-selector) {
   flex: 1;
   text-align: center;
   overflow: hidden;
@@ -352,19 +380,19 @@ onBeforeUnmount(() => {
   white-space: nowrap;
 }
 
-.ma-header > div > label {
+.ll-header > div > label {
   font-size: 16px;
   display: inline-block;
   margin-right: 5px;
   text-align: left;
 }
 
-.ma-header > div > label.version {
+.ll-header > div > label.version {
   font-size: 12px;
   color: var(--header-version-color);
 }
 
-.ma-header > span {
+.ll-header > span {
   cursor: pointer;
   padding: 0 4px;
   height: 30px;
@@ -375,43 +403,76 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 
-.ma-header > span:last-child {
+.ll-header > span:last-child {
   margin-right: 15px;
 }
 
-.ma-header .ma-button-run {
+.ll-header .ll-button-run {
   color: var(--button-run-color);
 }
 
-.ma-header .ma-icon-push {
+.ll-header .ll-icon-push {
   color: var(--button-run-color);
   font-weight: bold;
 }
 
-.ma-header > span:hover:not(.disabled) {
+.ll-header > span:hover:not(.disabled) {
   background: var(--button-hover-background);
 }
 
-.ma-header > span.disabled {
+.ll-header > span.disabled {
   color: var(--button-disabled-background);
 }
 
-.ma-skin-selector {
+.ll-header > span.ll-with-dropdown {
+  position: relative;
+}
+
+.ll-skin-selector,
+.ll-locale-selector {
   position: absolute;
   top: 30px;
-  right: 100px;
+  right: 0;
   z-index: 20;
+  min-width: 84px;
   background: var(--background);
   border: 1px solid var(--border-color);
   border-top: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-.ma-skin-selector ul li:not(:last-child) {
-  border-bottom: 1px solid var(--border-color);
+.ll-skin-selector ul li,
+.ll-locale-selector ul li {
   padding: 2px 5px;
 }
 
-.ma-remote-push-container label {
+.ll-skin-selector ul li:not(:last-child),
+.ll-locale-selector ul li:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ll-skin-selector ul li.active,
+.ll-locale-selector ul li.active {
+  color: var(--button-run-color);
+}
+
+.ll-locale-btn {
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--ll-icon-blue);
+}
+
+/* 语言下拉项统一为品牌蓝，选中项用深蓝加粗 */
+.ll-locale-selector ul li {
+  color: var(--ll-icon-blue);
+}
+
+.ll-locale-selector ul li.active {
+  color: var(--ll-icon-blue-strong);
+  font-weight: bold;
+}
+
+.ll-remote-push-container label {
   width: 80px;
   text-align: right;
   display: inline-block;

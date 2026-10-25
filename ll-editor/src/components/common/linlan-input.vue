@@ -48,7 +48,7 @@ export default defineComponent({
     <input :readonly="readonly" :placeholder="placeholder" :type="type" :value="value !== undefined ? value : modelValue" @focus="focus"
            @input="(e) => { const v = e.target.value; $emit('update:value', v); $emit('update:modelValue', v); $emit('input', v) }"
            @keyup.enter.stop="onEnter"/>
-    <span v-if="icon"><i :class="'ma-icon ma-icon-' + icon"/></span>
+    <span v-if="icon"><i :class="'ll-icon ll-icon-' + icon"/></span>
   </div>
 </template>
 

@@ -62,12 +62,12 @@ export default defineComponent({
     okHandle() {
       const text = (this.text || '').trim()
       if (!text) return
-      // 先回调（触发 unmount + resolve），再隐藏（hide 会再次触发 input=false，
-      // 由 modal 侧的幂等保护兜底）
+      // 先缓存 dialog 引用：onOk 内部会卸载组件，卸载后 $refs.dialog 变为 null
+      const dialog = this.$refs.dialog
       if (typeof this.onOk === 'function') {
         this.onOk(text)
       }
-      this.close()
+      if (dialog) dialog.hide()
       this.closeHandle()
     },
     cancelHandle() {
@@ -102,8 +102,8 @@ export default defineComponent({
       </div>
     </template>
     <template #buttons>
-      <button class="ma-button active" @click="okHandle">{{ ok }}</button>
-      <button class="ma-button" @click="cancelHandle">{{ cancel }}</button>
+      <button class="ll-button active" @click="okHandle">{{ ok }}</button>
+      <button class="ll-button" @click="cancelHandle">{{ cancel }}</button>
     </template>
   </linlan-dialog>
 </template>

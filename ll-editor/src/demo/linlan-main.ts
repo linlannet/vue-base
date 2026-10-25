@@ -6,7 +6,6 @@ import { LinlanContextmenuPlugin } from '@/components/common/linlan-contextmenu'
 // 主题变量（--background / --color 等）与全局样式
 import '@/assets/iconfont/iconfont.css'
 import '@/assets/index.css'
-import '@/styles/index.css'
 
 const app = createApp(LinlanEditorDemo)
 installCommonComponents(app)

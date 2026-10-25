@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, onMounted, ref } from 'vue'
+import { computed, inject, onMounted, reactive, ref } from 'vue'
 import { linlanApi } from '@/api/linlanApi'
 import type { LinlanApiEntity } from '@/api/linlanApi'
 import type { I18n } from '@/i18n'
@@ -10,22 +10,28 @@ import LinlanDialog from '@/components/common/modal/linlan-dialog.vue'
 import LinlanInput from '@/components/common/linlan-input.vue'
 import LinlanSelect from '@/components/common/linlan-select.vue'
 import LinlanTextarea from '@/components/common/linlan-textarea.vue'
+import LinlanTreeMenu from '@/components/resources/linlan-tree-menu.vue'
+import { buildDatasourceMenu, copyToClipboard } from '@/components/resources/treeMenu'
+import type { TreeMenuItem } from '@/components/resources/treeMenu'
 
 const i18n = inject<I18n>('ll-i18n')!
+// 左键点击数据源：在中间编辑区打开该数据源的 SQL 查询
+const openSql = inject<(ds: { id?: string | null; name?: string; key?: string }) => void>('ll-ds-open-sql')!
 // modal/index.ts 是 @ts-nocheck 的 JS 模块，参数 arity 未标注；沿用既有约定用 as any 调用
 const modalAny = modal as any
 
 // 数据源实体（对齐 backend DataSourceInfo：url/username/password/key/maxRows/driverClassName/type）
 interface Datasource {
   id?: string | null
-  name?: string | null
-  key?: string | null
-  url?: string | null
-  username?: string | null
-  password?: string | null
-  driverClassName?: string | null
-  type?: string | null
-  maxRows?: string | number | null
+  // 表单绑定字段：LinlanInput 的 value 为 string | undefined，null 会导致模板绑定类型错误
+  name?: string | undefined
+  key?: string | undefined
+  url?: string | undefined
+  username?: string | undefined
+  password?: string | undefined
+  driverClassName?: string | undefined
+  type?: string | undefined
+  maxRows?: string | undefined
   groupId?: string | null
   [k: string]: unknown
 }
@@ -249,6 +255,78 @@ function remove(item: Datasource): void {
   })
 }
 
+// ===== 右键菜单（与接口树同一套组件，数据源专属菜单项）=====
+const menu = reactive({
+  visible: false,
+  x: 0,
+  y: 0,
+  items: [] as TreeMenuItem[],
+  item: null as Datasource | null
+})
+function closeMenu(): void {
+  menu.visible = false
+}
+function onContextMenu(e: MouseEvent, item: Datasource): void {
+  menu.item = item
+  menu.x = e.clientX
+  menu.y = e.clientY
+  // 配置注册的只读数据源（无 id）不能编辑/删除/测试
+  menu.items = buildDatasourceMenu(i18n, !!item.id, !!item.url)
+  menu.visible = true
+}
+
+// 测试连接：列表项可能只有摘要字段，测试前取完整实体
+async function testConnection(item: Datasource): Promise<void> {
+  if (!item.id) {
+    modalAny.linlanAlert(i18n.t('datasource.cannotModify'))
+    return
+  }
+  try {
+    const detail = (await linlanApi.fetchApi(item.id)) as unknown as Datasource
+    const msg = await linlanApi.testDatasource(detail as Record<string, unknown>)
+    if (msg === 'ok') {
+      modalAny.linlanAlert(i18n.t('datasource.testSuccess'))
+    } else {
+      modalAny.linlanAlert('测试连接失败：' + (msg || i18n.t('datasource.unknownError')), {
+        title: i18n.t('datasource.testFail')
+      })
+    }
+  } catch (e) {
+    modalAny.linlanAlert((e as Error).message || i18n.t('datasource.testFail'))
+  }
+}
+
+function onMenuCommand(key: string): void {
+  const item = menu.item
+  closeMenu()
+  if (!item) return
+  switch (key) {
+    case 'openSql':
+      openSql({ id: item.id, name: item.name, key: item.key })
+      break
+    case 'edit':
+      void showDetail(item)
+      break
+    case 'test':
+      void testConnection(item)
+      break
+    case 'copyKey':
+      void copyToClipboard(item.key || '')
+      break
+    case 'copyUrl':
+      void copyToClipboard(item.url || '')
+      break
+    case 'refresh':
+      void initData()
+      break
+    case 'delete':
+      remove(item)
+      break
+    default:
+      break
+  }
+}
+
 onMounted(initData)
 // useMagicRuntime 登录成功后调用 datasourceListRef.value?.initData?.() 刷新列表
 defineExpose({ initData, refresh: initData })
@@ -267,86 +345,120 @@ defineExpose({ initData, refresh: initData })
       <input v-model="keyword" :placeholder="i18n.t('datasource.search')" />
     </div>
     <div v-if="error" class="ll-tree-error">{{ error }}</div>
-    <div v-if="!loading && !filtered.length" class="ma-empty">{{ i18n.t('datasource.empty') }}</div>
+    <div v-if="!loading && !filtered.length" class="ll-empty">{{ i18n.t('datasource.empty') }}</div>
     <div
       v-for="item in filtered"
       :key="String(item.id || item.key || item.name)"
       class="ll-tree-api ll-ds-item"
       :title="(item.name || '') + '(' + (item.key || 'default') + ')'"
-      @click="showDetail(item)"
+      @click="openSql({ id: item.id, name: item.name, key: item.key })"
+      @contextmenu.prevent="onContextMenu($event, item)"
     >
-      <i class="ma-icon ma-icon-datasource ll-ds-icon" />
+      <i class="ll-icon ll-icon-datasource ll-ds-icon" />
       <span class="ll-name">{{ item.name || i18n.t('datasource.default') }}</span>
       <span class="ll-ds-key">({{ item.key || 'default' }})</span>
       <span v-if="item.id" class="ll-node-actions">
+        <button class="ll-mini ll-mini-sm" :title="i18n.t('datasource.edit')" @click.stop="showDetail(item)">🖉</button>
         <button class="ll-mini ll-mini-sm" :title="i18n.t('datasource.delete')" @click.stop="remove(item)">🗑</button>
       </span>
     </div>
 
+    <linlan-tree-menu
+      v-if="menu.visible"
+      :items="menu.items"
+      :x="menu.x"
+      :y="menu.y"
+      @command="onMenuCommand"
+      @close="closeMenu"
+    />
+
+    <!-- 挂到 body：脱离 .ll-sidebar(z-index:10) 层叠上下文，否则会被编辑器盖住 -->
+    <Teleport to="body">
     <linlan-dialog
       :value="showDialog"
-      :title="dsObj.id ? '修改数据源:' + (dsObj.name || '') : '创建数据源'"
+      :title="dsObj.id ? '修改数据源: ' + (dsObj.name || '') : '创建数据源'"
       align="right"
-      width="450px"
-      height="450px"
+      width="480px"
+      height="auto"
       @onClose="showDialog = false"
     >
       <template #content>
-        <div class="ll-ds-form">
-          <label>名称</label>
-          <linlan-input v-model:value="dsObj.name" placeholder="数据源名称，仅做展示使用" />
-        </div>
-        <div class="ll-ds-form">
-          <label>Key</label>
-          <linlan-input v-model:value="dsObj.key" placeholder="数据库key，后续代码中使用" />
-        </div>
-        <div class="ll-ds-form">
-          <label>URL</label>
-          <linlan-input v-model:value="dsObj.url" placeholder="请输入jdbcurl，如：jdbc:mysql://localhost" />
-        </div>
-        <div class="ll-ds-form">
-          <label>用户名</label>
-          <linlan-input v-model:value="dsObj.username" placeholder="请输入数据库用户名" />
-        </div>
-        <div class="ll-ds-form">
-          <label>密码</label>
-          <linlan-input v-model:value="dsObj.password" type="password" placeholder="请输入数据库密码" />
-        </div>
-        <div class="ll-ds-form">
-          <label>驱动类</label>
-          <linlan-select
-            :inputable="true"
-            :border="true"
-            :options="drivers"
-            v-model:value="dsObj.driverClassName"
-            placeholder="驱动类，可选，内部自动识别，也可以手动输入指定"
-          />
-        </div>
-        <div class="ll-ds-form">
-          <label>类型</label>
-          <linlan-select
-            :inputable="true"
-            :border="true"
-            :options="datasourceTypes"
-            v-model:value="dsObj.type"
-            placeholder="数据源类型，可选，也可以手动输入指定"
-          />
-        </div>
-        <div class="ll-ds-form">
-          <label>maxRows</label>
-          <linlan-input v-model:value="dsObj.maxRows" placeholder="最多返回条数，-1为不限制" />
-        </div>
-        <div class="ll-ds-form ll-ds-form-block">
-          <label>其它配置</label>
-          <linlan-textarea v-model:value="extraJson" placeholder="JSON 格式的其它配置，如连接池参数" class="ll-ds-json" />
+        <div class="ll-ds2">
+          <!-- 基本信息 -->
+          <div class="ll-ds2-section">
+            <div class="ll-ds2-title">基本信息</div>
+            <div class="ll-ds2-grid">
+              <div class="ll-ds2-field">
+                <label><i>*</i>名称</label>
+                <linlan-input v-model:value="dsObj.name" placeholder="仅做展示使用" />
+              </div>
+              <div class="ll-ds2-field">
+                <label><i>*</i>Key</label>
+                <linlan-input v-model:value="dsObj.key" placeholder="代码中引用的数据库 key" />
+              </div>
+            </div>
+          </div>
+          <!-- 连接配置 -->
+          <div class="ll-ds2-section">
+            <div class="ll-ds2-title">连接配置</div>
+            <div class="ll-ds2-field">
+              <label><i>*</i>URL</label>
+              <linlan-input v-model:value="dsObj.url" placeholder="jdbc:mysql://localhost:3306/your_db" />
+            </div>
+            <div class="ll-ds2-grid">
+              <div class="ll-ds2-field">
+                <label>用户名</label>
+                <linlan-input v-model:value="dsObj.username" placeholder="数据库用户名" />
+              </div>
+              <div class="ll-ds2-field">
+                <label>密码</label>
+                <linlan-input v-model:value="dsObj.password" type="password" placeholder="数据库密码" />
+              </div>
+            </div>
+            <div class="ll-ds2-grid">
+              <div class="ll-ds2-field">
+                <label>驱动类</label>
+                <linlan-select
+                  :inputable="true"
+                  :border="true"
+                  :options="drivers"
+                  v-model:value="dsObj.driverClassName"
+                  placeholder="可选，自动识别"
+                />
+              </div>
+              <div class="ll-ds2-field">
+                <label>类型</label>
+                <linlan-select
+                  :inputable="true"
+                  :border="true"
+                  :options="datasourceTypes"
+                  v-model:value="dsObj.type"
+                  placeholder="可选，手动输入指定"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- 高级选项 -->
+          <div class="ll-ds2-section">
+            <div class="ll-ds2-title">高级选项</div>
+            <div class="ll-ds2-field">
+              <label>maxRows</label>
+              <linlan-input v-model:value="dsObj.maxRows" placeholder="最多返回条数，-1 为不限制" />
+            </div>
+            <div class="ll-ds2-field">
+              <label>其它配置</label>
+              <linlan-textarea v-model:value="extraJson" placeholder="JSON 格式的其它配置，如连接池参数" class="ll-ds-json" />
+            </div>
+          </div>
         </div>
       </template>
       <template #buttons>
-        <button class="ma-button active" :disabled="saving" @click="doSave">{{ dsObj.id ? '修改' : '创建' }}</button>
-        <button class="ma-button" :disabled="saving" @click="doTest">测试连接</button>
-        <button class="ma-button" :disabled="saving" @click="showDialog = false">取消</button>
+        <button class="ll-ds2-btn" :disabled="saving" @click="doTest">测试连接</button>
+        <button class="ll-ds2-btn" :disabled="saving" @click="showDialog = false">取消</button>
+        <button class="ll-ds2-btn primary" :disabled="saving" @click="doSave">{{ dsObj.id ? '保存修改' : '创建' }}</button>
       </template>
     </linlan-dialog>
+    </Teleport>
   </div>
 </template>
 
@@ -367,31 +479,146 @@ defineExpose({ initData, refresh: initData })
   flex-shrink: 0;
 }
 
-/* ===== 数据源编辑表单（对齐官方 .ds-form 布局） ===== */
-.ll-ds-form {
-  margin-bottom: 5px;
-  display: flex;
-  align-items: flex-start;
+/* ===== 数据源编辑表单：分组 + 上置 label + 两列网格 ===== */
+.ll-ds2-section {
+  margin-bottom: 14px;
 }
 
-.ll-ds-form > label {
-  margin-right: 5px;
-  display: inline-block;
-  width: 60px;
-  text-align: right;
+.ll-ds2-section:last-child {
+  margin-bottom: 0;
+}
+
+.ll-ds2-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding-left: 7px;
+  border-left: 3px solid var(--ll-primary, #3a8ee6);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color, #24292f);
+}
+
+.ll-ds2-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.ll-ds2-field {
+  min-width: 0;
+  margin-bottom: 10px;
+}
+
+.ll-ds2-grid .ll-ds2-field {
+  margin-bottom: 0;
+}
+
+.ll-ds2-field > label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  color: #57606a;
+}
+
+.ll-ds2-field > label i {
+  margin-right: 2px;
+  color: #e5534b;
+  font-style: normal;
+}
+
+/* 统一输入控件观感：圆角、边框、focus 主蓝 */
+/* 注意：linlan-select 内部多处固定 22px，不能整只拉高，否则文字错位；保持 22px 并垂直对齐 */
+.ll-ds2 :deep(input) {
+  height: 26px;
+  line-height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #d0d7de);
+  padding: 0 8px;
+  font-size: 12px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ll-ds2 :deep(input:focus) {
+  border-color: var(--ll-primary, #3a8ee6);
+  box-shadow: 0 0 0 2px rgba(58, 142, 230, 0.12);
+}
+
+.ll-ds2 :deep(.ll-select) {
+  margin-top: 2px;
+}
+
+/* 还原可输入下拉内部 input：组件自带 22px 布局，不能套用外部输入样式，否则与箭头叠字 */
+.ll-ds2 :deep(.ll-select input) {
   height: 22px;
   line-height: 22px;
-  flex-shrink: 0;
+  border: none;
+  border-radius: 0;
+  padding: 0 16px 0 5px; /* 右侧让出下拉箭头位置，避免长文字叠字 */
+  box-shadow: none;
 }
 
-.ll-ds-form > *:not(label) {
-  flex: 1;
-  min-width: 0;
+.ll-ds2 :deep(.ll-select input:focus) {
+  border: none;
+  box-shadow: none;
+}
+
+.ll-ds2 :deep(textarea) {
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #d0d7de);
+  padding: 6px 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ll-ds2 :deep(textarea:focus) {
+  border-color: var(--ll-primary, #3a8ee6);
+  box-shadow: 0 0 0 2px rgba(58, 142, 230, 0.12);
+  outline: none;
 }
 
 .ll-ds-json {
   width: 100%;
-  height: 130px;
+  height: 96px;
   box-sizing: border-box;
+}
+
+/* 底部按钮：主蓝主操作 + 幽灵次操作 */
+.ll-ds2-btn {
+  height: 26px;
+  padding: 0 14px;
+  border: 1px solid var(--border-color, #d0d7de);
+  border-radius: 6px;
+  background: var(--background, #fff);
+  color: var(--color, #24292f);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ll-ds2-btn:hover:not(:disabled) {
+  border-color: var(--ll-primary, #3a8ee6);
+  color: var(--ll-primary, #3a8ee6);
+  background: #f0f7ff;
+}
+
+.ll-ds2-btn.primary {
+  border-color: var(--ll-primary, #3a8ee6);
+  background: var(--ll-primary, #3a8ee6);
+  color: #fff;
+}
+
+.ll-ds2-btn.primary:hover:not(:disabled) {
+  background: #2f7fd4;
+  border-color: #2f7fd4;
+  color: #fff;
+}
+
+.ll-ds2-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 </style>

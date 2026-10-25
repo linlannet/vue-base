@@ -76,7 +76,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div :class="{ inputable, border}" class="ma-select not-select" @click.stop="showList" ref="container">
+  <div :class="{ inputable, border}" class="ll-select not-select" @click.stop="showList" ref="container">
     <span v-if="!inputable">{{ showText }}</span>
     <input v-if="inputable" ref="input" :value="showText" autocomplete="off" type="text" @input="(e) => triggerSelect(e.target.value)" :placeholder="placeholder"/>
     <ul v-show="visible" :style="{ width, marginTop, marginLeft}" ref="selectList">
@@ -88,6 +88,8 @@ export default defineComponent({
 </template>
 
 <style scoped>
+/* 选择器根节点 class 为 ll-select：此前写成 .ll-select，scoped 属性选择器匹配不到，
+   导致底部接口信息里的请求方法下拉没有边框/高度/背景，与官方 magic-select border 不一致 */
 .ll-select {
   position: relative;
   display: inline-block;
@@ -132,7 +134,9 @@ export default defineComponent({
 
 .ll-select::after {
   content: '\efa2';
-  font-family: 'linlan-iconfont';
+  /* 图标字体实际注册名为 magic-iconfont（assets/iconfont/iconfont.css），
+     linlan-iconfont 不存在，导致下拉箭头不显示 */
+  font-family: 'magic-iconfont';
   position: absolute;
   right: 5px;
   top: 0px;

@@ -21,6 +21,7 @@ export default defineComponent({
   data() {
     return {
       resultEditor: null,
+      pendingBody: null,
       responseBody: [],
       responseHeaders: {},
       forceUpdate: false,
@@ -31,6 +32,16 @@ export default defineComponent({
     }
   },
   watch: {
+    // 打开/切换接口时同步该接口已保存的 responseBody 记录（对齐官方：执行结果面板
+    // 首次打开即显示上次运行的响应正文）。此前编辑器只在创建时读一次 info.responseBody，
+    // 而创建发生在尚未打开接口时，导致切换接口后 Body 始终为空。
+    'info.responseBody': {
+      handler(responseBody) {
+        this.pendingBody = responseBody
+        this.setBodyText(responseBody)
+      },
+      deep: false
+    },
     responseBody: {
       handler(responseBodyArr) {
         this.info.responseBodyDefinition = deepClone(responseBodyArr[0], ['level'])
@@ -49,7 +60,10 @@ export default defineComponent({
         URL.revokeObjectURL(this.objectUrl)
         this.objectUrl = null
       }
-      this.resultEditor && this.resultEditor.setValue(responseBody || '')
+      // 把本次结果写回接口实体，保证切换接口/重新打开时仍有记录
+      this.info.responseBody = responseBody
+      this.pendingBody = responseBody
+      this.setBodyText(responseBody)
       this.updateResponseBody(responseBody)
       this.responseHeaders = headers
     })
@@ -75,6 +89,12 @@ export default defineComponent({
     })
   },
   methods: {
+    setBodyText(text) {
+      const value = text || ''
+      if (this.resultEditor && this.resultEditor.getValue() !== value) {
+        this.resultEditor.setValue(value)
+      }
+    },
     createEditor() {
       // markRaw：Monaco 实例绝不能放进 reactive data，否则 Vue3 深层代理会遍历整个编辑器对象图，
       // 在 layout() 时造成主线程长时间卡死（实测点击「执行结果」tab 必现）
@@ -91,7 +111,7 @@ export default defineComponent({
         fontFamily: contants.EDITOR_FONT_FAMILY,
         fontSize: contants.EDITOR_FONT_SIZE,
         fontLigatures: true,
-        value: this.info.responseBody || '',
+        value: (this.pendingBody != null ? this.pendingBody : this.info.responseBody) || '',
         renderWhitespace: 'none',
         theme: store.get('skin') || 'default'
       }))
@@ -161,21 +181,21 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-run">
-    <ul class="not-select ma-nav-tab">
+  <div class="ll-run">
+    <ul class="not-select ll-nav-tab">
       <li v-for="(item, key) in navs" :key="'response_item_' + key" :class="{ selected: showIndex === key }" @click="showIndex = key;">{{ item }}
       </li>
     </ul>
-    <div ref="resultEditor" class="ma-body-editor" v-show="showIndex === 0 && !contentType"></div>
-    <iframe v-if="contentType && showIndex === 0" class="ma-response-body-container" style="padding:5px;" :src="this.objectUrl"></iframe>
-    <div class="ma-layout" v-if="showIndex === 1">
-      <div class="ma-layout-container">
-        <div class="ma-header ma-table-row">
+    <div ref="resultEditor" class="ll-body-editor" v-show="showIndex === 0 && !contentType"></div>
+    <iframe v-if="contentType && showIndex === 0" class="ll-response-body-container" style="padding:5px;" :src="this.objectUrl"></iframe>
+    <div class="ll-layout" v-if="showIndex === 1">
+      <div class="ll-layout-container">
+        <div class="ll-header ll-table-row">
           <div>Key</div>
           <div>Value</div>
         </div>
-        <div class="ma-content">
-          <div v-for="(value, key) in responseHeaders" :key="'response_header_' + key" class="ma-table-row content-bg">
+        <div class="ll-content">
+          <div v-for="(value, key) in responseHeaders" :key="'response_header_' + key" class="ll-table-row content-bg">
             <div>{{ key }}</div>
             <div>{{ value }}</div>
           </div>
@@ -187,6 +207,8 @@ export default defineComponent({
 </template>
 
 <style scoped>
+/* 选择器必须与模板中的 ll-* 类名一致：此前写成 ll-*，scoped 样式全部不生效，
+   导致 .ll-body-editor 高度为 0，Monaco 创建后不可见（「执行结果」空白） */
 div.ll-run{
   background: var(--background);
   height: 100%;

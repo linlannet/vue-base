@@ -36,7 +36,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-checkbox" @click.stop="e=>$emit('click',e)">
+  <div class="ll-checkbox" @click.stop="e=>$emit('click',e)">
     <input :id="cboId" ref="checkbox" type="checkbox" @change="onChange" :checked="value !== undefined ? value : modelValue"/>
     <label :for="cboId" :class="{ checkedHalf: checkedHalf&&value }"/>
   </div>

@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { AiEditor } from 'aieditor'
-import 'aieditor/style.css'
+import { inject, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import * as monaco from 'monaco-editor'
 import type { Diagnostic, KBFile } from '@/core/types'
 import type { ConsoleEntry } from '@/runtime/console'
 import { MockDebugAdapter, pythonMockExecutor } from '@/runtime'
 
+/**
+ * 知识库文件编辑器：md / py / java / txt 等统一由 Monaco 编辑。
+ * 分屏预览与 AI 助手已上提到工作台层（LLEditor.vue），此处只负责单文件编辑与运行调试。
+ */
 const props = defineProps<{ file: KBFile }>()
 const emit = defineEmits<{
   (e: 'update:content', content: string): void
@@ -16,11 +19,19 @@ const emit = defineEmits<{
 const dbg = inject<{ consoleEntries: ConsoleEntry[]; diagnostics: Diagnostic[] }>('ll-debug')
 
 const host = ref<HTMLDivElement | null>(null)
-let aiEditor: AiEditor | null = null
+// Monaco 实例不放入响应式对象，避免 Vue 代理导致的重复 layout
+let editor: monaco.editor.IStandaloneCodeEditor | null = null
+// 外部内容回写编辑器时抑制一次变更回调，避免 update:content 回环
+let applying = false
 let adapter: MockDebugAdapter | null = null
 const unsub: Array<() => void> = []
 
 let logSeq = 0
+
+function resolveLanguage(lang?: string): string {
+  const id = (lang || 'plaintext').toLowerCase()
+  return monaco.languages.getLanguages().some((l) => l.id === id) ? id : 'plaintext'
+}
 
 function ensureAdapter(language: string): void {
   if (adapter && adapter.language === language) return
@@ -45,38 +56,71 @@ function ensureAdapter(language: string): void {
   unsub.push(adapter.on('end', () => emit('state', { running: false, paused: false })))
 }
 
-onMounted(() => {
-  if (!host.value) return
-  aiEditor = new AiEditor({
-    element: host.value,
-    placeholder: '开始创作，或让 AI 帮你写下第一段内容',
-    content: props.file?.content ?? '',
-    editable: true,
-    theme: 'light',
-    // KB 文件里偶尔会带 ```python ``` 代码块；关闭默认上传和 AI，保持轻量
-    uploader: false,
-    ai: undefined,
-    aiChat: false,
-    onUpdate: () => {
-      // 内容变化（用户编辑）时把 HTML 回写到 store
-      if (aiEditor) emit('update:content', aiEditor.getHTML())
-    }
+function createEditor(): void {
+  if (editor || !host.value) return
+  const file = props.file
+  editor = monaco.editor.create(host.value, {
+    value: file?.content ?? '',
+    language: resolveLanguage(file?.language),
+    theme: 'vs',
+    automaticLayout: true,
+    fontSize: 13,
+    minimap: { enabled: false },
+    scrollBeyondLastLine: false,
+    wordWrap: 'on',
+    tabSize: 2,
+    renderWhitespace: 'selection'
   })
-  ensureAdapter(props.file?.language ?? 'plaintext')
+  editor.onDidChangeModelContent(() => {
+    if (applying || !editor) return
+    emit('update:content', editor.getValue())
+  })
+}
+
+function destroyEditor(): void {
+  editor?.dispose()
+  editor = null
+}
+
+/** 外部内容回写编辑器（切换文件/导入），不触发 update:content */
+function applyValue(text: string): void {
+  applying = true
+  editor?.setValue(text)
+  applying = false
+}
+
+function syncEditor(): void {
+  const file = props.file
+  if (!file) return
+  if (!editor) createEditor()
+  const model = editor?.getModel()
+  if (editor && model) {
+    monaco.editor.setModelLanguage(model, resolveLanguage(file.language))
+    if (model.getValue() !== (file.content ?? '')) applyValue(file.content ?? '')
+  }
+  ensureAdapter(file.language)
+}
+
+onMounted(async () => {
+  await nextTick()
+  syncEditor()
 })
 
 watch(
   () => props.file?.id,
-  () => {
-    if (!aiEditor || !props.file) return
-    // 切换文件时替换内容，第二个参数 emitUpdate=false 避免重复触发 onUpdate
-    aiEditor.setContent(props.file.content ?? '', false)
-    ensureAdapter(props.file.language)
+  async () => {
+    await nextTick()
+    syncEditor()
   }
 )
 
+// 当前编辑器文本（运行时使用）
+function currentText(): string {
+  return editor?.getValue() ?? ''
+}
+
 function run(): void {
-  if (!aiEditor || !props.file) return
+  if (!props.file) return
   ensureAdapter(props.file.language)
   if (adapter) {
     emit('state', { running: true, paused: false })
@@ -84,7 +128,7 @@ function run(): void {
       id: props.file.id,
       name: props.file.name,
       language: props.file.language,
-      content: aiEditor.getText(),
+      content: currentText(),
       updatedAt: Date.now()
     })
   }
@@ -96,16 +140,15 @@ function stepDbg(): void {
   run()
 }
 
-defineExpose({ run, continueDbg, stepDbg })
+defineExpose({ run, continueDbg, stepDbg, getContent: currentText })
 
 onBeforeUnmount(() => {
   unsub.forEach((fn) => fn())
   unsub.length = 0
-  aiEditor?.destroy()
-  aiEditor = null
+  destroyEditor()
 })
 </script>
 
 <template>
-  <div class="ll-editor-canvas ll-kb-ai-host" ref="host"></div>
+  <div class="ll-editor-canvas ll-kb-code-host" ref="host"></div>
 </template>

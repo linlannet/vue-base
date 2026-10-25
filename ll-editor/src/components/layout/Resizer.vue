@@ -32,8 +32,8 @@ function onUp(): void {
 
 <template>
   <div
-    class="ma-resizer"
-    :class="props.dir === 'y' ? 'ma-resizer-y' : 'ma-resizer-x'"
+    class="ll-resizer"
+    :class="props.dir === 'y' ? 'll-resizer-y' : 'll-resizer-x'"
     @mousedown="onDown"
   />
 </template>

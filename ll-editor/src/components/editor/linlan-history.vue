@@ -93,7 +93,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-history">
+  <div class="ll-history">
     <ul class="not-select">
       <li v-for="(item, key) in timestampes" :key="'history_' + key" :class="{ selected: currentItem === item }"
           @click.stop="open(item)">
@@ -109,7 +109,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.ma-history {
+.ll-history {
   overflow: auto;
   position: relative;
   width: 100%;
@@ -117,7 +117,7 @@ export default defineComponent({
   border-top: 1px solid var(--border-color);
 }
 
-.ma-history ul {
+.ll-history ul {
   position: absolute;
   left: 0px;
   width: 210px;
@@ -128,7 +128,7 @@ export default defineComponent({
   background: var(--toolbox-background);
 }
 
-.ma-history ul li {
+.ll-history ul li {
   border-bottom: 1px solid var(--border-color);
   height: 20px;
   line-height: 20px;
@@ -136,13 +136,13 @@ export default defineComponent({
   white-space: nowrap;
 }
 
-.ma-history ul li:hover,
-.ma-history ul li.selected {
+.ll-history ul li:hover,
+.ll-history ul li.selected {
   background: var(--history-select-background);
   color: var(--history-select-color);
 }
 
-.ma-history .version {
+.ll-history .version {
   position: absolute;
   left: 210px;
   right: 0px;
@@ -150,17 +150,17 @@ export default defineComponent({
   height: 24px;
 }
 
-.ma-history .version span {
+.ll-history .version span {
   float: left;
   display: block;
   padding: 0 10px;
 }
 
-.ma-history .version span.current {
+.ll-history .version span.current {
   float: right;
 }
 
-.ma-history .diff-editor {
+.ll-history .diff-editor {
   position: absolute;
   left: 210px;
   right: 0px;

@@ -165,10 +165,10 @@ export default defineComponent({
   <div>
     <linlan-dialog title="全局搜索" :value="showDialog" align="right" width="700px" padding="0" @onClose="close()">
       <template #content>
-        <div class="ma-search-container">
+        <div class="ll-search-container">
           <linlan-input v-model="inputText" width="100%" placeholder="请输入关键字进行搜索"></linlan-input>
-          <div v-show="searchList.length > 0" class="ma-search-result-container">
-            <div class="ma-search-result-item" :class="{ selected: selectedItem.id === item.id }" v-for="(item, index) in searchList" :key="'ma-search-result-item' + index" @click="resultItemHandle(item)" @dblclick="resultItemDbHandle(item)">
+          <div v-show="searchList.length > 0" class="ll-search-result-container">
+            <div class="ll-search-result-item" :class="{ selected: selectedItem.id === item.id }" v-for="(item, index) in searchList" :key="'ll-search-result-item' + index" @click="resultItemHandle(item)" @dblclick="resultItemDbHandle(item)">
               <div class="label" v-html="item.text"></div>
               <div class="name">{{ item.cache ? item.cache.groupName + '/' + item.cache.name : '' }}</div>
               <div class="line" v-text="item.line"></div>

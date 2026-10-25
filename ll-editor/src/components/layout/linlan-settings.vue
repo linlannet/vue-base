@@ -77,26 +77,26 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-settings">
-    <ul class="ma-nav not-select">
+  <div class="ll-settings">
+    <ul class="ll-nav not-select">
       <li v-for="(item, key) in navs" :key="'response_item_' + key" :class="{ selected: showIndex == key }"
           @click="showIndex = key">
         {{ item }}
       </li>
     </ul>
-    <div class="ma-layout">
-      <div v-if="showIndex < 2" class="not-select ma-sider">
-        <div @click="addRow"><i class="ma-icon ma-icon-plus"/></div>
-        <div @click="removeRow"><i class="ma-icon ma-icon-minus"/></div>
+    <div class="ll-layout">
+      <div v-if="showIndex < 2" class="not-select ll-sider">
+        <div @click="addRow"><i class="ll-icon ll-icon-plus"/></div>
+        <div @click="removeRow"><i class="ll-icon ll-icon-minus"/></div>
       </div>
-      <div v-if="showIndex === 0" class="ma-layout-container">
-        <div class="ma-header ma-table-row">
+      <div v-if="showIndex === 0" class="ll-layout-container">
+        <div class="ll-header ll-table-row">
           <div>键</div>
           <div>值</div>
           <div>描述</div>
         </div>
-        <div class="ma-content">
-          <div v-for="(item, key) in parameters" :key="'request_parameter_' + key" class="ma-table-row">
+        <div class="ll-content">
+          <div v-for="(item, key) in parameters" :key="'request_parameter_' + key" class="ll-table-row">
             <div :class="{ focus: parameterIndex === key && !item.name }">
               <linlan-input :focus="() => (parameterIndex = key)" v-model:value="item.name" style="width: 100%"/>
             </div>
@@ -109,14 +109,14 @@ export default defineComponent({
           </div>
         </div>
       </div>
-      <div v-if="showIndex === 1" class="ma-layout-container">
-        <div class="ma-header ma-table-row">
+      <div v-if="showIndex === 1" class="ll-layout-container">
+        <div class="ll-header ll-table-row">
           <div>键</div>
           <div>值</div>
           <div>描述</div>
         </div>
-        <div class="ma-content">
-          <div v-for="(item, key) in headers" :key="'request_header_' + key" class="ma-table-row">
+        <div class="ll-content">
+          <div v-for="(item, key) in headers" :key="'request_header_' + key" class="ll-table-row">
             <div :class="{ focus: headerIndex === key && !item.name }">
               <linlan-input :focus="() => (headerIndex = key)" v-model:value="item.name" style="width: 100%"/>
             </div>

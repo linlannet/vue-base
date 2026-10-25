@@ -9,7 +9,7 @@
  * onBeforeUnmount 调 dispose()；loading / showLogin / onLogin 交给模板与登录组件。
  */
 import { ref, shallowRef, type Ref } from 'vue'
-// magic-api 运行时样式（含 --background 主题变量与 .ma-container 基础样式）
+// magic-api 运行时样式（含 --background 主题变量与 .ll-container 基础样式）
 import '@/assets/index.css'
 import '@/assets/iconfont/iconfont.css'
 import bus from '@/scripts/bus'
@@ -19,10 +19,12 @@ import LinlanWebSocket from '@/scripts/websocket'
 import store from '@/scripts/store'
 import Key from '@/scripts/hotkey'
 import { getQueryVariable, replaceURL } from '@/scripts/utils'
-import { defineTheme } from '@/scripts/editor/theme'
-import defaultTheme from '@/scripts/editor/default-theme'
-import darkTheme from '@/scripts/editor/dark-theme'
-import JavaClass from '@/scripts/editor/java-class'
+import { defineTheme } from '@/scripts/monaco/theme'
+import defaultTheme from '@/scripts/monaco/default-theme'
+import darkTheme from '@/scripts/monaco/dark-theme'
+import grayNewTheme from '@/scripts/monaco/gray-new-theme'
+import darkNewTheme from '@/scripts/monaco/dark-new-theme'
+import JavaClass from '@/scripts/monaco/java-class'
 import { modal } from '@/components/common/modal/index'
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
@@ -118,13 +120,17 @@ export function useMagicRuntime(deps: MagicRuntimeDeps) {
       contants.OPTIONS = response.options || contants.OPTIONS
       if (response.title) document.title = response.title
       store.set(contants.RECENT_OPENED_TAB, response.recentOpenedTab)
-      if (response.themes?.default) defineTheme(response.themes.default.name, response.themes.default)
-      if (response.themes?.dark) defineTheme(response.themes.dark.name, response.themes.dark)
+      // 后端版本号写入 constants：顶栏展示与「版本检测」均以此为准（对齐官方 D.MAGIC_API_VERSION_TEXT）
+      // contants 非响应式，另发 bus 事件通知顶栏刷新版本显示
+      if (response.version) {
+        contants.MAGIC_API_VERSION_TEXT = String(response.version)
+        contants.MAGIC_API_VERSION = 'V' + String(response.version).replace(/\./g, '_')
+        bus.$emit('version', contants.MAGIC_API_VERSION_TEXT)
+      }
+      // 后端 config.json 可注入自定义主题（对齐官方：Object.keys(config.themes).forEach(defineTheme)）
+      if (response.themes) Object.keys(response.themes).forEach((name) => defineTheme(name, response.themes[name]))
       // 后端 config.json 可显式开启/关闭版本校验；未提供时保留宿主 Config.ignoreVersion 设置
       if (response.ignoreVersion !== undefined) contants.IGNORE_VERSION = !!response.ignoreVersion
-      if (response.version && !response.ignoreVersion && !contants.IGNORE_VERSION && response.version !== contants.MAGIC_API_VERSION_TEXT) {
-        ;(modal as any).linlanAlert('检测到新版本\n' + response.version + '\n当前:' + contants.MAGIC_API_VERSION_TEXT)
-      }
     }).catch((e: any) => {
       ;(modal as any).linlanAlert('加载配置失败' + (e?.response?.status ? ', HTTP ' + e.response.status : ''))
     })
@@ -137,19 +143,52 @@ export function useMagicRuntime(deps: MagicRuntimeDeps) {
     })
   }
 
-  function checkUpdate(): void {
-    const url = contants.SERVER_URL + '/api/check_update'
-    fetch(url).then((r) => r.json()).then((json: any) => {
-      if (json?.data?.version && json.data.version !== contants.MAGIC_API_VERSION_TEXT) {
-        ;(modal as any).linlanConfirm('检测到新版本：' + json.data.version + '\n当前版本：' + contants.MAGIC_API_VERSION_TEXT + '\n是否刷新页面？', {
-          confirm: () => { replaceURL('v', json.data.version); window.location.reload() },
-          cancel: () => {}
-        })
-      }
-    }).catch(() => {})
-  }
+  // ===== 版本检测（对齐官方 magic-editor checkUpdate）：查询官方最新版本，非最新则提示 =====
+  // const IGNORE_VERSION = 'ignore_version'
+  // function checkUpdate(): void {
+  //   const cfg = contants.config as any
+  //   if (cfg?.checkUpdate === false) return
+  //   const url =
+  //     'https://linlan.net/ll_editor_api/latest?group=net.linlan&artifactId=java-magic-api&from=' + contants.MAGIC_API_VERSION_TEXT
+  //   fetch(url)
+  //     .then((r) => (r.status === 200 ? r.json() : null))
+  //     .then((json: any) => {
+  //       if (!json) return
+  //       if (json.version && json.version !== 'unknown' && cfg?.version !== json.version) {
+  //         bus.$emit('status', '版本检测完毕，最新版本为：' + json.version + ',建议更新！！')
+  //         if (json.version !== store.get(IGNORE_VERSION)) {
+  //           ;(modal as any).linlanConfirm('检测到已有新版本' + json.version + '，是否更新？', {
+  //             title: '提示',
+  //             ok: '更新日志',
+  //             cancel: '不再提醒',
+  //             onOk: () => window.open('http://www.ssssssss.org/magic-api/changelog.html'),
+  //             onCancel: () => store.set(IGNORE_VERSION, json.version)
+  //           })
+  //         }
+  //       } else {
+  //         bus.$emit('status', '版本检测完毕，当前已是最新版')
+  //       }
+  //     })
+  //     .catch(() => {})
+  // }
 
   // ===== WebSocket：登录成功后创建（对齐 magic-editor.vue L108-118，console 由 BASE_URL 推导） =====
+  // 16 位十六进制随机串（对应官方 zi(16)，用于 WS 登录握手的 CLIENT_ID）
+  function randomHex(len: number): string {
+    let s = ''
+    while (s.length < len) s += Math.floor(Math.random() * 16).toString(16)
+    return s.slice(0, len)
+  }
+  // WS 连接建立后发送登录握手 login,<token>,<clientId>（对齐官方 Se.OPEN -> T.send(Se.LOGIN, ...)）
+  // 缺少该握手时后端不会把客户端登记进在线列表，也就收不到 online_users / user_login 广播
+  function onWsOpen(): void {
+    contants.CLIENT_ID = randomHex(16)
+    bus.$emit('message', 'login', [contants.HEADER_MAGIC_TOKEN_VALUE, contants.CLIENT_ID].join(','))
+  }
+  function onRefreshToken(token: string): void {
+    if (token) contants.HEADER_MAGIC_TOKEN_VALUE = token
+  }
+
   function createWebSocket(): void {
     if (websocket.value || !contants.BASE_URL) return
     let link = `${location.protocol}//${location.host}${location.pathname}`.replace('/index.html', '')
@@ -161,6 +200,8 @@ export function useMagicRuntime(deps: MagicRuntimeDeps) {
     } else {
       link = `${link}/${baseURL}`
     }
+    bus.$on('ws_open', onWsOpen)
+    bus.$on('ws_refresh_token', onRefreshToken)
     websocket.value = new LinlanWebSocket(replaceURL(link.replace(/^http/, 'ws') + '/console')) as any
   }
 
@@ -177,13 +218,14 @@ export function useMagicRuntime(deps: MagicRuntimeDeps) {
   }
 
   // ===== bus 事件（搜索定位 / 登出） =====
+  // 左侧工具栏索引：0 文件 / 1 接口 / 2 函数 / 3 数据源（对齐 LLEditor toolbars 定义）
   function searchOpen(item: any): void {
     if (item.type === 1) {
-      deps.toolbarIndex.value = 0
+      deps.toolbarIndex.value = 1
       deps.editorMode.value = 1
       deps.apiListRef.value?.position?.(item.id)
     } else if (item.type === 2) {
-      deps.toolbarIndex.value = 1
+      deps.toolbarIndex.value = 2
       deps.editorMode.value = 2
       deps.functionListRef.value?.position?.(item.id)
     }
@@ -191,12 +233,12 @@ export function useMagicRuntime(deps: MagicRuntimeDeps) {
   function onLogout(): void { showLogin.value = true }
   function onShowLogin(): void { showLogin.value = true }
   function onPositionApi(id: any): void {
-    deps.toolbarIndex.value = 0
+    deps.toolbarIndex.value = 1
     deps.editorMode.value = 1
     deps.apiListRef.value?.position?.(id)
   }
   function onPositionFunction(id: any): void {
-    deps.toolbarIndex.value = 1
+    deps.toolbarIndex.value = 2
     deps.editorMode.value = 2
     deps.functionListRef.value?.position?.(id)
   }
@@ -239,6 +281,8 @@ export function useMagicRuntime(deps: MagicRuntimeDeps) {
 
     defineTheme('default', defaultTheme)
     defineTheme('dark', darkTheme)
+    defineTheme('gray-new', grayNewTheme)
+    defineTheme('dark-new', darkNewTheme)
   }
 
   /** onMounted 阶段：快捷键 / 配置加载 / 登录 / bus 订阅 / URL 定位 */
@@ -248,7 +292,11 @@ export function useMagicRuntime(deps: MagicRuntimeDeps) {
     if (contants.BASE_URL) {
       loading.value = true
       JavaClass.initClasses().then(() => JavaClass.initImportClass()).catch(() => {})
-      loadConfig().then(() => { hideLoading(); login(); checkUpdate() })
+      loadConfig().then(() => { 
+        hideLoading(); 
+        login(); 
+        //checkUpdate() 
+      })
     }
     onLoginBus = createWebSocket
     bus.$on('login', onLoginBus)
@@ -269,6 +317,8 @@ export function useMagicRuntime(deps: MagicRuntimeDeps) {
     bus.$off('position-api', onPositionApi)
     bus.$off('position-function', onPositionFunction)
     Key.unbind()
+    bus.$off('ws_open', onWsOpen)
+    bus.$off('ws_refresh_token', onRefreshToken)
     websocket.value?.close()
     websocket.value = null
   }

@@ -55,8 +55,8 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-log-wrapper" @contextmenu.prevent="e=>onContextMenu(e)">
-    <div ref="container" class="ma-log">
+  <div class="ll-log-wrapper" @contextmenu.prevent="e=>onContextMenu(e)">
+    <div ref="container" class="ll-log">
       <div v-for="(item, key) in logs" :class="{ multiple: item.multiple, more: item.showMore }" :key="'run_log_' + key">
         <pre v-html="item.html"></pre>
         <span v-if="item.multiple" class="multiple" @click="item.showMore = !item.showMore">
@@ -68,7 +68,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.ma-log-wrapper{
+.ll-log-wrapper{
   position: relative;
   overflow: auto;
   width: 100%;
@@ -76,23 +76,23 @@ export default defineComponent({
   background: var(--run-log-background);
   padding: 5px;
 }
-.ma-log {
+.ll-log {
   position: absolute;
   font-size: 13.5px;
   height: 100%;
 }
 
-.ma-log > div pre{
+.ll-log > div pre{
   line-height: 20px;
 }
-.ma-log > div.multiple pre{
+.ll-log > div.multiple pre{
   max-height: 60px;
   overflow: hidden;
 }
-.ma-log > div.multiple.more pre{
+.ll-log > div.multiple.more pre{
   max-height: none;
 }
-.ma-log span.multiple{
+.ll-log span.multiple{
   opacity: 0.5;
   font-size: 13px;
   text-decoration: underline;

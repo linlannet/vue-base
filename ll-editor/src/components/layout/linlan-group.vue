@@ -133,26 +133,26 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-request-wrapper">
-    <div class="ma-api-info">
+  <div class="ll-request-wrapper">
+    <div class="ll-api-info">
       <label>分组名称</label>
       <linlan-input v-model="info.name" placeholder="请输入分组名称" style="flex:1"/>
       <label>分组路径</label>
       <linlan-input v-model="info.path" placeholder="请输入分组路径" style="flex:2;margin-right: 10px"/>
-      <button class="ma-button" @click="doSave">保存</button>
+      <button class="ll-button" @click="doSave">保存</button>
     </div>
-    <div class="ma-request-parameters">
-      <ul class="not-select ma-nav-tab">
+    <div class="ll-request-parameters">
+      <ul class="not-select ll-nav-tab">
         <li v-for="(item, key) in navs" :key="key" :class="{ selected: showIndex === key }" @click="showIndex = key;">{{ item }}
         </li>
       </ul>
-      <div class="ma-layout">
-        <div class="not-select ma-sider">
-          <div @click="addRow"><i class="ma-icon ma-icon-plus"/></div>
-          <div @click="removeRow"><i class="ma-icon ma-icon-minus"/></div>
+      <div class="ll-layout">
+        <div class="not-select ll-sider">
+          <div @click="addRow"><i class="ll-icon ll-icon-plus"/></div>
+          <div @click="removeRow"><i class="ll-icon ll-icon-minus"/></div>
         </div>
-        <div v-show="showIndex === 0" class="ma-layout-container">
-          <div class="ma-header ma-table-row ma-table-request-row">
+        <div v-show="showIndex === 0" class="ll-layout-container">
+          <div class="ll-header ll-table-row ll-table-request-row">
             <div style="flex: 1">Key</div>
             <div style="flex: 1">Value</div>
             <div style="width: 100px">参数类型</div>
@@ -161,9 +161,9 @@ export default defineComponent({
             <div style="flex: 1">验证说明</div>
             <div style="flex: 2">Description</div>
           </div>
-          <div class="ma-content">
+          <div class="ll-content">
             <div v-for="(item, key) in info.paths" :key="key"
-                 class="ma-table-row ma-table-request-row">
+                 class="ll-table-row ll-table-request-row">
               <div :class="{ focus: pathIndex === key && !item.name }" style="flex:1">
                 <linlan-input :focus="() => (pathIndex = key)" v-model:value="item.name" style="width: 100%"/>
               </div>
@@ -190,14 +190,14 @@ export default defineComponent({
             </div>
           </div>
         </div>
-        <div v-show="showIndex === 1" class="ma-layout-container">
-          <div class="ma-header ma-table-row">
+        <div v-show="showIndex === 1" class="ll-layout-container">
+          <div class="ll-header ll-table-row">
             <div>键</div>
             <div>值</div>
             <div>描述</div>
           </div>
-          <div class="ma-content">
-            <div v-for="(item, key) in info.options" :key="key" class="ma-table-row">
+          <div class="ll-content">
+            <div v-for="(item, key) in info.options" :key="key" class="ll-table-row">
               <div :class="{ focus: optionIndex === key && !item.name }">
                 <linlan-select :focus="() => (optionIndex = key)"
                               :inputable="true"

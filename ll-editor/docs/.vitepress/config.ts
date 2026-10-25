@@ -1,8 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 /**
- * ll-editor 文档站配置（参考 https://aieditor.com.cn/core/ 的三栏结构：
- * 顶部导航 + 左侧分类树 + 右侧页内 TOC），内置中英双语 i18n。
+ * ll-editor 文档站配置（顶部导航 + 左侧分类树 + 右侧页内 TOC 三栏结构），内置中英双语 i18n。
  *
  * 目录约定：
  *   docs/zh-CN/   -> 简体中文

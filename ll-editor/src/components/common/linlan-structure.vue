@@ -37,7 +37,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="ma-structure-container">
+  <div class="ll-structure-container">
     <span :class="dataType" v-if="displayText">{{ data }}</span>
     <span class="boolean" v-else-if="!type">null</span>
     <linlan-structure-array v-else-if="Array.isArray(jsonData)" :data="jsonData"/>
